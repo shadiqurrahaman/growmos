@@ -1,0 +1,45 @@
+services:
+  db:
+    image: postgres:16-alpine
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: growmos
+      POSTGRES_USER: growmos
+      POSTGRES_PASSWORD: growmos_secret
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U growmos -d growmos"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+  app:
+    build: .
+    restart: unless-stopped
+    ports:
+      - "3000:3000"
+    environment:
+      DATABASE_URL: postgres://growmos:growmos_secret@db:5432/growmos
+      AUTH_SECRET: ${AUTH_SECRET:-growmos-change-this-secret-32chars}
+      ADMIN_PASSWORD: ${ADMIN_PASSWORD:-admin123}
+      SMTP_HOST: ${SMTP_HOST:-mail.growmos.com}
+      SMTP_PORT: ${SMTP_PORT:-465}
+      SMTP_USER: ${SMTP_USER:-hello@growmos.com}
+      SMTP_PASS: ${SMTP_PASS:-}
+      CONTACT_TO: ${CONTACT_TO:-hello@growmos.com}
+      IMAP_HOST: ${IMAP_HOST:-mail.growmos.com}
+      IMAP_PORT: ${IMAP_PORT:-993}
+      IMAP_USER: ${IMAP_USER:-hello@growmos.com}
+      IMAP_PASS: ${IMAP_PASS:-}
+      EMAIL_FROM_NAME: ${EMAIL_FROM_NAME:-GrowMos}
+      NEXT_PUBLIC_BASE_URL: ${NEXT_PUBLIC_BASE_URL:-http://localhost:3000}
+      BLOB_READ_WRITE_TOKEN: ${BLOB_READ_WRITE_TOKEN:-}
+    depends_on:
+      db:
+        condition: service_healthy
+
+volumes:
+  postgres_data:

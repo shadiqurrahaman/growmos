@@ -1,0 +1,401 @@
+
+        /* How It Works - Steps */
+        .boss-steps {
+            padding: var(--spacing-4xl) 0;
+        }
+
+        .boss-steps__grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: var(--spacing-xl);
+            margin-top: var(--spacing-3xl);
+        }
+
+        .boss-step {
+            text-align: center;
+            padding: var(--spacing-xl);
+            position: relative;
+        }
+
+        .boss-step__number {
+            width: 56px;
+            height: 56px;
+            background: var(--primary);
+            color: var(--white);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: var(--font-size-xl);
+            font-weight: 800;
+            margin: 0 auto var(--spacing-lg);
+        }
+
+        .boss-step__icon {
+            width: 64px;
+            height: 64px;
+            background: var(--accent-purple);
+            border-radius: var(--radius-xl);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto var(--spacing-lg);
+        }
+
+        .boss-step__icon i {
+            font-size: var(--font-size-2xl);
+            color: var(--primary);
+        }
+
+        .boss-step__title {
+            font-size: var(--font-size-lg);
+            font-weight: 700;
+            margin-bottom: var(--spacing-sm);
+        }
+
+        .boss-step__desc {
+            font-size: var(--font-size-sm);
+            color: var(--gray-600);
+            line-height: 1.6;
+        }
+
+        /* Connector lines between steps */
+        .boss-step:not(:last-child)::after {
+            content: '';
+            position: absolute;
+            top: 28px;
+            right: -12px;
+            width: calc(var(--spacing-xl));
+            height: 2px;
+            background: var(--gray-300);
+        }
+
+        /* You vs We Section */
+        .boss-split {
+            padding: var(--spacing-4xl) 0;
+            background: var(--gray-50);
+        }
+
+        .boss-split__grid {
+            display: grid;
+            grid-template-columns: 1fr auto 1fr;
+            gap: var(--spacing-2xl);
+            margin-top: var(--spacing-3xl);
+            align-items: start;
+        }
+
+        .boss-split__card {
+            background: var(--white);
+            border-radius: var(--radius-2xl);
+            padding: var(--spacing-2xl);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .boss-split__card--you {
+            border-top: 4px solid var(--primary);
+        }
+
+        .boss-split__card--we {
+            border-top: 4px solid var(--success);
+        }
+
+        .boss-split__card-header {
+            display: flex;
+            align-items: center;
+            gap: var(--spacing-md);
+            margin-bottom: var(--spacing-xl);
+        }
+
+        .boss-split__card-icon {
+            width: 48px;
+            height: 48px;
+            border-radius: var(--radius-lg);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+
+        .boss-split__card--you .boss-split__card-icon {
+            background: var(--accent-purple);
+            color: var(--primary);
+        }
+
+        .boss-split__card--we .boss-split__card-icon {
+            background: var(--accent-green);
+            color: var(--success);
+        }
+
+        .boss-split__card-icon i {
+            font-size: var(--font-size-xl);
+        }
+
+        .boss-split__card-title {
+            font-size: var(--font-size-xl);
+            font-weight: 700;
+        }
+
+        .boss-split__list {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            display: flex;
+            flex-direction: column;
+            gap: var(--spacing-md);
+        }
+
+        .boss-split__list li {
+            display: flex;
+            align-items: flex-start;
+            gap: var(--spacing-md);
+            font-size: var(--font-size-base);
+            color: var(--gray-700);
+        }
+
+        .boss-split__list li i {
+            margin-top: 4px;
+            flex-shrink: 0;
+        }
+
+        .boss-split__card--you .boss-split__list li i {
+            color: var(--primary);
+        }
+
+        .boss-split__card--we .boss-split__list li i {
+            color: var(--success);
+        }
+
+        .boss-split__divider {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .boss-split__vs {
+            width: 56px;
+            height: 56px;
+            background: var(--secondary);
+            color: var(--white);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: var(--font-size-sm);
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        /* Team Structure Section */
+        .boss-team {
+            padding: var(--spacing-4xl) 0;
+        }
+
+        .boss-team__grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: var(--spacing-lg);
+            margin-top: var(--spacing-3xl);
+        }
+
+        .boss-team__card {
+            background: var(--white);
+            border: 1px solid var(--gray-200);
+            border-radius: var(--radius-xl);
+            padding: var(--spacing-xl);
+            text-align: center;
+            transition: all var(--transition-base);
+        }
+
+        .boss-team__card:hover {
+            box-shadow: var(--shadow-lg);
+            transform: translateY(-4px);
+        }
+
+        .boss-team__card-icon {
+            width: 64px;
+            height: 64px;
+            border-radius: var(--radius-xl);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto var(--spacing-lg);
+            font-size: var(--font-size-2xl);
+        }
+
+        .boss-team__card-icon--product { background: var(--accent-blue); }
+        .boss-team__card-icon--growth { background: var(--accent-green); }
+        .boss-team__card-icon--success { background: var(--accent-yellow); }
+        .boss-team__card-icon--data { background: var(--accent-purple); }
+
+        .boss-team__card-title {
+            font-size: var(--font-size-lg);
+            font-weight: 700;
+            margin-bottom: var(--spacing-sm);
+        }
+
+        .boss-team__card-role {
+            font-size: var(--font-size-sm);
+            color: var(--primary);
+            font-weight: 600;
+            margin-bottom: var(--spacing-md);
+        }
+
+        .boss-team__card-tasks {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .boss-team__card-tasks li {
+            font-size: var(--font-size-sm);
+            color: var(--gray-600);
+            padding: var(--spacing-xs) 0;
+            border-top: 1px solid var(--gray-100);
+        }
+
+        .boss-team__card-tasks li:first-child {
+            border-top: none;
+        }
+
+        /* Methodology Section */
+        .boss-method {
+            padding: var(--spacing-4xl) 0;
+            background: var(--gray-50);
+        }
+
+        .boss-method__grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: var(--spacing-lg);
+            margin-top: var(--spacing-3xl);
+        }
+
+        .boss-method__card {
+            background: var(--white);
+            border-radius: var(--radius-xl);
+            padding: var(--spacing-2xl);
+            box-shadow: var(--shadow-md);
+            transition: all var(--transition-base);
+        }
+
+        .boss-method__card:hover {
+            box-shadow: var(--shadow-xl);
+            transform: translateY(-2px);
+        }
+
+        .boss-method__number {
+            font-size: var(--font-size-3xl);
+            font-weight: 800;
+            color: var(--gray-300);
+            margin-bottom: var(--spacing-md);
+        }
+
+        .boss-method__card-title {
+            font-size: var(--font-size-lg);
+            font-weight: 700;
+            margin-bottom: var(--spacing-sm);
+        }
+
+        .boss-method__card-desc {
+            font-size: var(--font-size-sm);
+            color: var(--gray-600);
+            line-height: 1.6;
+        }
+
+        /* Benefits Section */
+        .boss-benefits {
+            padding: var(--spacing-4xl) 0;
+        }
+
+        .boss-benefits__grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: var(--spacing-xl);
+            margin-top: var(--spacing-3xl);
+        }
+
+        .boss-benefit {
+            display: flex;
+            gap: var(--spacing-lg);
+            align-items: flex-start;
+        }
+
+        .boss-benefit__icon {
+            width: 48px;
+            height: 48px;
+            background: var(--accent-purple);
+            border-radius: var(--radius-lg);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+
+        .boss-benefit__icon i {
+            font-size: var(--font-size-lg);
+            color: var(--primary);
+        }
+
+        .boss-benefit__title {
+            font-size: var(--font-size-base);
+            font-weight: 700;
+            margin-bottom: var(--spacing-xs);
+        }
+
+        .boss-benefit__desc {
+            font-size: var(--font-size-sm);
+            color: var(--gray-600);
+            line-height: 1.6;
+        }
+
+        /* Responsive */
+        @media (max-width: 991px) {
+            .boss-steps__grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .boss-step:not(:last-child)::after {
+                display: none;
+            }
+
+            .boss-split__grid {
+                grid-template-columns: 1fr;
+            }
+
+            .boss-split__divider {
+                order: -1;
+            }
+
+            .boss-split__vs {
+                width: 40px;
+                height: 40px;
+                font-size: var(--font-size-xs);
+            }
+
+            .boss-team__grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .boss-method__grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .boss-benefits__grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 575px) {
+            .boss-steps__grid {
+                grid-template-columns: 1fr;
+            }
+
+            .boss-team__grid {
+                grid-template-columns: 1fr;
+            }
+
+            .boss-method__grid {
+                grid-template-columns: 1fr;
+            }
+        }
