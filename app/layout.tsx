@@ -1,7 +1,5 @@
 import type { Metadata } from "next";
-import "./globals.css";
-import Header from "@/components/Header";
-import Footer from "@/components/Footer";
+import "./tailwind-only.css";
 
 export const metadata: Metadata = {
   title: "GrowMos | AI Driven Business Growth And Marketing Solution",
@@ -32,11 +30,7 @@ export default function RootLayout({
           href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
         />
       </head>
-      <body>
-        <Header />
-        {children}
-        <Footer />
-      </body>
+      <body>{children}</body>
     </html>
   );
 }

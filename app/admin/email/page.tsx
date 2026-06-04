@@ -3,7 +3,7 @@ import { useEffect, useState, useCallback } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 
-type Tab = "inbox" | "campaigns" | "subscribers" | "contacts";
+type Tab = "inbox" | "compose" | "campaigns" | "subscribers" | "contacts";
 
 type InboxEmail = {
   uid: number;
@@ -70,7 +70,11 @@ function StatusBadge({ status }: { status: string }) {
 function InboxTab() {
   const [emails, setEmails] = useState<InboxEmail[]>([]);
   const [loading, setLoading] = useState(false);
+  const [loadingMore, setLoadingMore] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [page, setPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(1);
+  const [total, setTotal] = useState(0);
   const [selected, setSelected] = useState<number | null>(null);
   const [body, setBody] = useState<{ html?: string; text?: string; from?: object; date?: string; subject?: string } | null>(null);
   const [bodyLoading, setBodyLoading] = useState(false);
@@ -79,22 +83,25 @@ function InboxTab() {
   const [replying, setReplying] = useState(false);
   const [replyStatus, setReplyStatus] = useState<"idle" | "ok" | "err">("idle");
 
-  const fetchInbox = useCallback(async () => {
-    setLoading(true);
+  const fetchInbox = useCallback(async (pg = 1, append = false) => {
+    append ? setLoadingMore(true) : setLoading(true);
     setError(null);
     try {
-      const res = await fetch("/api/email/inbox?limit=30");
+      const res = await fetch(`/api/email/inbox?limit=50&page=${pg}`);
       const data = await res.json();
       if (!res.ok) throw new Error(data.error || "Failed");
-      setEmails(data.emails || []);
+      setEmails(prev => append ? [...prev, ...(data.emails || [])] : (data.emails || []));
+      setPage(pg);
+      setTotalPages(data.pages || 1);
+      setTotal(data.total || 0);
     } catch (e) {
       setError(e instanceof Error ? e.message : "Error loading inbox");
     } finally {
-      setLoading(false);
+      append ? setLoadingMore(false) : setLoading(false);
     }
   }, []);
 
-  useEffect(() => { fetchInbox(); }, [fetchInbox]);
+  useEffect(() => { fetchInbox(1); }, [fetchInbox]);
 
   async function openEmail(uid: number) {
     setSelected(uid);
@@ -137,7 +144,7 @@ function InboxTab() {
     <div className="text-center py-10">
       <p className="text-red-500 mb-3">{error}</p>
       <p className="text-sm text-gray-400">Check IMAP_HOST, IMAP_USER, IMAP_PASS env vars.</p>
-      <button onClick={fetchInbox} className="mt-4 px-4 py-2 bg-indigo-600 text-white rounded-lg text-sm">Retry</button>
+      <button onClick={() => fetchInbox(1)} className="mt-4 px-4 py-2 bg-indigo-600 text-white rounded-lg text-sm">Retry</button>
     </div>
   );
 
@@ -146,8 +153,10 @@ function InboxTab() {
       {/* Email list */}
       <div className="w-80 flex-shrink-0 border-r border-gray-200 overflow-y-auto bg-white">
         <div className="sticky top-0 bg-gray-50 border-b border-gray-200 px-4 py-3 flex items-center justify-between">
-          <span className="text-xs font-semibold text-gray-500 uppercase tracking-wide">Inbox</span>
-          <button onClick={fetchInbox} className="text-gray-400 hover:text-indigo-600 text-xs">Refresh</button>
+          <span className="text-xs font-semibold text-gray-500 uppercase tracking-wide">
+            Inbox {total > 0 && <span className="ml-1 text-gray-400 font-normal normal-case">({total})</span>}
+          </span>
+          <button onClick={() => fetchInbox(1)} className="text-gray-400 hover:text-indigo-600 text-xs">Refresh</button>
         </div>
         {emails.length === 0 ? (
           <p className="text-gray-400 text-sm text-center py-10">No emails found</p>
@@ -167,6 +176,15 @@ function InboxTab() {
             <p className="text-xs text-gray-400 mt-0.5">{formatDate(em.date)}</p>
           </button>
         ))}
+        {page < totalPages && (
+          <button
+            onClick={() => fetchInbox(page + 1, true)}
+            disabled={loadingMore}
+            className="w-full py-3 text-xs text-indigo-600 hover:bg-indigo-50 font-semibold border-t border-gray-100 transition-colors disabled:opacity-50"
+          >
+            {loadingMore ? "Loading…" : `Load older emails (${total - emails.length} more)`}
+          </button>
+        )}
       </div>
 
       {/* Email body */}
@@ -235,6 +253,118 @@ function InboxTab() {
           </div>
         ) : null}
       </div>
+    </div>
+  );
+}
+
+// ── Compose Tab ──────────────────────────────────────────────────────────────
+
+function ComposeTab() {
+  const [form, setForm] = useState({ to: "", subject: "", body: "" });
+  const [sending, setSending] = useState(false);
+  const [status, setStatus] = useState<"idle" | "ok" | "err">("idle");
+  const [errMsg, setErrMsg] = useState("");
+
+  function reset() {
+    setForm({ to: "", subject: "", body: "" });
+    setStatus("idle");
+    setErrMsg("");
+  }
+
+  async function send(e: React.FormEvent) {
+    e.preventDefault();
+    setSending(true);
+    setStatus("idle");
+    setErrMsg("");
+    try {
+      const res = await fetch("/api/email/send", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          to: form.to,
+          subject: form.subject,
+          html: `<div style="font-family:sans-serif;font-size:15px;line-height:1.6;color:#333">${form.body.replace(/\n/g, "<br>")}</div>`,
+          text: form.body,
+        }),
+      });
+      const data = await res.json();
+      if (res.ok) {
+        setStatus("ok");
+        setForm({ to: "", subject: "", body: "" });
+      } else {
+        setErrMsg(data.error || "Failed to send");
+        setStatus("err");
+      }
+    } catch {
+      setErrMsg("Network error");
+      setStatus("err");
+    } finally {
+      setSending(false);
+    }
+  }
+
+  return (
+    <div className="max-w-2xl">
+      {status === "ok" && (
+        <div className="flex items-center justify-between bg-green-50 border border-green-200 text-green-700 px-4 py-3 rounded-xl text-sm mb-5">
+          <span><i className="fa-solid fa-circle-check mr-2"></i>Email sent successfully.</span>
+          <button onClick={reset} className="text-green-600 hover:text-green-800 font-semibold">Compose another</button>
+        </div>
+      )}
+      {status === "err" && (
+        <div className="bg-red-50 border border-red-200 text-red-600 px-4 py-3 rounded-xl text-sm mb-5">
+          <i className="fa-solid fa-circle-exclamation mr-2"></i>{errMsg}
+        </div>
+      )}
+
+      <form onSubmit={send} className="bg-white rounded-xl border border-gray-200 overflow-hidden">
+        <div className="divide-y divide-gray-100">
+          <div className="flex items-center px-5 py-3">
+            <span className="text-xs font-semibold text-gray-400 uppercase tracking-wide w-20 flex-shrink-0">To</span>
+            <input
+              type="email"
+              required
+              value={form.to}
+              onChange={e => setForm(p => ({ ...p, to: e.target.value }))}
+              placeholder="recipient@example.com"
+              className="flex-1 text-sm text-gray-900 border-0 focus:outline-none focus:ring-0 bg-transparent"
+            />
+          </div>
+          <div className="flex items-center px-5 py-3">
+            <span className="text-xs font-semibold text-gray-400 uppercase tracking-wide w-20 flex-shrink-0">Subject</span>
+            <input
+              type="text"
+              required
+              value={form.subject}
+              onChange={e => setForm(p => ({ ...p, subject: e.target.value }))}
+              placeholder="Email subject…"
+              className="flex-1 text-sm text-gray-900 border-0 focus:outline-none focus:ring-0 bg-transparent"
+            />
+          </div>
+        </div>
+        <div className="border-t border-gray-200">
+          <textarea
+            required
+            rows={14}
+            value={form.body}
+            onChange={e => setForm(p => ({ ...p, body: e.target.value }))}
+            placeholder="Write your message here…"
+            className="w-full px-5 py-4 text-sm text-gray-800 border-0 focus:outline-none resize-none bg-white"
+          />
+        </div>
+        <div className="border-t border-gray-100 px-5 py-3 bg-gray-50 flex items-center justify-between">
+          <p className="text-xs text-gray-400">Sends from <span className="font-medium">hello@growmos.com</span></p>
+          <button
+            type="submit"
+            disabled={sending}
+            className="bg-indigo-600 hover:bg-indigo-700 disabled:opacity-50 text-white text-sm font-semibold px-5 py-2 rounded-lg transition-colors flex items-center gap-2"
+          >
+            {sending
+              ? <><i className="fa-solid fa-spinner fa-spin"></i> Sending…</>
+              : <><i className="fa-solid fa-paper-plane"></i> Send Email</>}
+          </button>
+        </div>
+      </form>
     </div>
   );
 }
@@ -680,6 +810,7 @@ export default function EmailDashboard() {
 
   const tabs: { id: Tab; label: string; icon: string }[] = [
     { id: "inbox", label: "Inbox", icon: "fa-solid fa-inbox" },
+    { id: "compose", label: "Compose", icon: "fa-solid fa-pen-to-square" },
     { id: "campaigns", label: "Campaigns", icon: "fa-solid fa-paper-plane" },
     { id: "subscribers", label: "Subscribers", icon: "fa-solid fa-users" },
     { id: "contacts", label: "Contact Forms", icon: "fa-solid fa-envelope-open-text" },
@@ -727,6 +858,7 @@ export default function EmailDashboard() {
         </div>
 
         {tab === "inbox" && <InboxTab />}
+        {tab === "compose" && <ComposeTab />}
         {tab === "campaigns" && <CampaignsTab />}
         {tab === "subscribers" && <SubscribersTab />}
         {tab === "contacts" && <ContactsTab />}

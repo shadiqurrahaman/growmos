@@ -25,6 +25,8 @@ export async function GET(
       pass: process.env.IMAP_PASS || process.env.SMTP_PASS || "",
     },
     logger: false,
+    connectionTimeout: 10000,
+    greetingTimeout: 8000,
   });
 
   try {
