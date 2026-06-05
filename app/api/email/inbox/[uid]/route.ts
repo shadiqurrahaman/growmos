@@ -1,69 +1,43 @@
 import { NextRequest, NextResponse } from "next/server";
 import { getAdminFromCookie } from "@/lib/auth";
-import { ImapFlow } from "imapflow";
-import { simpleParser } from "mailparser";
+import { getDB } from "@/lib/db";
 
 export const dynamic = "force-dynamic";
 
 export async function GET(
-  req: NextRequest,
+  _req: NextRequest,
   { params }: { params: Promise<{ uid: string }> }
 ) {
   const admin = await getAdminFromCookie();
   if (!admin) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
 
   const { uid } = await params;
-  const { searchParams } = new URL(req.url);
-  const folder = searchParams.get("folder") || "INBOX";
-
-  const client = new ImapFlow({
-    host: process.env.IMAP_HOST || "mail.growmos.com",
-    port: parseInt(process.env.IMAP_PORT || "993"),
-    secure: parseInt(process.env.IMAP_PORT || "993") === 993,
-    auth: {
-      user: process.env.IMAP_USER || process.env.SMTP_USER || "",
-      pass: process.env.IMAP_PASS || process.env.SMTP_PASS || "",
-    },
-    logger: false,
-    connectionTimeout: 10000,
-    greetingTimeout: 8000,
-  });
+  const id = parseInt(uid);
+  if (isNaN(id)) return NextResponse.json({ error: "Invalid id" }, { status: 400 });
 
   try {
-    await client.connect();
-    const lock = await client.getMailboxLock(folder);
-    let email = null;
+    const sql = getDB();
+    const [row] = await sql`
+      SELECT * FROM received_emails WHERE id = ${id}
+    `;
+    if (!row) return NextResponse.json({ error: "Email not found" }, { status: 404 });
 
-    try {
-      const msg = await client.fetchOne(`${uid}`, { source: true }, { uid: true });
-      if (msg && (msg as { source?: Buffer }).source) {
-        const parsed = await simpleParser((msg as { source: Buffer }).source);
-        email = {
-          uid,
-          subject: parsed.subject,
-          from: parsed.from?.value?.[0] ?? null,
-          to: parsed.to,
-          date: parsed.date,
-          html: parsed.html || null,
-          text: parsed.text || null,
-          attachments: parsed.attachments?.map((a) => ({
-            filename: a.filename,
-            contentType: a.contentType,
-            size: a.size,
-          })) ?? [],
-        };
-        await client.messageFlagsAdd(`${uid}`, ["\\Seen"], { uid: true });
-      }
-    } finally {
-      lock.release();
-    }
+    // Mark as read
+    await sql`UPDATE received_emails SET read = true WHERE id = ${id}`;
 
-    await client.logout();
-    if (!email) return NextResponse.json({ error: "Email not found" }, { status: 404 });
-    return NextResponse.json({ email });
+    return NextResponse.json({
+      email: {
+        uid:     row.id,
+        subject: row.subject,
+        from:  { name: row.from_name, address: row.from_address },
+        to:      row.to_address,
+        date:    row.received_at,
+        html:    row.html || null,
+        text:    row.text || null,
+      },
+    });
   } catch (err) {
-    console.error("IMAP fetch error:", err);
-    const msg = err instanceof Error ? err.message : "IMAP error";
-    return NextResponse.json({ error: msg }, { status: 500 });
+    console.error("Fetch email error:", err);
+    return NextResponse.json({ error: "Failed to load email" }, { status: 500 });
   }
 }

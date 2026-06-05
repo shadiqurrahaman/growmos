@@ -77,4 +77,18 @@ export async function initDB() {
       created_at TIMESTAMPTZ DEFAULT NOW()
     )
   `;
+
+  await sql`
+    CREATE TABLE IF NOT EXISTS received_emails (
+      id SERIAL PRIMARY KEY,
+      from_address TEXT NOT NULL,
+      from_name TEXT,
+      to_address TEXT,
+      subject TEXT,
+      html TEXT,
+      text TEXT,
+      read BOOLEAN DEFAULT false,
+      received_at TIMESTAMPTZ DEFAULT NOW()
+    )
+  `;
 }

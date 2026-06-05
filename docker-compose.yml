@@ -37,6 +37,7 @@ services:
       EMAIL_FROM_NAME: ${EMAIL_FROM_NAME:-GrowMos}
       NEXT_PUBLIC_BASE_URL: ${NEXT_PUBLIC_BASE_URL:-http://localhost:3000}
       RESEND_API_KEY: ${RESEND_API_KEY:-}
+      RESEND_WEBHOOK_SECRET: ${RESEND_WEBHOOK_SECRET:-growmos-inbound-secret-2024}
       BLOB_READ_WRITE_TOKEN: ${BLOB_READ_WRITE_TOKEN:-}
     volumes:
       - uploads_data:/app/public/uploads
