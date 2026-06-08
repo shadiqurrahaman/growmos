@@ -113,14 +113,21 @@ export default function Header() {
                 setOpenSub(null);
               }}
             >
-              <button
+              <Link
+                href="/#services"
                 className="nav__link nav__link--dropdown"
-                onClick={() => setDropdownOpen(!dropdownOpen)}
-                style={{ background: "none", border: "none", cursor: "pointer" }}
+                onClick={() => setDropdownOpen(false)}
               >
                 Services
-                <i className="fa-solid fa-chevron-down nav__dropdown-arrow"></i>
-              </button>
+                <i
+                  className="fa-solid fa-chevron-down nav__dropdown-arrow"
+                  onClick={(e) => {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    setDropdownOpen(!dropdownOpen);
+                  }}
+                ></i>
+              </Link>
 
               {dropdownOpen && (
                 <div className="nav__dropdown" id="services-dropdown">

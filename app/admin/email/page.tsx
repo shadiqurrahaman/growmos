@@ -82,6 +82,8 @@ function InboxTab() {
   const [replyBody, setReplyBody] = useState("");
   const [replying, setReplying] = useState(false);
   const [replyStatus, setReplyStatus] = useState<"idle" | "ok" | "err">("idle");
+  const [syncing, setSyncing] = useState(false);
+  const [syncMsg, setSyncMsg] = useState<string | null>(null);
 
   const fetchInbox = useCallback(async (pg = 1, append = false) => {
     append ? setLoadingMore(true) : setLoading(true);
@@ -101,7 +103,25 @@ function InboxTab() {
     }
   }, []);
 
-  useEffect(() => { fetchInbox(1); }, [fetchInbox]);
+  const syncEmails = useCallback(async () => {
+    setSyncing(true);
+    setSyncMsg(null);
+    try {
+      const res = await fetch("/api/email/sync", { method: "POST" });
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error || "Sync failed");
+      setSyncMsg(data.newEmails > 0 ? `${data.newEmails} new email${data.newEmails !== 1 ? "s" : ""}` : "Up to date");
+      if (data.newEmails > 0) fetchInbox(1);
+    } catch (e) {
+      setSyncMsg(e instanceof Error ? e.message : "Sync failed");
+    } finally {
+      setSyncing(false);
+    }
+  }, [fetchInbox]);
+
+  useEffect(() => {
+    fetchInbox(1).then(() => syncEmails());
+  }, [fetchInbox, syncEmails]);
 
   async function openEmail(uid: number) {
     setSelected(uid);
@@ -156,7 +176,18 @@ function InboxTab() {
           <span className="text-xs font-semibold text-gray-500 uppercase tracking-wide">
             Inbox {total > 0 && <span className="ml-1 text-gray-400 font-normal normal-case">({total})</span>}
           </span>
-          <button onClick={() => fetchInbox(1)} className="text-gray-400 hover:text-indigo-600 text-xs">Refresh</button>
+          <div className="flex items-center gap-2">
+            {syncMsg && <span className="text-xs text-gray-400">{syncMsg}</span>}
+            <button
+              onClick={syncEmails}
+              disabled={syncing}
+              className="text-gray-400 hover:text-indigo-600 text-xs flex items-center gap-1 disabled:opacity-50"
+              title="Sync from mail server"
+            >
+              <i className={`fa-solid fa-rotate ${syncing ? "fa-spin" : ""}`}></i>
+              {syncing ? "Syncing…" : "Sync"}
+            </button>
+          </div>
         </div>
         {emails.length === 0 ? (
           <p className="text-gray-400 text-sm text-center py-10">No emails found</p>

@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { getDB } from "@/lib/db";
+import { siteUrl, siteName } from "@/lib/seo";
 export const dynamic = "force-dynamic";
 
 async function getPost(slug: string) {
@@ -15,10 +16,27 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
   const { slug } = await params;
   const post = await getPost(slug);
   if (!post) return { title: "Post Not Found | GrowMos" };
+  const url = `${siteUrl}/blog/${post.slug}`;
   return {
     title: `${post.title} | GrowMos Blog`,
     description: post.excerpt || "",
-    openGraph: post.image_url ? { images: [{ url: post.image_url }] } : {},
+    alternates: { canonical: url },
+    openGraph: {
+      type: "article",
+      title: post.title,
+      description: post.excerpt || "",
+      url,
+      siteName,
+      publishedTime: post.created_at,
+      authors: [post.author],
+      images: post.image_url ? [{ url: post.image_url }] : undefined,
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: post.title,
+      description: post.excerpt || "",
+      images: post.image_url ? [post.image_url] : undefined,
+    },
   };
 }
 
@@ -27,8 +45,29 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
   const post = await getPost(slug);
   if (!post) notFound();
 
+  const articleJsonLd = {
+    "@context": "https://schema.org",
+    "@type": "Article",
+    headline: post.title,
+    description: post.excerpt || "",
+    image: post.image_url ? [post.image_url] : undefined,
+    datePublished: post.created_at,
+    dateModified: post.updated_at || post.created_at,
+    author: { "@type": "Person", name: post.author },
+    publisher: {
+      "@type": "Organization",
+      name: siteName,
+      logo: { "@type": "ImageObject", url: `${siteUrl}/images/CEO.jpg` },
+    },
+    mainEntityOfPage: { "@type": "WebPage", "@id": `${siteUrl}/blog/${post.slug}` },
+  };
+
   return (
     <main style={{ paddingTop:"2rem" }}>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(articleJsonLd) }}
+      />
       <article style={{ maxWidth:"800px", margin:"0 auto", padding:"0 1.5rem 4rem" }}>
         {/* Back */}
         <Link href="/blog" style={{ display:"inline-flex", alignItems:"center", gap:"0.5rem", color:"var(--primary)", fontWeight:600, marginBottom:"2rem", fontSize:"0.9rem" }}>

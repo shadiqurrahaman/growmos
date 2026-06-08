@@ -88,7 +88,17 @@ export async function initDB() {
       html TEXT,
       text TEXT,
       read BOOLEAN DEFAULT false,
-      received_at TIMESTAMPTZ DEFAULT NOW()
+      received_at TIMESTAMPTZ DEFAULT NOW(),
+      message_id TEXT UNIQUE
     )
+  `;
+
+  // Add message_id column to existing tables that predate this migration
+  await sql`
+    ALTER TABLE received_emails ADD COLUMN IF NOT EXISTS message_id TEXT
+  `;
+  await sql`
+    CREATE UNIQUE INDEX IF NOT EXISTS received_emails_message_id_idx
+    ON received_emails (message_id) WHERE message_id IS NOT NULL
   `;
 }
