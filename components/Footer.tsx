@@ -14,6 +14,7 @@ export default function Footer() {
               Your dedicated Management Operating System. We handle the tech so
               you can focus on business growth.
             </p>
+            {/* Social links — hidden for now, will activate once profiles are live
             <div className="footer__social">
               <a href="#" className="footer__social-link" aria-label="LinkedIn">
                 <i className="fa-brands fa-linkedin-in"></i>
@@ -28,6 +29,7 @@ export default function Footer() {
                 <i className="fa-brands fa-instagram"></i>
               </a>
             </div>
+            */}
           </div>
 
           <div className="footer__links">

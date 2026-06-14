@@ -89,8 +89,21 @@ export default function Header() {
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const [openSub, setOpenSub] = useState<number | null>(null);
 
+  const closeMenu = () => {
+    setMenuOpen(false);
+    setDropdownOpen(false);
+    setOpenSub(null);
+  };
+
   return (
     <header className="header" id="header">
+      {menuOpen && (
+        <div
+          className="nav__overlay"
+          onClick={closeMenu}
+          aria-hidden="true"
+        ></div>
+      )}
       <nav className="nav container">
         <Link href="/" className="nav__logo">
           <Image
@@ -116,7 +129,7 @@ export default function Header() {
               <Link
                 href="/#services"
                 className="nav__link nav__link--dropdown"
-                onClick={() => setDropdownOpen(false)}
+                onClick={closeMenu}
               >
                 Services
                 <i
@@ -152,13 +165,13 @@ export default function Header() {
                           <ul className="nav__svc-subs">
                             {svc.subs.map((sub, si) => (
                               <li key={si}>
-                                <Link href={`${svc.href}${sub.hash}`}>
+                                <Link href={`${svc.href}${sub.hash}`} onClick={closeMenu}>
                                   <i className="fa-solid fa-circle-dot"></i> {sub.label}
                                 </Link>
                               </li>
                             ))}
                             <li className="nav__svc-page-link">
-                              <Link href={svc.href}>
+                              <Link href={svc.href} onClick={closeMenu}>
                                 View all {svc.name} services{" "}
                                 <i className="fa-solid fa-arrow-right"></i>
                               </Link>
@@ -173,12 +186,12 @@ export default function Header() {
             </li>
 
             <li className="nav__item">
-              <Link href="/boss-model" className="nav__link">
+              <Link href="/boss-model" className="nav__link" onClick={closeMenu}>
                 The &quot;Boss&quot; Model
               </Link>
             </li>
             <li className="nav__item">
-              <Link href="/contact" className="nav__link">
+              <Link href="/contact" className="nav__link" onClick={closeMenu}>
                 Contact
               </Link>
             </li>
@@ -187,7 +200,7 @@ export default function Header() {
           <div
             className="nav__close"
             id="nav-close"
-            onClick={() => setMenuOpen(false)}
+            onClick={closeMenu}
           >
             <i className="fa-solid fa-xmark"></i>
           </div>

@@ -232,7 +232,6 @@ export default function HomePage() {
                 <div className="svc-card__image-wrap">
                   <img className="svc-card__image" src={svc.img} alt={svc.title} />
                   <div className="svc-card__overlay"></div>
-                  <div className="svc-card__icon"><i className={svc.icon}></i></div>
                 </div>
                 <div className="svc-card__body">
                   <h3 className="svc-card__title">{svc.title}</h3>
