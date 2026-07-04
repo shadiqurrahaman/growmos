@@ -137,13 +137,13 @@ export default function HomePage() {
       <section className="bento-section">
         <div className="bento-grid">
           <div className="bento-item bento-item--1"><div className="placeholder-image placeholder-image--bento" style={{position:"relative"}}><Image src="/images/team_coloboration.jpg" alt="Team Collaboration" fill style={{objectFit:"cover"}} /></div></div>
-          <StatCard label="Top Talents" target={300} color="blue" cls="bento-item--2" />
+          <StatCard label="Top Talents" target={20+} color="blue" cls="bento-item--2" />
           <div className="bento-item bento-item--3"><div className="placeholder-image placeholder-image--bento" style={{position:"relative"}}><Image src="/images/web_developer.jpg" alt="Web developer" fill style={{objectFit:"cover"}} /></div></div>
           <div className="bento-item bento-item--4"><div className="placeholder-image placeholder-image--bento placeholder-image--accent" style={{position:"relative"}}><Image src="/images/CEO.jpg" alt="CEO" fill style={{objectFit:"cover"}} /></div></div>
-          <StatCard label="Projects" target={80} color="pink" cls="bento-item--5" />
+          <StatCard label="Projects" target={120} color="pink" cls="bento-item--5" />
           <div className="bento-item bento-item--6"><div className="placeholder-image placeholder-image--bento" style={{position:"relative"}}><Image src="/images/web_development2.png" alt="Web development" fill style={{objectFit:"cover"}} /></div></div>
           <div className="bento-item bento-item--7"><div className="placeholder-image placeholder-image--bento placeholder-image--accent" style={{position:"relative"}}><Image src="/images/social_media_marketing.jpg" alt="Social media" fill style={{objectFit:"cover"}} /></div></div>
-          <StatCard label="Experience" target={8} color="green" cls="bento-item--8" />
+          <StatCard label="Experience" target={4+} color="green" cls="bento-item--8" />
           <StatCard label="Tech Stack" target={20} color="purple" cls="bento-item--9" />
           <div className="bento-item bento-item--10"><div className="placeholder-image placeholder-image--bento" style={{position:"relative"}}><Image src="/images/devteam.jpg" alt="Dev team" fill style={{objectFit:"cover"}} /></div></div>
         </div>
