@@ -19,13 +19,13 @@ export const metadata: Metadata = {
     title,
     description,
     url: siteUrl,
-    images: [{ url: "/images/CEO.jpg", width: 1200, height: 630, alt: siteName }],
+    images: [{ url: "/images/growmos.jpg", width: 1408, height: 1275, alt: siteName }],
   },
   twitter: {
     card: "summary_large_image",
     title,
     description,
-    images: ["/images/CEO.jpg"],
+    images: ["/images/growmos.jpg"],
   },
   alternates: {
     canonical: siteUrl,
@@ -37,7 +37,7 @@ const organizationJsonLd = {
   "@type": "Organization",
   name: siteName,
   url: siteUrl,
-  logo: `${siteUrl}/images/CEO.jpg`,
+  logo: `${siteUrl}/images/growmos.jpg`,
   description,
   email: "hello@growmos.com",
   contactPoint: {
