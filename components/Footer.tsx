@@ -11,15 +11,14 @@ export default function Footer() {
               <span className="logo-mosss">Mos</span>
             </Link>
             <p className="footer__tagline">
-              Your dedicated Management Operating System. We handle the tech so
-              you can focus on business growth.
+              Your dedicated data and growth partner. We design, build, and
+              maintain the data foundation your business runs on.
             </p>
-            {/* Social links — hidden for now, will activate once profiles are live
-            <div className="footer__social">
+            <div className="footer__social" aria-label="Social links">
               <a href="#" className="footer__social-link" aria-label="LinkedIn">
                 <i className="fa-brands fa-linkedin-in"></i>
               </a>
-              <a href="#" className="footer__social-link" aria-label="Twitter">
+              <a href="#" className="footer__social-link" aria-label="X (Twitter)">
                 <i className="fa-brands fa-x-twitter"></i>
               </a>
               <a href="#" className="footer__social-link" aria-label="Facebook">
@@ -28,25 +27,61 @@ export default function Footer() {
               <a href="#" className="footer__social-link" aria-label="Instagram">
                 <i className="fa-brands fa-instagram"></i>
               </a>
+              <a href="#" className="footer__social-link" aria-label="YouTube">
+                <i className="fa-brands fa-youtube"></i>
+              </a>
             </div>
-            */}
           </div>
 
           <div className="footer__links">
-            <h4 className="footer__title">Services</h4>
+            <h4 className="footer__title">Data Solutions</h4>
             <ul className="footer__list">
               <li>
-                <Link href="/digital-marketing">Digital Marketing</Link>
+                <Link href="/data-pipeline-engineering">Data Pipeline Engineering</Link>
               </li>
               <li>
-                <Link href="/custom-software-development">Software Development</Link>
+                <Link href="/cloud-data-warehousing">Cloud Data Warehousing</Link>
               </li>
               <li>
-                <Link href="/bi-reporting-ai">BI, Reporting & AI</Link>
+                <Link href="/bi-dashboards">BI &amp; Dashboards</Link>
               </li>
               <li>
-                <Link href="/#services">All Services</Link>
+                <Link href="/crm-data-integration">CRM Data Integration</Link>
               </li>
+              <li>
+                <Link href="/reverse-etl-activation">Reverse ETL &amp; Activation</Link>
+              </li>
+            </ul>
+          </div>
+
+          <div className="footer__links">
+            <h4 className="footer__title">Growth Services</h4>
+            <ul className="footer__list">
+              <li>
+                <Link href="/meta-ads">Meta Ads</Link>
+              </li>
+              <li>
+                <Link href="/google-ads">Google Ads</Link>
+              </li>
+              <li>
+                <Link href="/social-media-management">Social Media Management</Link>
+              </li>
+              <li>
+                <Link href="/ai-video-editing">AI Video &amp; Editing</Link>
+              </li>
+              <li>
+                <Link href="/custom-software-development">Custom Software</Link>
+              </li>
+            </ul>
+          </div>
+
+          <div className="footer__links">
+            <h4 className="footer__title">Industries</h4>
+            <ul className="footer__list">
+              <li><Link href="/industries/saas">SaaS</Link></li>
+              <li><Link href="/industries/ecommerce">E-commerce</Link></li>
+              <li><Link href="/industries/edtech">EdTech</Link></li>
+              <li><Link href="/industries/retail">Retail</Link></li>
             </ul>
           </div>
 
@@ -57,10 +92,10 @@ export default function Footer() {
                 <Link href="/boss-model">The Boss Model</Link>
               </li>
               <li>
-                <a href="#">About Us</a>
+                <Link href="/resources/data-maturity-assessment">Free Data Maturity Assessment</Link>
               </li>
               <li>
-                <a href="#">Careers</a>
+                <Link href="/blog">Blog</Link>
               </li>
               <li>
                 <Link href="/contact">Contact</Link>
