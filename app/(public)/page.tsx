@@ -3,6 +3,7 @@ import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import DataStack from "@/components/DataStack";
+import Team from "@/components/Team";
 
 const workedLogos = [
   { file: "Logo - GJW.webp", alt: "GJW Direct" },
@@ -342,6 +343,9 @@ export default function HomePage() {
           </div>
         </div></div>
       </section>
+
+      {/* Team */}
+      <Team />
 
       {/* Tech Stack */}
       <section className="tech-stack" id="tech-stack">

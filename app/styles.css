@@ -3967,6 +3967,90 @@ section {
 }
 
 /* --------------------------------------------------------------------------
+   Team Section
+   -------------------------------------------------------------------------- */
+.team-section {
+    padding: var(--spacing-4xl) 0;
+    background: var(--white);
+}
+
+.team-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 1.5rem;
+    margin-top: 3rem;
+}
+
+.team-card {
+    background: var(--gray-50, #f8fafc);
+    border: 1px solid var(--gray-100, #eef0f4);
+    border-radius: var(--radius-2xl, 1.5rem);
+    padding: 1.75rem 1.5rem;
+    text-align: center;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.team-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 16px 32px -16px rgba(15, 23, 42, 0.15);
+}
+
+.team-card__avatar {
+    width: 72px;
+    height: 72px;
+    border-radius: 9999px;
+    margin: 0 auto 1rem;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    color: #fff;
+    font-weight: 800;
+    font-size: 1.25rem;
+    letter-spacing: 0.02em;
+}
+
+.team-card--blue .team-card__avatar   { background: linear-gradient(135deg, #6366f1, #8b5cf6); }
+.team-card--green .team-card__avatar  { background: linear-gradient(135deg, #10b981, #059669); }
+.team-card--purple .team-card__avatar { background: linear-gradient(135deg, #8b5cf6, #db2777); }
+.team-card--pink .team-card__avatar   { background: linear-gradient(135deg, #ec4899, #f97316); }
+.team-card--orange .team-card__avatar { background: linear-gradient(135deg, #f59e0b, #ea580c); }
+
+.team-card__initials {
+    line-height: 1;
+}
+
+.team-card__name {
+    font-size: 1.05rem;
+    font-weight: 700;
+    color: var(--secondary, #0f172a);
+    margin: 0 0 0.25rem;
+}
+
+.team-card__role {
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: var(--primary, #6366f1);
+    margin: 0 0 0.75rem;
+}
+
+.team-card__bio {
+    font-size: 0.85rem;
+    color: var(--gray-600, #475569);
+    line-height: 1.5;
+    margin: 0;
+}
+
+.team-section__note {
+    margin: 2rem auto 0;
+    max-width: 720px;
+    text-align: center;
+    font-size: 0.9rem;
+    color: var(--gray-500, #64748b);
+    font-style: italic;
+}
+
+
+/* --------------------------------------------------------------------------
    Data Stack Section (pipeline visualization)
    -------------------------------------------------------------------------- */
 .stack-section {
