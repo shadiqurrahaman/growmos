@@ -67,8 +67,21 @@ function StatCard({ label, target, color, cls }: { label: string; target: number
   const [vis, setVis] = useState(false);
   const count = useCounter(target, vis);
   useEffect(() => {
-    const o = new IntersectionObserver(([e]) => { if (e.isIntersecting) setVis(true); }, { threshold: 0.5 });
-    if (ref.current) o.observe(ref.current);
+    if (!ref.current) return;
+    // If the element is already in (or near) the viewport on mount, trigger immediately.
+    const rect = ref.current.getBoundingClientRect();
+    const alreadyVisible =
+      rect.top < (typeof window !== "undefined" ? window.innerHeight : 0) &&
+      rect.bottom > 0;
+    if (alreadyVisible) {
+      setVis(true);
+      return;
+    }
+    const o = new IntersectionObserver(
+      ([e]) => { if (e.isIntersecting) { setVis(true); o.disconnect(); } },
+      { threshold: 0.1, rootMargin: "0px 0px -10% 0px" }
+    );
+    o.observe(ref.current);
     return () => o.disconnect();
   }, []);
   return (
