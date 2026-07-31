@@ -4314,6 +4314,177 @@ section {
 @media (max-width: 720px) {
     .integration-stats { grid-template-columns: 1fr; }
 }
+
+/* --------------------------------------------------------------------------
+   Data Maturity Assessment (lead magnet)
+   -------------------------------------------------------------------------- */
+.magnet-layout {
+    display: grid;
+    grid-template-columns: 1fr 1.4fr;
+    gap: 2rem;
+    align-items: start;
+}
+
+.magnet-side {
+    background: linear-gradient(135deg, #6366f1, #ec4899);
+    color: #fff;
+    border-radius: var(--radius-2xl, 1.5rem);
+    padding: 2.25rem 1.75rem;
+    box-shadow: 0 24px 40px -16px rgba(99, 102, 241, 0.4);
+}
+
+.magnet-side__title {
+    font-size: 1.4rem;
+    font-weight: 700;
+    margin: 0 0 1.25rem;
+}
+
+.magnet-side__list {
+    list-style: none;
+    padding: 0;
+    margin: 0 0 1.5rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.85rem;
+}
+
+.magnet-side__list li {
+    display: flex;
+    gap: 0.75rem;
+    align-items: flex-start;
+    font-size: 0.95rem;
+    line-height: 1.5;
+}
+
+.magnet-side__list i {
+    color: rgba(255, 255, 255, 0.95);
+    margin-top: 0.2rem;
+    flex-shrink: 0;
+}
+
+.magnet-side__note {
+    font-size: 0.85rem;
+    color: rgba(255, 255, 255, 0.85);
+    margin: 0;
+}
+
+.magnet-side__note a {
+    color: #fff;
+    text-decoration: underline;
+    font-weight: 600;
+}
+
+.magnet-card {
+    background: var(--white);
+    border: 1px solid var(--gray-100, #eef0f4);
+    border-radius: var(--radius-2xl, 1.5rem);
+    padding: 2.25rem;
+    box-shadow: 0 1px 2px rgba(15, 23, 42, 0.04), 0 8px 24px -16px rgba(15, 23, 42, 0.1);
+}
+
+.magnet-card__title {
+    font-size: 1.3rem;
+    font-weight: 700;
+    color: var(--secondary, #0f172a);
+    margin: 0 0 1.5rem;
+}
+
+.magnet-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+    margin-bottom: 1rem;
+}
+
+.magnet-field {
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
+    margin-bottom: 1rem;
+}
+
+.magnet-field label {
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: var(--gray-700, #334155);
+}
+
+.magnet-field label span {
+    color: var(--primary, #6366f1);
+}
+
+.magnet-field input,
+.magnet-field select,
+.magnet-field textarea {
+    width: 100%;
+    padding: 0.7rem 0.85rem;
+    border: 1px solid var(--gray-100, #eef0f4);
+    border-radius: 0.6rem;
+    background: var(--gray-50, #f8fafc);
+    color: var(--secondary, #0f172a);
+    font-size: 0.95rem;
+    font-family: inherit;
+    transition: border-color 0.15s ease, background 0.15s ease;
+}
+
+.magnet-field input:focus,
+.magnet-field select:focus,
+.magnet-field textarea:focus {
+    outline: none;
+    border-color: var(--primary, #6366f1);
+    background: var(--white);
+}
+
+.magnet-field textarea { resize: vertical; min-height: 100px; }
+
+.magnet-submit {
+    width: 100%;
+    padding: 0.9rem 1.25rem;
+    border: none;
+    border-radius: 0.6rem;
+    background: linear-gradient(135deg, var(--primary, #6366f1), #ec4899);
+    color: #fff;
+    font-size: 1rem;
+    font-weight: 700;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+
+.magnet-submit:hover:not(:disabled) {
+    transform: translateY(-1px);
+    box-shadow: 0 12px 24px -8px rgba(99, 102, 241, 0.5);
+}
+
+.magnet-submit:disabled {
+    opacity: 0.7;
+    cursor: not-allowed;
+}
+
+.magnet-fineprint {
+    font-size: 0.78rem;
+    color: var(--gray-500, #64748b);
+    margin: 1rem 0 0;
+    text-align: center;
+}
+
+.magnet-fineprint a {
+    color: var(--primary, #6366f1);
+    text-decoration: underline;
+}
+
+.magnet-success {
+    text-align: center;
+    padding: 2rem 1rem;
+}
+
+@media (max-width: 900px) {
+    .magnet-layout { grid-template-columns: 1fr; }
+    .magnet-row { grid-template-columns: 1fr; }
+}
 .team-section {
     padding: var(--spacing-4xl) 0;
     background: var(--white);
