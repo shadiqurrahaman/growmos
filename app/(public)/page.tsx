@@ -2,6 +2,7 @@
 import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
+import DataStack from "@/components/DataStack";
 
 const workedLogos = [
   { file: "Logo - GJW.webp", alt: "GJW Direct" },
@@ -355,6 +356,9 @@ export default function HomePage() {
           </div>
         </div>
       </section>
+
+      {/* Data Stack Pipeline */}
+      <DataStack />
 
       {/* Industries */}
       <section className="exp-section" id="industries">
