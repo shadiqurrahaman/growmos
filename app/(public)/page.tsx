@@ -15,37 +15,37 @@ const workedLogos = [
   { file: "Logo - Lowell.webp", alt: "Lowell" },
 ];
 
-const techStack = [
-  { icon: "fa-brands fa-laravel", label: "Laravel" },
-  { icon: "fa-brands fa-react", label: "React" },
-  { icon: "fa-brands fa-php", label: "PHP" },
-  { icon: "fa-brands fa-java", label: "Java" },
+const dataStack = [
+  { icon: "fa-solid fa-database", label: "Fivetran" },
+  { icon: "fa-solid fa-arrows-rotate", label: "Airbyte" },
+  { icon: "fa-solid fa-gears", label: "dbt" },
+  { icon: "fa-solid fa-cube", label: "BigQuery" },
+  { icon: "fa-solid fa-snowflake", label: "Snowflake" },
+  { icon: "fa-brands fa-microsoft", label: "Fabric" },
+  { icon: "fa-solid fa-chart-line", label: "Power BI" },
+  { icon: "fa-solid fa-chart-area", label: "Metabase" },
+  { icon: "fa-solid fa-cloud", label: "Salesforce" },
+  { icon: "fa-solid fa-bullhorn", label: "HubSpot" },
+  { icon: "fa-solid fa-server", label: "PostgreSQL" },
   { icon: "fa-brands fa-python", label: "Python" },
-  { icon: "fa-brands fa-vuejs", label: "Vue.js" },
-  { icon: "fa-brands fa-golang", label: "Go" },
-  { icon: "fa-brands fa-microsoft", label: ".Net" },
-  { icon: "fa-brands fa-aws", label: "AWS" },
-  { icon: "fa-brands fa-node-js", label: "Node.js" },
-  { icon: "fa-brands fa-angular", label: "Angular" },
-  { icon: "fa-brands fa-flutter", label: "Flutter" },
 ];
 
 const industries = [
-  { icon: "fa-solid fa-cart-shopping", name: "E-commerce", sub: "Paid growth, storefronts & conversion optimisation", color: "blue" },
+  { icon: "fa-solid fa-cloud", name: "SaaS", sub: "Product analytics, attribution & warehouse foundations", color: "indigo" },
+  { icon: "fa-solid fa-cart-shopping", name: "E-commerce", sub: "Multi-channel attribution, LTV & inventory analytics", color: "blue" },
+  { icon: "fa-solid fa-graduation-cap", name: "EdTech", sub: "Learner analytics, dashboards & engagement pipelines", color: "amber" },
+  { icon: "fa-solid fa-store", name: "Retail", sub: "POS, inventory & unified customer data platforms", color: "purple" },
   { icon: "fa-solid fa-heart-pulse", name: "Healthcare", sub: "Patient platforms & clinic management software", color: "green" },
-  { icon: "fa-solid fa-graduation-cap", name: "Education", sub: "eLearning tools, LMS & student engagement apps", color: "amber" },
-  { icon: "fa-solid fa-building-columns", name: "Finance", sub: "FinTech apps, dashboards & compliance systems", color: "purple" },
+  { icon: "fa-solid fa-building-columns", name: "Finance", sub: "FinTech apps, dashboards & compliance systems", color: "teal" },
   { icon: "fa-solid fa-truck-fast", name: "Logistics", sub: "Fleet tracking, route ops & supply chain tech", color: "orange" },
   { icon: "fa-solid fa-utensils", name: "Food & Beverage", sub: "Ordering platforms, POS & loyalty programmes", color: "red" },
-  { icon: "fa-solid fa-concierge-bell", name: "Hospitality", sub: "Booking systems, reviews & guest experience", color: "teal" },
-  { icon: "fa-solid fa-cloud", name: "SaaS", sub: "Product dev, AI feature builds & user growth", color: "indigo" },
 ];
 
 const faqs = [
-  { q: "What makes GrowMos a top business service development company in Bangladesh?", a: 'We combine world-class talent with the "Boss Model" approach, ensuring you focus on strategy while we handle execution.' },
-  { q: "How does the custom software development process work at GrowMos?", a: "Our process starts with deep discovery to understand your needs, followed by strategic planning, agile development, rigorous testing, and continuous support." },
-  { q: "What industries does your custom software development serve?", a: "We serve diverse industries including E-commerce, Healthcare, Education, Finance, Logistics, Food & Beverage, Hospitality, and SaaS." },
-  { q: "How do you ensure quality in custom software development?", a: "Quality is ensured through our rigorous process: code reviews, automated testing, continuous integration, and dedicated QA teams." },
+  { q: "What does GrowMos actually do?", a: "We design, build, and maintain modern data platforms for B2B companies — from ingestion (Fivetran, Airbyte) through transformation (dbt) to warehouse (BigQuery, Microsoft Fabric) and dashboards (Power BI, Metabase). We also integrate CRM and ad data, and surface insights through BI and AI." },
+  { q: "Who do you typically work with?", a: "Founders, decision-makers, and marketing leaders at SaaS, E-commerce, EdTech, and Retail companies — usually teams that have outgrown spreadsheets but don't want to staff a full in-house data team yet." },
+  { q: "Which tools do you work with?", a: "Our core stack is Fivetran / Airbyte for ingestion, dbt for transformation, BigQuery / Microsoft Fabric / Snowflake for the warehouse, and Power BI / Metabase for dashboards. We also build custom integrations with Salesforce, HubSpot, Shopify, and ad platforms." },
+  { q: "How is a data engagement structured?", a: "Most engagements start with a discovery sprint (2–3 weeks) to map your sources, define KPIs, and design the warehouse. Then we build the pipeline in 4–8 weeks, hand off with documentation, and offer ongoing support. Detailed scope is set in a written proposal." },
 ];
 
 type Post = { id: number; title: string; slug: string; excerpt: string; image_url: string | null; category: string; author: string; created_at: string };
@@ -136,11 +136,12 @@ export default function HomePage() {
         </div>
         <div className="container">
           <div className="hero-new__content">
-            <span className="hero-new__badge">Top Business Management Agency</span>
-            <h1 className="hero-new__title">AI Driven Business Growth <br />And Marketing Solution</h1>
-            <p className="hero-new__description">From concept to code GrowMos delivers tailored business solutions as your most trusted business growth solution provider.</p>
+            <span className="hero-new__badge">B2B Data Solutions Partner</span>
+            <h1 className="hero-new__title">Modern Data Solutions <br />for B2B Growth</h1>
+            <p className="hero-new__description">We help founders and marketing leaders turn scattered data into decisions. From ingestion to dashboards, we build the data foundation your business runs on.</p>
+            <p className="hero-new__stack"><strong>Our stack:</strong> Fivetran · dbt · BigQuery · Microsoft Fabric · Power BI · Metabase</p>
             <div className="hero-new__actions">
-              <Link href="/contact" className="btn btn--primary btn--lg">Hire The Best Team <i className="fa-solid fa-arrow-right"></i></Link>
+              <Link href="/contact" className="btn btn--primary btn--lg">Book a Free Data Consultation <i className="fa-solid fa-arrow-right"></i></Link>
             </div>
           </div>
         </div>
@@ -234,12 +235,14 @@ export default function HomePage() {
           </div>
           <div className="svc-grid">
             {[
-              { img:"/images/svc-digital-marketing.jpg", icon:"fa-brands fa-meta", title:"AI-driven Meta Ads", desc:"AI-powered Facebook & Instagram campaigns that target the right audience and maximise ROAS.", subs:["Audience Research & Targeting","Meta Pixel & Conversions API Setup","Campaign Strategy & Funnel Building","Account Management"], href:"/meta-ads" },
-              { img:"/images/svc-boss-model.jpg", icon:"fa-brands fa-google", title:"AI-driven Google Ads", desc:"Capture high-intent buyers the moment they search — with AI-optimised campaigns across all Google channels.", subs:["Search Ads Setup & Management","Google Shopping & Merchant Center","Keyword Research & Competitor Analysis","Performance Max (PMax) Management"], href:"/google-ads" },
-              { img:"/images/svc-software-dev.jpg", icon:"fa-solid fa-code", title:"Software Dev & AI Integration", desc:"Custom-built software and AI systems that streamline operations and give your business a competitive edge.", subs:["Web Development","Custom AI Assistants & RAG Systems","AI Workflow Automation","Mobile App Development"], href:"/custom-software-development" },
-              { img:"/images/svc-bi-ai.jpg", icon:"fa-solid fa-film", title:"AI Video & Editing", desc:"Stop-scroll video content powered by AI that converts viewers into customers across every platform.", subs:["AI Video Generation","UGC Ad Editing","E-Commerce Product Video Ads","AI Workflow Integration"], href:"/ai-video-editing" },
-              { img:"/images/web_analytics.jpg", icon:"fa-solid fa-chart-pie", title:"Web Analytics & BI", desc:"Turn raw data into clear decisions with intelligent dashboards, event tracking, and AI-powered insights.", subs:["GA4 & Google Tag Manager Setup","Custom Event & E-commerce Tracking","E-commerce Funnel Analysis","Dashboard Creation"], href:"/bi-reporting-ai" },
-              { img:"/images/social-media-management.jpg", icon:"fa-solid fa-share-nodes", title:"Social Media Management", desc:"Full-service social media management that grows your audience and turns followers into paying customers.", subs:["Social Media Strategy & Consulting","Visual Branding & Template Design","Platform-Specific Niche Management","Creator & Influencer Operations"], href:"/social-media-management" },
+              { img:"/images/svc-digital-marketing.jpg", icon:"fa-solid fa-database", title:"Data Pipeline Engineering", desc:"End-to-end ingestion and transformation with Fivetran, Airbyte, and dbt. Clean, modelled, and ready for analysis.", subs:["Source connectors & sync setup","dbt transformations & testing","Schema management & lineage","Orchestration with Airflow / Dagster"], href:"/data-pipeline-engineering" },
+              { img:"/images/svc-boss-model.jpg", icon:"fa-solid fa-cube", title:"Cloud Data Warehousing", desc:"Modern warehouses designed for B2B scale — BigQuery, Microsoft Fabric, and Snowflake, optimised for cost and speed.", subs:["Warehouse architecture & setup","Cost & performance tuning","Security & access controls","Migration from legacy systems"], href:"/cloud-data-warehousing" },
+              { img:"/images/svc-software-dev.jpg", icon:"fa-solid fa-chart-line", title:"BI & Dashboard Development", desc:"Decision-ready dashboards in Power BI and Metabase, built around the metrics your team actually acts on.", subs:["Executive KPI dashboards","Operational & cohort views","Self-serve analytics enablement","Embedded analytics for apps"], href:"/bi-dashboards" },
+              { img:"/images/svc-bi-ai.jpg", icon:"fa-solid fa-plug", title:"CRM Data Integration", desc:"Unify Salesforce and HubSpot data with the rest of your stack — for true customer 360 and attribution.", subs:["Salesforce & HubSpot sync","Custom objects & fields mapping","Lead-to-revenue reporting","Attribution modelling"], href:"/crm-data-integration" },
+              { img:"/images/web_analytics.jpg", icon:"fa-solid fa-arrow-right-arrow-left", title:"Reverse ETL & Activation", desc:"Send warehouse insights back to the tools your team lives in — sales, marketing, support, and product.", subs:["Hightouch / Census syncs","Audience activation","Sales enablement workflows","Closed-loop reporting"], href:"/reverse-etl-activation" },
+              { img:"/images/svc-digital-marketing.jpg", icon:"fa-brands fa-meta", title:"Performance Marketing & Paid Ads", desc:"Full-funnel Meta & Google campaigns tied directly to your warehouse data — so growth is measured, not assumed.", subs:["Meta & Google Ads management","Server-side tracking (Pixel + CAPI)","Multi-touch attribution","Creative testing frameworks"], href:"/meta-ads" },
+              { img:"/images/social-media-management.jpg", icon:"fa-solid fa-share-nodes", title:"AI-Powered Content & Social", desc:"Stop-scroll video, branded content, and platform-specific social management — produced by an AI-augmented team.", subs:["AI video generation & editing","UGC ad creative","Platform-specific management","Creator & influencer ops"], href:"/social-media-management" },
+              { img:"/images/svc-software-dev.jpg", icon:"fa-solid fa-code", title:"Custom Software & Dashboards", desc:"When off-the-shelf BI doesn't fit — we build custom dashboards, internal tools, and data apps on top of your warehouse.", subs:["Custom dashboards & portals","Internal data tools","API & webhook integrations","AI assistants over your data"], href:"/custom-software-development" },
             ].map((svc, i) => (
               <div className="svc-card" key={i}>
                 <div className="svc-card__image-wrap">
@@ -342,9 +345,13 @@ export default function HomePage() {
       {/* Tech Stack */}
       <section className="tech-stack" id="tech-stack">
         <div className="container">
-          <div className="section__header"><h2 className="section__title">We Serve All Tech Stacks</h2></div>
+          <div className="section__header">
+            <span className="section__badge">Our Stack</span>
+            <h2 className="section__title">The Modern Data Stack, <span className="gradient-text">Done Right</span></h2>
+            <p className="section__subtitle">Best-in-class tools, integrated and maintained by our team — so you don't have to.</p>
+          </div>
           <div className="tech-stack__grid">
-            {techStack.map((t, i) => <div key={i} className="tech-item"><i className={t.icon}></i><span>{t.label}</span></div>)}
+            {dataStack.map((t, i) => <div key={i} className="tech-item"><i className={t.icon}></i><span>{t.label}</span></div>)}
           </div>
         </div>
       </section>
@@ -354,11 +361,11 @@ export default function HomePage() {
         <div className="container">
           <div className="exp-head">
             <div className="exp-head__left">
-              <span className="exp-badge">Our Expertise</span>
+              <span className="exp-badge">Built For</span>
               <h2 className="exp-title">Industries We<br /><span className="exp-title__accent">Transform</span></h2>
             </div>
             <div className="exp-head__right">
-              <p className="exp-desc">We bring deep domain knowledge and proven execution across the sectors that shape today&apos;s economy.</p>
+              <p className="exp-desc">We bring deep domain knowledge and proven execution across SaaS, E-commerce, EdTech, and Retail — plus the adjacent verticals that share their data problems.</p>
             </div>
           </div>
           <div className="exp-grid">

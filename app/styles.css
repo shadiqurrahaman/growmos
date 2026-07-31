@@ -1963,6 +1963,20 @@ section {
     flex-wrap: wrap;
 }
 
+.hero-new__stack {
+    margin: 0 auto 2rem;
+    max-width: 720px;
+    color: rgba(255, 255, 255, 0.85);
+    font-size: 0.95rem;
+    text-align: center;
+}
+
+.hero-new__stack strong {
+    color: #fff;
+    font-weight: 700;
+    margin-right: 0.5rem;
+}
+
 /* --------------------------------------------------------------------------
    Worked With Logos Section
    -------------------------------------------------------------------------- */
