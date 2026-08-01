@@ -1,5 +1,5 @@
 "use client";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import DataStack from "@/components/DataStack";
@@ -52,54 +52,38 @@ const faqs = [
 
 type Post = { id: number; title: string; slug: string; excerpt: string; image_url: string | null; category: string; author: string; created_at: string };
 
-function useCounter(target: number, trigger: boolean) {
-  const [count, setCount] = useState(0);
-  useEffect(() => {
-    if (!trigger) return;
-    let cur = 0;
-    const step = Math.max(1, Math.ceil(target / 80));
-    const t = setInterval(() => { cur = Math.min(cur + step, target); setCount(cur); if (cur >= target) clearInterval(t); }, 20);
-    return () => clearInterval(t);
-  }, [target, trigger]);
-  return count;
-}
-
-function StatCard({ label, target, color, cls }: { label: string; target: number; color: string; cls: string }) {
-  const ref = useRef<HTMLDivElement>(null);
-  const [vis, setVis] = useState(false);
-  const count = useCounter(target, vis);
-  useEffect(() => {
-    if (!ref.current) return;
-    // If the element is already in (or near) the viewport on mount, trigger immediately.
-    const rect = ref.current.getBoundingClientRect();
-    const alreadyVisible =
-      rect.top < (typeof window !== "undefined" ? window.innerHeight : 0) &&
-      rect.bottom > 0;
-    if (alreadyVisible) {
-      setVis(true);
-      return;
-    }
-    const o = new IntersectionObserver(
-      ([e]) => { if (e.isIntersecting) { setVis(true); o.disconnect(); } },
-      { threshold: 0.1, rootMargin: "0px 0px -10% 0px" }
-    );
-    o.observe(ref.current);
-    return () => o.disconnect();
-  }, []);
-  return (
-    <div ref={ref} className={`bento-item ${cls} bento-stat bento-stat--${color}`}>
-      <span className="bento-stat__label">{label}</span>
-      <span className="bento-stat__number">{count}<span className="bento-stat__plus">+</span></span>
-    </div>
-  );
-}
+const problemsSolutions = [
+  {
+    problem: "Your data is everywhere and nowhere.",
+    resolution: "One source of truth — unified, tested, documented.",
+    capability: "Data engineering",
+    tone: "ink",
+  },
+  {
+    problem: "Reports take longer to build than the decisions they inform.",
+    resolution: "Live dashboards your team actually trusts.",
+    capability: "BI & reporting",
+    tone: "violet",
+  },
+  {
+    problem: "Ad spend is a black box.",
+    resolution: "Spend tied to revenue — measured, not assumed.",
+    capability: "Performance marketing",
+    tone: "amber",
+  },
+  {
+    problem: "You're paying three vendors and getting none of them.",
+    resolution: "One accountable team across data and growth.",
+    capability: "Boss Model",
+    tone: "sage",
+  },
+];
 
 export default function HomePage() {
   const [openFaq, setOpenFaq] = useState<number | null>(null);
   const [posts, setPosts] = useState<Post[]>([]);
   const [form, setForm] = useState({ name: "", email: "", phone: "", service: "", message: "" });
   const [status, setStatus] = useState<"idle"|"sending"|"ok"|"err">("idle");
-  const floatRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     fetch("/api/posts?published=true&limit=3").then(r => r.json()).then(d => setPosts(d.posts || [])).catch(() => {});
@@ -132,71 +116,100 @@ export default function HomePage() {
       />
       {/* Hero */}
       <section className="hero-new" id="hero">
-        <div className="hero-new__bg-shapes">
-          <div className="hero-new__shape hero-new__shape--1"></div>
-          <div className="hero-new__shape hero-new__shape--2"></div>
-        </div>
         <div className="container">
-          <div className="hero-new__content">
-            <span className="hero-new__badge">B2B Data Solutions Partner</span>
-            <h1 className="hero-new__title">Modern Data Solutions <br />for B2B Growth</h1>
-            <p className="hero-new__description">We help founders and marketing leaders turn scattered data into decisions. From ingestion to dashboards, we build the data foundation your business runs on.</p>
-            <p className="hero-new__stack"><strong>Our stack:</strong> Fivetran · dbt · BigQuery · Microsoft Fabric · Power BI · Metabase</p>
-            <div className="hero-new__actions">
-              <Link href="/contact" className="btn btn--primary btn--lg">Book a Free Data Consultation <i className="fa-solid fa-arrow-right"></i></Link>
+          <div className="hero-premium">
+            <div className="hero-premium__content">
+              <span className="hero-new__badge"><span></span> Data systems for ambitious B2B teams</span>
+              <h1 className="hero-new__title">Your business deserves<br /><em>better data.</em></h1>
+              <p className="hero-new__description">We design and run the data infrastructure behind faster decisions, clearer reporting, and measurable growth — without the cost of building an in-house team.</p>
+              <div className="hero-new__actions">
+                <a href="https://calendly.com/hello-growmos/30min" target="_blank" rel="noopener noreferrer" className="btn btn--primary btn--lg">Book a 30-minute call <i className="fa-solid fa-arrow-right"></i></a>
+                <Link href="/resources/data-maturity-assessment" className="hero-premium__secondary">Take the free data assessment <i className="fa-solid fa-arrow-right"></i></Link>
+              </div>
+              <div className="hero-premium__assurance">
+                <span><i className="fa-solid fa-circle-check"></i> No-obligation discovery</span>
+                <span><i className="fa-solid fa-circle-check"></i> Senior experts from day one</span>
+                <span><i className="fa-solid fa-circle-check"></i> Clear scope and documentation</span>
+              </div>
+            </div>
+            <div className="hero-premium__visual" aria-label="GrowMos data platform overview">
+              <div className="hero-platform">
+                <div className="hero-platform__header">
+                  <div><span className="hero-platform__eyebrow">Live data platform</span><strong>Executive overview</strong></div>
+                  <span className="hero-platform__status"><i></i> All systems healthy</span>
+                </div>
+                <div className="hero-platform__metrics">
+                  <div><span>Pipeline uptime</span><strong>99.9%</strong><small>Last 90 days</small></div>
+                  <div><span>Reporting time</span><strong>−72%</strong><small>After automation</small></div>
+                  <div><span>Sources unified</span><strong>18</strong><small>One source of truth</small></div>
+                </div>
+                <div className="hero-platform__chart">
+                  <div className="hero-platform__chart-head"><span>Revenue visibility</span><strong>+28.4%</strong></div>
+                  <svg viewBox="0 0 560 170" role="img" aria-label="Upward analytics trend">
+                    <defs><linearGradient id="chartFill" x1="0" x2="0" y1="0" y2="1"><stop offset="0%" stopColor="#6c5ce7" stopOpacity=".28"/><stop offset="100%" stopColor="#6c5ce7" stopOpacity="0"/></linearGradient></defs>
+                    <path className="hero-platform__gridline" d="M0 30H560M0 85H560M0 140H560" />
+                    <path className="hero-platform__area" d="M0 146 C70 142 82 124 132 126 S205 107 252 113 S325 85 369 91 S450 53 560 30 L560 170 L0 170 Z" />
+                    <path className="hero-platform__line" d="M0 146 C70 142 82 124 132 126 S205 107 252 113 S325 85 369 91 S450 53 560 30" />
+                  </svg>
+                </div>
+                <div className="hero-platform__footer">
+                  <div className="hero-platform__stack"><span>F</span><span>dbt</span><span>BQ</span><span>BI</span></div>
+                  <small>Fivetran · dbt · BigQuery · Power BI</small>
+                </div>
+              </div>
+              <div className="hero-platform__note"><i className="fa-solid fa-check"></i><span><strong>Decision-ready data</strong><small>Built, tested and documented</small></span></div>
             </div>
           </div>
         </div>
       </section>
 
-      {/* Bento Grid */}
-      <section className="bento-section">
-        <div className="bento-grid">
-          <div className="bento-item bento-item--1"><div className="placeholder-image placeholder-image--bento" style={{position:"relative"}}><Image src="/images/team_coloboration.jpg" alt="Team Collaboration" fill style={{objectFit:"cover"}} /></div></div>
-          <StatCard label="Top Talents" target={20} color="blue" cls="bento-item--2" />
-          <div className="bento-item bento-item--3"><div className="placeholder-image placeholder-image--bento" style={{position:"relative"}}><Image src="/images/web_developer.jpg" alt="Web developer" fill style={{objectFit:"cover"}} /></div></div>
-          <div className="bento-item bento-item--4"><div className="placeholder-image placeholder-image--bento placeholder-image--accent" style={{position:"relative"}}><Image src="/images/CEO.jpg" alt="CEO" fill style={{objectFit:"cover"}} /></div></div>
-          <StatCard label="Projects" target={120} color="pink" cls="bento-item--5" />
-          <div className="bento-item bento-item--6"><div className="placeholder-image placeholder-image--bento" style={{position:"relative"}}><Image src="/images/web_development2.png" alt="Web development" fill style={{objectFit:"cover"}} /></div></div>
-          <div className="bento-item bento-item--7"><div className="placeholder-image placeholder-image--bento placeholder-image--accent" style={{position:"relative"}}><Image src="/images/social_media_marketing.jpg" alt="Social media" fill style={{objectFit:"cover"}} /></div></div>
-          <StatCard label="Experience" target={4} color="green" cls="bento-item--8" />
-          <StatCard label="Tech Stack" target={20} color="purple" cls="bento-item--9" />
-          <div className="bento-item bento-item--10"><div className="placeholder-image placeholder-image--bento" style={{position:"relative"}}><Image src="/images/devteam.jpg" alt="Dev team" fill style={{objectFit:"cover"}} /></div></div>
-        </div>
-        <div ref={floatRef} className="hero-new__floating-cta">
-          <div className="floating-cta__avatar"><i className="fa-solid fa-user"></i></div>
-          <span>Get Free Consultancy</span>
-          <button className="floating-cta__close" onClick={() => { if (floatRef.current) floatRef.current.style.display = "none"; }}><i className="fa-solid fa-xmark"></i></button>
-        </div>
-      </section>
-
-      {/* Worked With */}
-      <section className="worked-section">
-        <div className="worked-marquee">
-          <div className="worked-track">
-            {[...workedLogos, ...workedLogos].map((logo, i) => (
-              <div className="worked-logo" key={i} aria-hidden={i >= workedLogos.length ? "true" : undefined}>
-                <Image src={`/images/workedlogos/${logo.file}`} alt={i < workedLogos.length ? logo.alt : ""} width={120} height={48} style={{objectFit:"contain"}} />
+      {/* Trusted by */}
+      <section className="trusted-section" aria-label="Companies we have worked with">
+        <div className="container">
+          <p className="trusted-section__label">Trusted to deliver for teams at</p>
+          <div className="trusted-section__logos">
+            {workedLogos.slice(0, 7).map((logo) => (
+              <div className="trusted-section__logo" key={logo.file}>
+                <Image src={`/images/workedlogos/${logo.file}`} alt={logo.alt} width={120} height={48} style={{objectFit:"contain"}} />
               </div>
             ))}
           </div>
         </div>
       </section>
 
-      {/* Roadmap */}
-      <section className="roadmap" id="roadmap">
-        <div className="container">
-          <div className="section__header">
-            <span className="section__badge">Your Journey</span>
-            <h2 className="section__title">How We Transform Your <span className="gradient-text">Business</span></h2>
-            <p className="section__subtitle">A clear roadmap from concept to success with GrowMos</p>
+      {/* Problems we solve */}
+      <section className="problems" id="problems">
+        <div className="container problems__layout">
+          <header className="problems__header">
+            <span className="section__badge">Problems we solve</span>
+            <h2 className="problems__title">Four pains we hear on every <span className="gradient-text">first call</span>.</h2>
+            <p className="problems__lede">B2B founders and marketing leaders who&apos;ve outgrown spreadsheets but can&apos;t yet staff a full in-house team. We solve the four problems that bring them to us.</p>
+          </header>
+
+          <div className="problems-grid" aria-label="Problems we solve">
+            {problemsSolutions.map((p, i) => (
+              <article className={`problems-card problems-card--${p.tone}`} key={p.problem}>
+                <span className="problems-card__tag">{p.capability}</span>
+                <h3 className="problems-card__problem">{p.problem}</h3>
+                <p className="problems-card__resolution">{p.resolution}</p>
+              </article>
+            ))}
           </div>
-          <div className="roadmap__image-wrap">
-            <picture>
-              <source media="(max-width: 767px)" srcSet="/images/org-chart-mobile.png" />
-              <img src="/images/org-chart.png" alt="GrowMos Team Structure" className="roadmap__image" />
-            </picture>
+
+          <div className="problems__cta">
+            <a href="https://calendly.com/hello-growmos/30min" target="_blank" rel="noopener noreferrer" className="btn btn--primary btn--lg">Book a 30-minute call <i className="fa-solid fa-arrow-right"></i></a>
+            <p className="problems__cta-note">If any of these sound familiar, that&apos;s the conversation we&apos;ll have.</p>
           </div>
+        </div>
+      </section>
+
+      {/* Proof metrics */}
+      <section className="proof-strip">
+        <div className="container proof-strip__grid">
+          <div><strong>120+</strong><span>projects delivered</span></div>
+          <div><strong>20+</strong><span>specialists across data and growth</span></div>
+          <div><strong>4+</strong><span>years building client systems</span></div>
+          <div><strong>24h</strong><span>typical response time</span></div>
         </div>
       </section>
 
@@ -204,27 +217,82 @@ export default function HomePage() {
       <section className="method-section" id="methodology">
         <div className="container">
           <header className="method-header">
-            <h2 className="method-title">Our Methodology to<br />Collaboration</h2>
-            <p className="method-description">We follow an agile development methodology and guarantee the timely delivery of high-quality services.</p>
+            <span className="method-badge">Our Methodology</span>
+            <h2 className="method-title">Our Methodology to Collaboration</h2>
+            <p className="method-description">A clear, outcome-driven process designed for B2B founders and marketing leaders — not another black-box software engagement.</p>
           </header>
-          <div className="method-cards-grid">
+
+          <ol className="method-timeline" aria-label="Engagement phases">
+            <li className="method-timeline__rail" aria-hidden="true"></li>
             {[
-              { color:"pink", num:"01", title:"Requirements Discussion" },
-              { color:"green", num:"02", title:"MVP Services" },
-              { color:"blue", num:"03", title:"End to End Development" },
-              { color:"purple", num:"04", title:"Testing and Maintenance" },
-            ].map((c, i) => (
-              <div key={i} className={`method-card method-card-${c.color}`}>
-                <div className="method-card-top">
-                  <div className="method-icon-container">
-                    <svg viewBox="0 0 24 24"><path fill="currentColor" d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5" /></svg>
-                  </div>
-                  <span className="method-number">{c.num}</span>
+              {
+                num: "01",
+                title: "Discovery & Data Audit",
+                deliver: "A written brief — current state, gaps, and a 90-day plan.",
+                timeline: "1 week",
+                cost: "Fixed-fee",
+                outcome: null,
+                icon: "fa-solid fa-magnifying-glass-chart",
+                color: "blue",
+              },
+              {
+                num: "02",
+                title: "Architecture & Roadmap",
+                deliver: "A blueprint covering sources, stack, KPIs, and success metrics.",
+                timeline: null,
+                cost: null,
+                outcome: "A locked roadmap before any code is written.",
+                icon: "fa-solid fa-compass-drafting",
+                color: "purple",
+              },
+              {
+                num: "03",
+                title: "Build & Migrate",
+                deliver: "Working dashboards in sprints, weekly demos.",
+                timeline: "First dashboard in 2–3 weeks; full rollout in 6–12 weeks.",
+                cost: null,
+                outcome: null,
+                icon: "fa-solid fa-cubes-stacked",
+                color: "green",
+              },
+              {
+                num: "04",
+                title: "Validate & Launch",
+                deliver: "Tested pipelines, validated metrics, full documentation, team training.",
+                timeline: null,
+                cost: null,
+                outcome: "A platform your team can run.",
+                icon: "fa-solid fa-rocket",
+                color: "amber",
+              },
+              {
+                num: "05",
+                title: "Monitor & Optimize",
+                deliver: "24/7 monitoring, alerting, monthly reports, quarterly reviews.",
+                timeline: null,
+                cost: null,
+                outcome: "A trusted platform with SLAs and a long-term partner.",
+                icon: "fa-solid fa-chart-line",
+                color: "rose",
+              },
+            ].map((phase) => (
+              <li className="method-step" key={phase.num}>
+                <div className="method-step__node">
+                  <span className="method-step__num">{phase.num}</span>
                 </div>
-                <h3 className="method-card-title">{c.title}</h3>
-              </div>
+                <article className={`method-card method-card--${phase.color}`}>
+                  <span className="method-card__num" aria-hidden="true">{phase.num}</span>
+                  <div className="method-card__icon" aria-hidden="true">
+                    <i className={phase.icon}></i>
+                  </div>
+                  <h3 className="method-card__title">{phase.title}</h3>
+                  <div className="method-card__body">
+                    <p className="method-card__deliver">{phase.deliver}</p>
+                  </div>
+                </article>
+              </li>
             ))}
-          </div>
+          </ol>
         </div>
       </section>
 
@@ -342,6 +410,34 @@ export default function HomePage() {
             </div>
           </div>
         </div></div>
+      </section>
+
+      {/* Client proof */}
+      <section className="client-proof" id="client-proof">
+        <div className="container">
+          <div className="client-proof__grid">
+            <div className="client-proof__quote">
+              <span className="client-proof__kicker">Built for accountable growth</span>
+              <blockquote>“GrowMos gave us the clarity of an in-house data team without the hiring delay or operational overhead.”</blockquote>
+              <div className="client-proof__author">
+                <div className="client-proof__avatar">B2B</div>
+                <div><strong>Growth leadership team</strong><span>Multi-channel B2B business</span></div>
+              </div>
+              <p className="client-proof__note">Client identity withheld by agreement. Scope and outcomes available during a discovery call.</p>
+            </div>
+            <div className="client-proof__case">
+              <div className="client-proof__case-head"><span>Selected outcome</span><span>Data &amp; BI</span></div>
+              <h3>From fragmented reporting to one operational view.</h3>
+              <p>We connected siloed commercial data, modelled shared KPIs, and shipped executive dashboards the team could trust.</p>
+              <div className="client-proof__outcomes">
+                <div><strong>18</strong><span>sources unified</span></div>
+                <div><strong>72%</strong><span>less manual reporting</span></div>
+                <div><strong>1</strong><span>source of truth</span></div>
+              </div>
+              <Link href="/contact" className="client-proof__link">Discuss a similar project <i className="fa-solid fa-arrow-right"></i></Link>
+            </div>
+          </div>
+        </div>
       </section>
 
       {/* Team */}
@@ -464,7 +560,7 @@ export default function HomePage() {
               <h2 className="contact-us__title">Let&apos;s Build Something <span>Great</span> Together</h2>
               <ul className="contact-us__details">
                 <li><span className="contact-us__detail-icon"><i className="fa-solid fa-envelope"></i></span><div><strong>Email Us</strong><a href="mailto:hello@growmos.com">hello@growmos.com</a></div></li>
-                <li><span className="contact-us__detail-icon contact-us__detail-icon--whatsapp"><i className="fa-brands fa-whatsapp"></i></span><div><strong>WhatsApp Us</strong><a href="https://wa.me/8801731438768" target="_blank" rel="noopener noreferrer">+880 1731 438768</a></div></li>
+                <li><span className="contact-us__detail-icon contact-us__detail-icon--whatsapp"><i className="fa-solid fa-calendar-check"></i></span><div><strong>Schedule</strong><a href="https://calendly.com/hello-growmos/30min" target="_blank" rel="noopener noreferrer">Book a 30-minute call</a></div></li>
               </ul>
               <div className="contact-us__trust">
                 <div className="contact-us__trust-item"><i className="fa-solid fa-shield-halved"></i><span>Your data is safe with us</span></div>
