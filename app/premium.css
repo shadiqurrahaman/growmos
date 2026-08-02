@@ -1350,3 +1350,373 @@
 .cta__trust i { color: #4ade80; }
 .cta .btn--primary { background: #ffffff; color: var(--premium-ink); box-shadow: 0 12px 30px -10px rgba(0, 0, 0, 0.4); }
 .cta .btn--primary:hover { background: #f1efe8; }
+
+/* --------------------------------------------------------------------------
+   Services section — premium override on top of styles.css
+   Adds description subline + 3-column grid for the new 6-service lineup.
+   -------------------------------------------------------------------------- */
+.svc-header {
+    text-align: center;
+    margin-bottom: 60px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 14px;
+}
+
+.svc-header__label {
+    display: inline-flex;
+    align-items: center;
+    font-size: 0.72rem;
+    font-weight: 600;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--primary-light, #a99dff);
+    background: rgba(80, 58, 242, 0.15);
+    padding: 6px 14px;
+    border-radius: 999px;
+    border: 1px solid rgba(80, 58, 242, 0.35);
+    margin-bottom: 6px;
+}
+
+.svc-title {
+    font-size: clamp(2.2rem, 4vw, 3.1rem);
+    font-weight: 700;
+    line-height: 1.1;
+    letter-spacing: -0.028em;
+    color: var(--white, #ffffff);
+    margin: 0;
+}
+
+.svc-description {
+    color: rgba(255, 255, 255, 0.68);
+    font-size: 1rem;
+    line-height: 1.65;
+    margin: 0;
+    max-width: 620px;
+}
+
+/* Services grid — single column stack. The header (eyebrow, title,
+   description) sits full-width on top, then each horizontal card stacks
+   vertically one below the next. See plan unified-growing-sunset.md. */
+.svc-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 24px;
+}
+
+/* --------------------------------------------------------------------------
+   Service cards — horizontal cards with side-by-side content
+   Each card carries a deeper saturated tone (not pastel), a top accent bar,
+   and a small watermark numeral. Layout: left rail (icon + eyebrow) sits
+   side-by-side with the right panel (title, desc, bullets, bottom CTA).
+   Echoes the methodology card system so the page speaks one vivid visual
+   language end-to-end.
+   -------------------------------------------------------------------------- */
+.svc-card {
+    position: relative;
+    background: var(--svc-bg);
+    color: var(--svc-fg);
+    border-radius: 20px;
+    padding: 0;
+    border: 1px solid var(--svc-line);
+    display: flex;
+    flex-direction: row;
+    align-items: stretch;
+    transition: transform 240ms ease, box-shadow 240ms ease;
+    height: 100%;
+    min-height: 360px;
+    overflow: hidden;
+    isolation: isolate;
+}
+
+.svc-card::before {
+    content: "";
+    position: absolute;
+    inset: 0 0 auto 0;
+    height: 4px;
+    background: var(--svc-accent);
+    z-index: 1;
+}
+
+.svc-card__num {
+    position: absolute;
+    top: 16px;
+    right: 22px;
+    font-size: 3rem;
+    font-weight: 700;
+    line-height: 1;
+    opacity: 0.10;
+    pointer-events: none;
+    user-select: none;
+    margin: 0;
+    color: var(--svc-fg);
+    z-index: 0;
+    letter-spacing: -0.02em;
+}
+
+.svc-card:hover {
+    transform: translateY(-6px);
+    box-shadow: 0 24px 50px -22px var(--svc-shadow);
+}
+
+.svc-card__head {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: flex-start;
+    gap: 14px;
+    padding: 28px 24px;
+    position: relative;
+    z-index: 1;
+    flex: 0 0 200px;
+    border-right: 1px solid var(--svc-line);
+    background: rgba(255, 255, 255, 0.22);
+}
+
+/* Image media — left side of each card. Replaces the previous icon+eyebrow
+   rail: stock photo on the left, eyebrow/icon overlay chip sits on top of
+   the image so each service has a visual identity. */
+.svc-card__media {
+    position: relative;
+    flex: 0 0 300px;
+    height: 100%;
+    min-height: 360px;
+    overflow: hidden;
+    background: #ffffff;
+    border-right: 1px solid var(--svc-line);
+    padding: 20px;
+}
+
+.svc-card--blue .svc-card__media {
+    background: #f3f4f6;
+}
+
+.svc-card__img {
+    object-fit: contain;
+    object-position: center;
+}
+
+.svc-card__media-overlay {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: flex-start;
+    justify-content: flex-start;
+    padding: 18px 18px;
+    background: linear-gradient(180deg, rgba(0, 0, 0, 0.32) 0%, rgba(0, 0, 0, 0) 50%);
+    pointer-events: none;
+}
+
+.svc-card__media-tag {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 14px;
+    background: rgba(255, 255, 255, 0.92);
+    color: var(--svc-icon-fg);
+    border-radius: 999px;
+    font-size: 0.72rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.16em;
+    backdrop-filter: blur(6px);
+    -webkit-backdrop-filter: blur(6px);
+    box-shadow: 0 4px 14px -6px rgba(0, 0, 0, 0.35);
+}
+
+.svc-card__media-tag i {
+    font-size: 0.78rem;
+}
+
+.svc-card__icon {
+    width: 56px;
+    height: 56px;
+    border-radius: 14px;
+    background: var(--svc-icon-bg);
+    color: var(--svc-icon-fg);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.5rem;
+    flex-shrink: 0;
+}
+
+.svc-card__eyebrow {
+    font-size: 0.7rem;
+    text-transform: uppercase;
+    letter-spacing: 0.18em;
+    font-weight: 600;
+    color: var(--svc-icon-fg);
+    margin: 0;
+}
+
+.svc-card__body {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    padding: 26px 28px 24px;
+    flex: 1 1 auto;
+    position: relative;
+    z-index: 1;
+    min-width: 0;
+}
+
+.svc-card__title {
+    font-size: clamp(1.25rem, 1.7vw, 1.5rem);
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    line-height: 1.2;
+    color: var(--svc-fg);
+    margin: 0;
+    padding-right: 56px;
+}
+
+.svc-card__desc {
+    font-size: 0.95rem;
+    line-height: 1.55;
+    color: var(--svc-fg);
+    opacity: 0.78;
+    margin: 0;
+}
+
+.svc-card__subs {
+    list-style: none;
+    padding: 14px 0 0;
+    margin: 4px 0 0;
+    border-top: 1px solid var(--svc-line);
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.svc-card__subs li {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    font-size: 0.88rem;
+    font-weight: 500;
+    color: var(--svc-fg);
+    line-height: 1.45;
+}
+
+.svc-card__subs li i {
+    color: var(--svc-icon-fg);
+    font-size: 0.85rem;
+    margin-top: 3px;
+    flex-shrink: 0;
+}
+
+.svc-card__cta {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    margin-top: auto;
+    padding: 14px 24px;
+    background: var(--svc-icon-bg);
+    color: var(--svc-icon-fg);
+    font-size: 0.9rem;
+    font-weight: 600;
+    text-decoration: none;
+    letter-spacing: 0.01em;
+    transition: gap 200ms ease, background 200ms ease;
+    align-self: flex-start;
+    border-top: none;
+}
+
+.svc-card__cta:hover {
+    gap: 14px;
+    background: var(--svc-accent);
+    color: #ffffff;
+}
+
+/* Mobile collapse — at <720px the image media becomes a top banner sitting
+   above the body. The horizontal side-by-side split is preserved at every
+   other breakpoint because the single-column grid gives each card the
+   full container width. */
+@media (max-width: 719px) {
+    .svc-card {
+        flex-direction: column;
+        min-height: 0;
+    }
+
+    .svc-card__media {
+        flex: 0 0 auto;
+        width: 100%;
+        height: 220px;
+        border-right: none;
+        border-bottom: 1px solid var(--svc-line);
+    }
+
+    .svc-card__body {
+        padding: 22px 22px 22px;
+    }
+
+    .svc-card__cta {
+        align-self: stretch;
+        justify-content: space-between;
+    }
+}
+
+/* Per-service vivid tones — saturated backgrounds + matching accents.
+   Each service has a clear visual identity so all six stand apart in
+   the grid. Echoes the methodology card system for visual cohesion. */
+.svc-card--blue {
+    --svc-bg: #e0eaff;
+    --svc-fg: #0a1a40;
+    --svc-line: rgba(10, 26, 64, 0.12);
+    --svc-accent: #1e3a8a;
+    --svc-icon-bg: #ffffff;
+    --svc-icon-fg: #1e3a8a;
+    --svc-shadow: rgba(30, 58, 138, 0.45);
+}
+
+.svc-card--violet {
+    --svc-bg: #e8defc;
+    --svc-fg: #1a0a40;
+    --svc-line: rgba(26, 10, 64, 0.12);
+    --svc-accent: #4c1d95;
+    --svc-icon-bg: #ffffff;
+    --svc-icon-fg: #4c1d95;
+    --svc-shadow: rgba(76, 29, 149, 0.45);
+}
+
+.svc-card--green {
+    --svc-bg: #d4f5e0;
+    --svc-fg: #052e1f;
+    --svc-line: rgba(5, 46, 31, 0.12);
+    --svc-accent: #064e3b;
+    --svc-icon-bg: #ffffff;
+    --svc-icon-fg: #064e3b;
+    --svc-shadow: rgba(6, 78, 59, 0.45);
+}
+
+.svc-card--amber {
+    --svc-bg: #fde9b8;
+    --svc-fg: #451a03;
+    --svc-line: rgba(69, 26, 3, 0.12);
+    --svc-accent: #b45309;
+    --svc-icon-bg: #ffffff;
+    --svc-icon-fg: #78350f;
+    --svc-shadow: rgba(180, 83, 9, 0.45);
+}
+
+.svc-card--rose {
+    --svc-bg: #fcd9e8;
+    --svc-fg: #3a0d22;
+    --svc-line: rgba(58, 13, 34, 0.12);
+    --svc-accent: #9d174d;
+    --svc-icon-bg: #ffffff;
+    --svc-icon-fg: #4a1d33;
+    --svc-shadow: rgba(157, 23, 77, 0.45);
+}
+
+.svc-card--sage {
+    --svc-bg: #d8e8d4;
+    --svc-fg: #0d2818;
+    --svc-line: rgba(13, 40, 24, 0.12);
+    --svc-accent: #14532d;
+    --svc-icon-bg: #ffffff;
+    --svc-icon-fg: #14532d;
+    --svc-shadow: rgba(20, 83, 45, 0.45);
+}

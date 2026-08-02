@@ -7,27 +7,27 @@ export default function Footer() {
         <div className="footer__grid">
           <div className="footer__brand">
             <Link href="/" className="footer__logo">
-              <span className="logo-growss">Grow</span>
-              <span className="logo-mosss">Mos</span>
+              <span className="brand-mark" aria-hidden="true"><span></span><span></span><span></span></span>
+              <span className="brand-wordmark">GrowMos</span>
             </Link>
             <p className="footer__tagline">
               Your dedicated data and growth partner. We design, build, and
               maintain the data foundation your business runs on.
             </p>
             <div className="footer__social" aria-label="Social links">
-              <a href="#" className="footer__social-link" aria-label="LinkedIn">
+              <a href="mailto:hello@growmos.com?subject=Social%20channel%20request" className="footer__social-link" aria-label="LinkedIn">
                 <i className="fa-brands fa-linkedin-in"></i>
               </a>
-              <a href="#" className="footer__social-link" aria-label="X (Twitter)">
+              <a href="mailto:hello@growmos.com?subject=Social%20channel%20request" className="footer__social-link" aria-label="X (Twitter)">
                 <i className="fa-brands fa-x-twitter"></i>
               </a>
-              <a href="#" className="footer__social-link" aria-label="Facebook">
+              <a href="mailto:hello@growmos.com?subject=Social%20channel%20request" className="footer__social-link" aria-label="Facebook">
                 <i className="fa-brands fa-facebook-f"></i>
               </a>
-              <a href="#" className="footer__social-link" aria-label="Instagram">
+              <a href="mailto:hello@growmos.com?subject=Social%20channel%20request" className="footer__social-link" aria-label="Instagram">
                 <i className="fa-brands fa-instagram"></i>
               </a>
-              <a href="#" className="footer__social-link" aria-label="YouTube">
+              <a href="mailto:hello@growmos.com?subject=Social%20channel%20request" className="footer__social-link" aria-label="YouTube">
                 <i className="fa-brands fa-youtube"></i>
               </a>
             </div>
@@ -111,12 +111,12 @@ export default function Footer() {
                 <a href="mailto:hello@growmos.com">hello@growmos.com</a>
               </li>
               <li>
-                <i className="fa-solid fa-phone"></i>
-                <a href="tel:+8801731438768">+880 1731 438768</a>
+                <i className="fa-solid fa-calendar-check"></i>
+                <a href="https://calendly.com/hello-growmos/30min" target="_blank" rel="noopener noreferrer">Book a 30-minute call</a>
               </li>
               <li>
                 <i className="fa-solid fa-location-dot"></i>
-                <span>Remote-first, Global Team</span>
+                <span>Remote-first · serving global clients</span>
               </li>
             </ul>
           </div>

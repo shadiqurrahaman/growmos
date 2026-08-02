@@ -6857,6 +6857,7 @@ section {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
     gap: var(--spacing-xl);
+    align-items: stretch;
 }
 
 .sp-cap__card {
@@ -6864,6 +6865,9 @@ section {
     border: 1px solid var(--gray-200);
     border-radius: var(--radius-2xl);
     padding: var(--spacing-2xl);
+    display: flex;
+    flex-direction: column;
+    height: 100%;
     transition: transform var(--transition-base), box-shadow var(--transition-base), border-color var(--transition-base);
     scroll-margin-top: 100px;
 }
@@ -6901,6 +6905,8 @@ section {
 .sp-cap__points {
     display: grid;
     gap: var(--spacing-sm);
+    margin-top: auto;
+    padding-top: var(--spacing-md);
 }
 
 .sp-cap__points li {

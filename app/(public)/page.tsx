@@ -299,25 +299,97 @@ export default function HomePage() {
       {/* Services */}
       <section className="svc-section" id="services">
         <div className="container">
-          <div className="svc-header">
-            <div className="svc-header__label">What We Do</div>
+          <header className="svc-header">
+            <span className="svc-header__label">What We Do</span>
             <h2 className="svc-title">Services Built to<br />Grow Your Business</h2>
-          </div>
+            <p className="svc-description">End-to-end data services — from pipelines to dashboards to long-term data operations. Built for B2B teams that need a partner, not another vendor.</p>
+          </header>
           <div className="svc-grid">
             {[
-              { img:"/images/svc-digital-marketing.jpg", icon:"fa-solid fa-database", title:"Data Pipeline Engineering", desc:"End-to-end ingestion and transformation with Fivetran, Airbyte, and dbt. Clean, modelled, and ready for analysis.", subs:["Source connectors & sync setup","dbt transformations & testing","Schema management & lineage","Orchestration with Airflow / Dagster"], href:"/data-pipeline-engineering" },
-              { img:"/images/svc-boss-model.jpg", icon:"fa-solid fa-cube", title:"Cloud Data Warehousing", desc:"Modern warehouses designed for B2B scale — BigQuery, Microsoft Fabric, and Snowflake, optimised for cost and speed.", subs:["Warehouse architecture & setup","Cost & performance tuning","Security & access controls","Migration from legacy systems"], href:"/cloud-data-warehousing" },
-              { img:"/images/svc-software-dev.jpg", icon:"fa-solid fa-chart-line", title:"BI & Dashboard Development", desc:"Decision-ready dashboards in Power BI and Metabase, built around the metrics your team actually acts on.", subs:["Executive KPI dashboards","Operational & cohort views","Self-serve analytics enablement","Embedded analytics for apps"], href:"/bi-dashboards" },
-              { img:"/images/svc-bi-ai.jpg", icon:"fa-solid fa-plug", title:"CRM Data Integration", desc:"Unify Salesforce and HubSpot data with the rest of your stack — for true customer 360 and attribution.", subs:["Salesforce & HubSpot sync","Custom objects & fields mapping","Lead-to-revenue reporting","Attribution modelling"], href:"/crm-data-integration" },
-              { img:"/images/web_analytics.jpg", icon:"fa-solid fa-arrow-right-arrow-left", title:"Reverse ETL & Activation", desc:"Send warehouse insights back to the tools your team lives in — sales, marketing, support, and product.", subs:["Hightouch / Census syncs","Audience activation","Sales enablement workflows","Closed-loop reporting"], href:"/reverse-etl-activation" },
-              { img:"/images/svc-digital-marketing.jpg", icon:"fa-brands fa-meta", title:"Performance Marketing & Paid Ads", desc:"Full-funnel Meta & Google campaigns tied directly to your warehouse data — so growth is measured, not assumed.", subs:["Meta & Google Ads management","Server-side tracking (Pixel + CAPI)","Multi-touch attribution","Creative testing frameworks"], href:"/meta-ads" },
-              { img:"/images/social-media-management.jpg", icon:"fa-solid fa-share-nodes", title:"AI-Powered Content & Social", desc:"Stop-scroll video, branded content, and platform-specific social management — produced by an AI-augmented team.", subs:["AI video generation & editing","UGC ad creative","Platform-specific management","Creator & influencer ops"], href:"/social-media-management" },
-              { img:"/images/svc-software-dev.jpg", icon:"fa-solid fa-code", title:"Custom Software & Dashboards", desc:"When off-the-shelf BI doesn't fit — we build custom dashboards, internal tools, and data apps on top of your warehouse.", subs:["Custom dashboards & portals","Internal data tools","API & webhook integrations","AI assistants over your data"], href:"/custom-software-development" },
+              {
+                num: "01",
+                tone: "blue",
+                icon: "fa-solid fa-database",
+                title: "Data Pipeline Engineering",
+                desc: "Automated, reliable data ingestion from every source your business runs on.",
+                subs: ["Fivetran & Airbyte connectors", "Custom API & webhook ingestion", "Database replication (CDC)", "Schema management & monitoring"],
+                href: "/data-pipeline-engineering",
+                cta: "Explore Pipelines",
+                img: "/images/services/data-pipeline.jpg",
+              },
+              {
+                num: "02",
+                tone: "violet",
+                icon: "fa-solid fa-cube",
+                title: "Data Warehousing",
+                desc: "Scalable cloud data warehouses built for B2B scale — without the bloat.",
+                subs: ["BigQuery setup, optimization & cost control", "Microsoft Fabric implementation", "Multi-source consolidation", "Security, access control & governance"],
+                href: "/cloud-data-warehousing",
+                cta: "Explore Warehousing",
+                img: "/images/services/data-warehousing.jpg",
+              },
+              {
+                num: "03",
+                tone: "green",
+                icon: "fa-solid fa-code-branch",
+                title: "Data Transformation & Modeling",
+                desc: "Production-grade dbt models your analytics team can trust.",
+                subs: ["dbt project setup & best-practice architecture", "Staging → intermediate → marts layered modeling", "Tests, documentation, and CI/CD", "Incremental models & performance tuning"],
+                href: "/contact",
+                cta: "Explore dbt Modeling",
+                img: "/images/services/data-transformation.jpg",
+              },
+              {
+                num: "04",
+                tone: "amber",
+                icon: "fa-solid fa-chart-line",
+                title: "BI & Dashboard Development",
+                desc: "Executive-grade dashboards that turn your warehouse into decisions.",
+                subs: ["Power BI development & deployment", "Metabase setup & customization", "Self-serve analytics enablement", "KPI definition & metric governance"],
+                href: "/bi-dashboards",
+                cta: "Explore BI",
+                img: "/images/services/bi-dashboard.jpg",
+              },
+              {
+                num: "05",
+                tone: "rose",
+                icon: "fa-solid fa-plug",
+                title: "CRM & Marketing Data Integration",
+                desc: "Unify Salesforce, HubSpot, and ad platforms into a single source of truth.",
+                subs: ["Salesforce & HubSpot data extraction", "Multi-touch attribution modeling", "Customer 360 & lifecycle analytics", "Paid media + CRM unified reporting"],
+                href: "/crm-data-integration",
+                cta: "Explore CRM Integration",
+                img: "/images/services/crm-integration.jpg",
+              },
+              {
+                num: "06",
+                tone: "sage",
+                icon: "fa-solid fa-gears",
+                title: "Managed DataOps & Advisory",
+                desc: "A long-term data partner — monitoring, optimization, and strategy on retainer.",
+                subs: ["24/7 pipeline monitoring & alerting", "Monthly health & cost reports", "Quarterly roadmap reviews", "Data strategy & team enablement"],
+                href: "/contact",
+                cta: "Explore Managed DataOps",
+                img: "/images/services/managed-dataops.jpg",
+              },
             ].map((svc, i) => (
-              <div className="svc-card" key={i}>
-                <div className="svc-card__image-wrap">
-                  <img className="svc-card__image" src={svc.img} alt={svc.title} />
-                  <div className="svc-card__overlay"></div>
+              <article className={`svc-card svc-card--${svc.tone}`} key={i}>
+                <span className="svc-card__num" aria-hidden="true">{svc.num}</span>
+                <div className="svc-card__media">
+                  <Image
+                    src={svc.img}
+                    alt=""
+                    fill
+                    sizes="(max-width: 719px) 100vw, 828px"
+                    className="svc-card__img"
+                    priority={i === 0}
+                  />
+                  <div className="svc-card__media-overlay" aria-hidden="true">
+                    <div className="svc-card__media-tag">
+                      <i className={svc.icon}></i>
+                      <span>Service {svc.num}</span>
+                    </div>
+                  </div>
                 </div>
                 <div className="svc-card__body">
                   <h3 className="svc-card__title">{svc.title}</h3>
@@ -325,9 +397,9 @@ export default function HomePage() {
                   <ul className="svc-card__subs">
                     {svc.subs.map((s, j) => <li key={j}><i className="fa-solid fa-circle-check"></i> {s}</li>)}
                   </ul>
-                  <Link href={svc.href} className="svc-card__cta">Learn More <i className="fa-solid fa-arrow-right"></i></Link>
+                  <Link href={svc.href} className="svc-card__cta">{svc.cta} <i className="fa-solid fa-arrow-right"></i></Link>
                 </div>
-              </div>
+              </article>
             ))}
           </div>
         </div>

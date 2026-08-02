@@ -1,7 +1,6 @@
 "use client";
 import { useState } from "react";
 import Link from "next/link";
-import Image from "next/image";
 
 const services = [
   // ---- Data Solutions (lead with these) ----
@@ -176,15 +175,9 @@ export default function Header() {
         ></div>
       )}
       <nav className="nav container">
-        <Link href="/" className="nav__logo">
-          <Image
-            src="/images/growmos.jpg"
-            alt="GrowMos Logo"
-            width={40}
-            height={40}
-            className="nav__logo-img"
-          />
-          <span className="logo-mos">GrowMos</span>
+        <Link href="/" className="nav__logo" onClick={closeMenu}>
+          <span className="brand-mark" aria-hidden="true"><span></span><span></span><span></span></span>
+          <span className="brand-wordmark">GrowMos</span>
         </Link>
 
         <div className={`nav__menu${menuOpen ? " show-menu" : ""}`} id="nav-menu">
@@ -387,7 +380,7 @@ export default function Header() {
             rel="noopener noreferrer"
             className="btn btn--primary"
           >
-            Schedule A Meeting
+            Book a call
           </a>
           <div
             className="nav__toggle"

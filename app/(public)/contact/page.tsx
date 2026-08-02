@@ -1,6 +1,5 @@
 "use client";
 import { useState } from "react";
-import Image from "next/image";
 
 export default function ContactPage() {
   const [form, setForm] = useState({ firstName:"", lastName:"", email:"", phone:"", service:"", message:"" });
@@ -44,34 +43,37 @@ export default function ContactPage() {
                 <div><p className="contact-quick__label">Email</p><p className="contact-quick__value"><a href="mailto:hello@growmos.com">hello@growmos.com</a></p></div>
               </div>
               <div className="contact-quick__item">
-                <div className="contact-quick__icon contact-quick__icon--green"><i className="fa-solid fa-phone"></i></div>
-                <div><p className="contact-quick__label">Call Us</p><p className="contact-quick__value"><a href="tel:+8801731438768">+880 1731 438768</a></p></div>
+                <div className="contact-quick__icon contact-quick__icon--green"><i className="fa-solid fa-calendar-check"></i></div>
+                <div><p className="contact-quick__label">Schedule</p><p className="contact-quick__value"><a href="https://calendly.com/hello-growmos/30min" target="_blank" rel="noopener noreferrer">Book a 30-min call</a></p></div>
               </div>
               <div className="contact-quick__item">
                 <div className="contact-quick__icon contact-quick__icon--purple"><i className="fa-solid fa-location-dot"></i></div>
-                <div><p className="contact-quick__label">Location</p><p className="contact-quick__value">Remote-first, Global Team</p></div>
+                <div><p className="contact-quick__label">Location</p><p className="contact-quick__value">Remote-first · serving global clients</p></div>
               </div>
             </div>
             <div className="contact-quick__social">
-              <a href="#" className="contact-quick__social-link" aria-label="LinkedIn"><i className="fa-brands fa-linkedin-in"></i></a>
-              <a href="#" className="contact-quick__social-link" aria-label="Twitter"><i className="fa-brands fa-x-twitter"></i></a>
-              <a href="#" className="contact-quick__social-link" aria-label="Facebook"><i className="fa-brands fa-facebook-f"></i></a>
-              <a href="#" className="contact-quick__social-link" aria-label="Instagram"><i className="fa-brands fa-instagram"></i></a>
+              <a href="mailto:hello@growmos.com?subject=Social%20channel%20request" className="contact-quick__social-link" aria-label="LinkedIn"><i className="fa-brands fa-linkedin-in"></i></a>
+              <a href="mailto:hello@growmos.com?subject=Social%20channel%20request" className="contact-quick__social-link" aria-label="Twitter"><i className="fa-brands fa-x-twitter"></i></a>
+              <a href="mailto:hello@growmos.com?subject=Social%20channel%20request" className="contact-quick__social-link" aria-label="Facebook"><i className="fa-brands fa-facebook-f"></i></a>
+              <a href="mailto:hello@growmos.com?subject=Social%20channel%20request" className="contact-quick__social-link" aria-label="Instagram"><i className="fa-brands fa-instagram"></i></a>
             </div>
           </div>
 
           <div className="contact-grid">
             <div className="contact-whatsapp">
               <div className="contact-whatsapp__header">
-                <div className="contact-whatsapp__icon"><i className="fa-brands fa-whatsapp"></i></div>
-                <h3 className="contact-whatsapp__title">Chat on WhatsApp</h3>
+                <div className="contact-whatsapp__icon"><i className="fa-solid fa-calendar-check"></i></div>
+                <h3 className="contact-whatsapp__title">Book a discovery call</h3>
               </div>
               <div className="contact-whatsapp__qr">
-                <Image src="/images/whatsapp-qr.png" alt="Scan to chat on WhatsApp" width={200} height={200} />
+                <a href="https://calendly.com/hello-growmos/30min" target="_blank" rel="noopener noreferrer" style={{display:"block",padding:"32px 16px",borderRadius:"16px",background:"linear-gradient(135deg,#f5f3ff,#ede9fe)",color:"#2d1f6b",fontWeight:600,textAlign:"center"}}>
+                  <i className="fa-solid fa-calendar-days" style={{fontSize:"2rem",display:"block",marginBottom:8}}></i>
+                  Open our calendar
+                </a>
               </div>
-              <p className="contact-whatsapp__text">Scan the QR code to start a<br /><strong>WhatsApp conversation</strong> with us instantly</p>
-              <a href="https://wa.me/8801731438768" target="_blank" rel="noopener noreferrer" className="contact-whatsapp__btn">
-                <i className="fa-brands fa-whatsapp"></i> Open WhatsApp
+              <p className="contact-whatsapp__text">Pick a 30-minute window that works for you.<br />We respond to every booking with a <strong>tailored agenda within 24 hours</strong>.</p>
+              <a href="https://calendly.com/hello-growmos/30min" target="_blank" rel="noopener noreferrer" className="contact-whatsapp__btn">
+                <i className="fa-solid fa-arrow-right"></i> Schedule a call
               </a>
             </div>
 
