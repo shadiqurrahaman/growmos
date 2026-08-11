@@ -3928,6 +3928,18 @@ section {
     color: var(--secondary);
 }
 
+.tech-item__logo {
+    width: 64px;
+    height: 64px;
+    object-fit: contain;
+    transition: filter var(--transition-base), opacity var(--transition-base), transform var(--transition-base);
+}
+
+.tech-item:hover .tech-item__logo {
+    transform: scale(1.05);
+    transition: transform var(--transition-base);
+}
+
 .tech-item span {
     font-size: var(--font-size-sm);
     font-weight: 600;
@@ -4612,7 +4624,7 @@ section {
    Data Stack Section (pipeline visualization)
    -------------------------------------------------------------------------- */
 .stack-section {
-    padding: var(--spacing-4xl) 0;
+    padding: var(--spacing-5xl, 6rem) 0;
     background: linear-gradient(180deg, var(--gray-50) 0%, var(--white) 100%);
     position: relative;
     overflow: hidden;
@@ -4623,8 +4635,8 @@ section {
     position: absolute;
     inset: 0;
     background:
-        radial-gradient(circle at 10% 10%, rgba(99, 102, 241, 0.06), transparent 40%),
-        radial-gradient(circle at 90% 90%, rgba(236, 72, 153, 0.06), transparent 40%);
+        radial-gradient(circle at 10% 10%, rgba(99, 102, 241, 0.07), transparent 40%),
+        radial-gradient(circle at 90% 90%, rgba(236, 72, 153, 0.07), transparent 40%);
     pointer-events: none;
 }
 
@@ -4632,73 +4644,158 @@ section {
     position: relative;
 }
 
+/* Stage wrapper holds both the rail and the grid so they can share positioning */
+.stack-stage {
+    position: relative;
+    margin-top: 3rem;
+}
+
 .stack-grid {
     display: grid;
     grid-template-columns: repeat(5, 1fr);
-    gap: 1.25rem;
-    margin-top: 3rem;
+    gap: 1.5rem;
     align-items: stretch;
 }
 
+/* Connector rail — positioned along the top of the cards, passing through the icon squares */
+.stack-rail {
+    position: absolute;
+    top: 2.25rem;             /* aligns with the center of the 64px icon squares (32px from card top + icon center) */
+    left: 0;
+    right: 0;
+    height: 4px;
+    z-index: 0;
+    pointer-events: none;
+}
+
+.stack-rail__svg {
+    width: 100%;
+    height: 100%;
+    display: block;
+    overflow: visible;
+}
+
+.stack-rail__line {
+    stroke-dasharray: 100;
+    stroke-dashoffset: 100;
+    transition: stroke-dashoffset 0.3s ease;
+}
+
+.stack-section.is-revealed .stack-rail__line {
+    animation: pipeline-draw 1.6s cubic-bezier(0.4, 0, 0.2, 1) 0.2s forwards;
+}
+
+/* Animated data packet — small dot riding along the rail */
+.stack-packet {
+    position: absolute;
+    top: 50%;
+    left: 0;
+    width: 100%;
+    height: 0;
+    transform: translateY(-50%);
+}
+
+.stack-packet__dot {
+    position: absolute;
+    top: -5px;
+    left: 0;
+    width: 14px;
+    height: 14px;
+    border-radius: 50%;
+    background: radial-gradient(circle at 30% 30%, #fff, var(--primary, #6366f1) 70%);
+    box-shadow:
+        0 0 0 4px rgba(99, 102, 241, 0.15),
+        0 0 14px 2px rgba(99, 102, 241, 0.55);
+    opacity: 0;
+    transform: translateX(-7px);
+}
+
+.stack-section.is-revealed .stack-packet__dot {
+    animation: packet-flow 6s linear 1.6s infinite;
+}
+
+/* Card */
 .stack-step {
     position: relative;
+    z-index: 1;
     background: var(--white);
     border: 1px solid var(--gray-100, #eef0f4);
+    border-top: 3px solid transparent;
     border-radius: var(--radius-2xl, 1.5rem);
     padding: 1.75rem 1.25rem 1.5rem;
     box-shadow: 0 1px 2px rgba(15, 23, 42, 0.04), 0 8px 24px -16px rgba(15, 23, 42, 0.12);
     display: flex;
     flex-direction: column;
     transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
+    opacity: 0;
+    transform: translateY(20px);
 }
 
+.stack-section.is-revealed .stack-step {
+    animation: step-rise 0.7s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+}
+
+.stack-section.is-revealed .stack-step:nth-child(1) { animation-delay: 0.05s; }
+.stack-section.is-revealed .stack-step:nth-child(2) { animation-delay: 0.18s; }
+.stack-section.is-revealed .stack-step:nth-child(3) { animation-delay: 0.31s; }
+.stack-section.is-revealed .stack-step:nth-child(4) { animation-delay: 0.44s; }
+.stack-section.is-revealed .stack-step:nth-child(5) { animation-delay: 0.57s; }
+
 .stack-step:hover {
-    transform: translateY(-4px);
-    box-shadow: 0 4px 8px rgba(15, 23, 42, 0.06), 0 24px 40px -16px rgba(99, 102, 241, 0.2);
-    border-color: rgba(99, 102, 241, 0.25);
+    transform: translateY(-6px);
+    box-shadow: 0 6px 14px rgba(15, 23, 42, 0.08), 0 28px 50px -18px var(--step-color, rgba(99, 102, 241, 0.25));
+    border-top-color: var(--step-color, rgba(99, 102, 241, 0.7));
 }
 
 .stack-step__num {
     position: absolute;
-    top: 1rem;
+    top: 0.9rem;
     right: 1rem;
-    font-size: 0.75rem;
+    font-size: 0.72rem;
     font-weight: 700;
-    color: var(--gray-400, #94a3b8);
+    color: var(--step-color-soft, #cbd5e1);
     letter-spacing: 0.05em;
 }
 
 .stack-step__icon {
-    width: 48px;
-    height: 48px;
-    border-radius: 14px;
+    width: 64px;
+    height: 64px;
+    border-radius: 16px;
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    font-size: 1.25rem;
+    font-size: 1.4rem;
     color: #fff;
-    background: linear-gradient(135deg, var(--primary, #6366f1), var(--accent-pink, #ec4899));
-    margin-bottom: 1rem;
+    background: linear-gradient(135deg, var(--step-color, #6366f1), var(--step-color-soft, #8b5cf6));
+    margin-bottom: 1.1rem;
+    position: relative;
+    box-shadow:
+        0 0 0 6px color-mix(in srgb, var(--step-color, #6366f1) 10%, transparent),
+        0 8px 18px -8px var(--step-color, rgba(99, 102, 241, 0.5));
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
-.stack-step--01 .stack-step__icon { background: linear-gradient(135deg, #6366f1, #8b5cf6); }
-.stack-step--02 .stack-step__icon { background: linear-gradient(135deg, #10b981, #059669); }
-.stack-step--03 .stack-step__icon { background: linear-gradient(135deg, #f59e0b, #d97706); }
-.stack-step--04 .stack-step__icon { background: linear-gradient(135deg, #3b82f6, #1d4ed8); }
-.stack-step--05 .stack-step__icon { background: linear-gradient(135deg, #ec4899, #db2777); }
+.stack-step:hover .stack-step__icon {
+    transform: scale(1.08);
+    box-shadow:
+        0 0 0 8px color-mix(in srgb, var(--step-color, #6366f1) 16%, transparent),
+        0 12px 24px -6px var(--step-color, rgba(99, 102, 241, 0.6));
+}
 
 .stack-step__title {
-    font-size: 1.125rem;
-    font-weight: 700;
+    font-size: 1.25rem;
+    font-weight: 800;
     color: var(--secondary, #0f172a);
     margin: 0 0 0.5rem;
+    letter-spacing: -0.01em;
 }
 
 .stack-step__desc {
     font-size: 0.875rem;
     color: var(--gray-600, #475569);
-    line-height: 1.5;
+    line-height: 1.55;
     margin: 0 0 1rem;
+    max-width: 32ch;
 }
 
 .stack-step__tools {
@@ -4713,49 +4810,120 @@ section {
 .stack-step__tools li {
     font-size: 0.72rem;
     font-weight: 600;
-    color: var(--gray-700, #334155);
-    background: var(--gray-50, #f8fafc);
-    border: 1px solid var(--gray-100, #eef0f4);
+    color: var(--step-color, #334155);
+    background: color-mix(in srgb, var(--step-color, #6366f1) 6%, var(--white));
+    border: 1px solid color-mix(in srgb, var(--step-color, #6366f1) 30%, transparent);
     border-radius: 9999px;
-    padding: 0.2rem 0.6rem;
+    padding: 0.22rem 0.6rem;
+    transition: background 0.2s ease, border-color 0.2s ease;
 }
 
-.stack-arrow {
-    position: absolute;
-    top: 50%;
-    right: -1.05rem;
-    transform: translateY(-50%);
-    width: 2rem;
-    height: 2rem;
-    border-radius: 9999px;
-    background: var(--white);
-    border: 1px solid var(--gray-100, #eef0f4);
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    color: var(--gray-400, #94a3b8);
-    font-size: 0.75rem;
-    z-index: 1;
+.stack-step__tools li:hover {
+    background: color-mix(in srgb, var(--step-color, #6366f1) 14%, var(--white));
+    border-color: color-mix(in srgb, var(--step-color, #6366f1) 55%, transparent);
 }
 
+/* CTA */
 .stack-section__cta {
     text-align: center;
     margin-top: 3rem;
 }
 
+/* Animations */
+@keyframes pipeline-draw {
+    from { stroke-dashoffset: 100; }
+    to   { stroke-dashoffset: 0; }
+}
+
+@keyframes step-rise {
+    from { opacity: 0; transform: translateY(20px); }
+    to   { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes packet-flow {
+    0%   { opacity: 0; left: 0%; }
+    5%   { opacity: 1; }
+    95%  { opacity: 1; }
+    100% { opacity: 0; left: 100%; }
+}
+
+/* Reduced motion */
+@media (prefers-reduced-motion: reduce) {
+    .stack-section.is-revealed .stack-rail__line,
+    .stack-section.is-revealed .stack-packet__dot,
+    .stack-section.is-revealed .stack-step {
+        animation: none;
+        stroke-dashoffset: 0;
+        opacity: 1;
+        transform: none;
+    }
+    .stack-packet__dot { display: none; }
+}
+
+/* Responsive — 3 columns at <=1100px, vertical rail below */
 @media (max-width: 1100px) {
     .stack-grid { grid-template-columns: repeat(3, 1fr); }
-    .stack-step--04, .stack-step--05 { grid-column: span 1; }
-    .stack-step--03 .stack-arrow,
-    .stack-step--05 .stack-arrow { display: none; }
+    .stack-rail {
+        /* Rail goes behind the first row only; second row cards have no rail connection */
+        top: 2.25rem;
+        height: 4px;
+    }
 }
 
 @media (max-width: 720px) {
+    .stack-stage {
+        padding-left: 32px;
+    }
     .stack-grid {
         grid-template-columns: 1fr;
         gap: 1rem;
     }
-    .stack-arrow { display: none !important; }
+    /* Vertical rail on the left */
+    .stack-rail {
+        top: 0;
+        bottom: 0;
+        left: 12px;
+        right: auto;
+        width: 4px;
+        height: 100%;
+    }
+    .stack-rail__svg {
+        width: 100%;
+        height: 100%;
+    }
+    .stack-section.is-revealed .stack-rail__line {
+        /* Re-target the line to animate vertically */
+        animation: pipeline-draw-v 1.6s cubic-bezier(0.4, 0, 0.2, 1) 0.2s forwards;
+    }
+    .stack-packet {
+        top: 0;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 0;
+        height: 100%;
+    }
+    .stack-packet__dot {
+        top: 0;
+        left: -7px;
+    }
+    .stack-section.is-revealed .stack-packet__dot {
+        animation-name: packet-flow-v;
+    }
+    .stack-step {
+        padding-left: 1.5rem;
+    }
+}
+
+@keyframes pipeline-draw-v {
+    from { stroke-dashoffset: 100; }
+    to   { stroke-dashoffset: 0; }
+}
+
+@keyframes packet-flow-v {
+    0%   { opacity: 0; top: 0%; }
+    5%   { opacity: 1; }
+    95%  { opacity: 1; }
+    100% { opacity: 0; top: 100%; }
 }
 
 
@@ -4860,25 +5028,25 @@ section {
     margin-bottom: 56px;
 }
 
-.exp-head__left { flex: 1; }
+.exp-head__left { flex: 1 1 auto; }
 
 .exp-head__right {
-    flex: 1;
-    max-width: 420px;
+    flex: 1 1 420px;
+    max-width: 520px;
 }
 
 .exp-badge {
     display: inline-block;
     padding: 7px 18px;
-    background: rgba(80, 58, 242, 0.2);
-    color: var(--primary-light);
+    background: rgba(124, 106, 245, 0.18);
+    color: #c4b5fd;
     font-size: 12px;
     font-weight: 700;
     border-radius: 30px;
     margin-bottom: 16px;
     text-transform: uppercase;
     letter-spacing: 1.5px;
-    border: 1px solid rgba(124, 106, 245, 0.3);
+    border: 1px solid rgba(167, 139, 250, 0.45);
 }
 
 .exp-title {
@@ -4898,7 +5066,7 @@ section {
 
 .exp-desc {
     font-size: 1rem;
-    color: rgba(255, 255, 255, 0.52);
+    color: rgba(226, 232, 240, 0.78);
     line-height: 1.75;
     margin: 0;
 }
@@ -4912,8 +5080,8 @@ section {
 
 /* Card base */
 .exp-card {
-    background: rgba(255, 255, 255, 0.04);
-    border: 1px solid rgba(255, 255, 255, 0.07);
+    background: rgba(255, 255, 255, 0.06);
+    border: 1px solid rgba(255, 255, 255, 0.12);
     border-radius: 18px;
     padding: 28px 22px;
     display: flex;
@@ -4926,7 +5094,7 @@ section {
 }
 
 .exp-card:hover {
-    background: rgba(255, 255, 255, 0.07);
+    background: rgba(255, 255, 255, 0.1);
     transform: translateY(-5px);
 }
 
@@ -4958,10 +5126,10 @@ section {
 }
 
 .exp-card__sub {
-    font-size: 0.8rem;
-    color: rgba(255, 255, 255, 0.42);
+    font-size: 0.85rem;
+    color: rgba(226, 232, 240, 0.72);
     margin: 0;
-    line-height: 1.5;
+    line-height: 1.55;
 }
 
 /* Colour variants — icon bg & colour */

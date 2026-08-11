@@ -3,7 +3,6 @@ import { useEffect, useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import DataStack from "@/components/DataStack";
-import Team from "@/components/Team";
 
 const workedLogos = [
   { file: "Logo - GJW.webp", alt: "GJW Direct" },
@@ -18,18 +17,18 @@ const workedLogos = [
 ];
 
 const dataStack = [
-  { icon: "fa-solid fa-database", label: "Fivetran" },
-  { icon: "fa-solid fa-arrows-rotate", label: "Airbyte" },
-  { icon: "fa-solid fa-gears", label: "dbt" },
-  { icon: "fa-solid fa-cube", label: "BigQuery" },
-  { icon: "fa-solid fa-snowflake", label: "Snowflake" },
-  { icon: "fa-brands fa-microsoft", label: "Fabric" },
-  { icon: "fa-solid fa-chart-line", label: "Power BI" },
-  { icon: "fa-solid fa-chart-area", label: "Metabase" },
-  { icon: "fa-solid fa-cloud", label: "Salesforce" },
-  { icon: "fa-solid fa-bullhorn", label: "HubSpot" },
-  { icon: "fa-solid fa-server", label: "PostgreSQL" },
-  { icon: "fa-brands fa-python", label: "Python" },
+  { src: "/images/stack/fivetran.png", label: "Fivetran" },
+  { src: "/images/stack/airbyte.svg", label: "Airbyte" },
+  { src: "/images/stack/dbt.svg", label: "dbt" },
+  { src: "/images/stack/bigquery.svg", label: "BigQuery" },
+  { src: "/images/stack/snowflake.svg", label: "Snowflake" },
+  { src: "/images/stack/fabric.png", label: "Fabric" },
+  { src: "/images/stack/power-bi.svg", label: "Power BI" },
+  { src: "/images/stack/metabase.svg", label: "Metabase" },
+  { src: "/images/stack/salesforce.svg", label: "Salesforce" },
+  { src: "/images/stack/hubspot.svg", label: "HubSpot" },
+  { src: "/images/stack/postgresql.svg", label: "PostgreSQL" },
+  { src: "/images/stack/python.svg", label: "Python" },
 ];
 
 const industries = [
@@ -64,18 +63,6 @@ const problemsSolutions = [
     resolution: "Live dashboards your team actually trusts.",
     capability: "BI & reporting",
     tone: "violet",
-  },
-  {
-    problem: "Ad spend is a black box.",
-    resolution: "Spend tied to revenue — measured, not assumed.",
-    capability: "Performance marketing",
-    tone: "amber",
-  },
-  {
-    problem: "You're paying three vendors and getting none of them.",
-    resolution: "One accountable team across data and growth.",
-    capability: "Boss Model",
-    tone: "sage",
   },
 ];
 
@@ -194,11 +181,6 @@ export default function HomePage() {
                 <p className="problems-card__resolution">{p.resolution}</p>
               </article>
             ))}
-          </div>
-
-          <div className="problems__cta">
-            <a href="https://calendly.com/hello-growmos/30min" target="_blank" rel="noopener noreferrer" className="btn btn--primary btn--lg">Book a 30-minute call <i className="fa-solid fa-arrow-right"></i></a>
-            <p className="problems__cta-note">If any of these sound familiar, that&apos;s the conversation we&apos;ll have.</p>
           </div>
         </div>
       </section>
@@ -405,85 +387,6 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* Recent Works */}
-      <section className="works-section" id="recent-works">
-        <div className="container">
-          <div className="works-header">
-            <div className="works-header__left">
-              <span className="works-badge">Recent Work</span>
-              <h2 className="works-title">Results We&apos;ve<br />Delivered</h2>
-            </div>
-            <div className="works-header__right">
-              <p className="works-desc">From full-stack builds to paid media — here&apos;s the impact we&apos;ve made across real businesses.</p>
-            </div>
-          </div>
-        </div>
-        <div className="works-strip"><div className="works-track">
-          <div className="works-card">
-            <div className="works-card__screen works-card__screen--purple">
-              <div className="works-screen__chrome"><div className="works-screen__dots"><span className="works-screen__dot"></span><span className="works-screen__dot"></span><span className="works-screen__dot"></span></div><div className="works-screen__url"></div></div>
-              <div className="works-screen__body">
-                <div className="wk-web__banner"><div className="wk-web__banner-text"></div><div className="wk-web__banner-btn"></div></div>
-                <div className="wk-web__products">{[0,1,2].map(i=><div key={i} className="wk-web__product"><div className="wk-web__product-img"></div><div className="wk-web__product-info"></div><div className="wk-web__product-price"></div></div>)}</div>
-              </div>
-            </div>
-            <div className="works-card__body">
-              <span className="works-card__tag works-card__tag--purple">Web Development</span>
-              <h3 className="works-card__title">E-Commerce Platform Rebuild</h3>
-              <p className="works-card__desc">Rebuilt an outdated online store into a fast, conversion-focused platform with custom UX and a streamlined checkout.</p>
-              <div className="works-card__metrics"><div className="works-metric"><span className="works-metric__val">3.2×</span><span className="works-metric__lbl">Faster Load Time</span></div><div className="works-metric__divider"></div><div className="works-metric"><span className="works-metric__val">+38%</span><span className="works-metric__lbl">Conversion Rate</span></div></div>
-            </div>
-          </div>
-          <div className="works-card">
-            <div className="works-card__screen works-card__screen--orange">
-              <div className="works-screen__chrome"><div className="works-screen__dots"><span className="works-screen__dot"></span><span className="works-screen__dot"></span><span className="works-screen__dot"></span></div><div className="works-screen__url"></div></div>
-              <div className="works-screen__body">
-                <div className="wk-meta__toprow">{[{v:"4.1×",l:"ROAS"},{v:"£45k",l:"Mo. Spend"},{v:"2.8%",l:"CTR"}].map((k,i)=><div key={i} className="wk-meta__kpi"><div className="wk-meta__kpi-val">{k.v}</div><div className="wk-meta__kpi-lbl">{k.l}</div></div>)}</div>
-                <div className="wk-meta__chart"><div className="wk-meta__bars">{[50,65,48,82,72,100,90].map((h,i)=><div key={i} className={`wk-meta__bar${h===100?" wk-meta__bar--peak":""}`} style={{height:`${h}%`}}></div>)}</div></div>
-              </div>
-            </div>
-            <div className="works-card__body">
-              <span className="works-card__tag works-card__tag--orange">Meta Ads</span>
-              <h3 className="works-card__title">D2C Brand Paid Social Scale</h3>
-              <p className="works-card__desc">Scaled a D2C brand from £8k to £45k monthly ad spend while maintaining a strong return on ad spend throughout.</p>
-              <div className="works-card__metrics"><div className="works-metric"><span className="works-metric__val">4.1×</span><span className="works-metric__lbl">ROAS</span></div><div className="works-metric__divider"></div><div className="works-metric"><span className="works-metric__val">5.6×</span><span className="works-metric__lbl">Spend Scaled</span></div></div>
-            </div>
-          </div>
-          <div className="works-card">
-            <div className="works-card__screen works-card__screen--teal">
-              <div className="works-screen__chrome"><div className="works-screen__dots"><span className="works-screen__dot"></span><span className="works-screen__dot"></span><span className="works-screen__dot"></span></div><div className="works-screen__url"></div></div>
-              <div className="works-screen__body">
-                <div className="wk-gads__searchbar"><div className="wk-gads__search-icon"><i className="fa-brands fa-google" style={{fontSize:"10px",color:"rgba(255,255,255,0.6)"}}></i></div><div className="wk-gads__search-text"></div></div>
-                <div className="wk-gads__results">{[0,1].map(i=><div key={i} className="wk-gads__result"><div className="wk-gads__result-ad">Ad</div><div className="wk-gads__result-lines"><div className="wk-gads__result-title"></div><div className="wk-gads__result-url"></div><div className="wk-gads__result-desc"></div></div></div>)}</div>
-                <div className="wk-gads__perf"><div className="wk-gads__perf-row"><div className="wk-gads__perf-lbl"></div><div className="wk-gads__perf-track"><div className="wk-gads__perf-fill" style={{width:"38%"}}></div></div></div><div className="wk-gads__perf-row"><div className="wk-gads__perf-lbl"></div><div className="wk-gads__perf-track"><div className="wk-gads__perf-fill wk-gads__perf-fill--bright" style={{width:"91%"}}></div></div></div></div>
-              </div>
-            </div>
-            <div className="works-card__body">
-              <span className="works-card__tag works-card__tag--teal">Google Ads</span>
-              <h3 className="works-card__title">B2B SaaS Lead Generation</h3>
-              <p className="works-card__desc">Restructured Google Search campaigns for a B2B SaaS product — cutting wasted spend and tripling qualified leads.</p>
-              <div className="works-card__metrics"><div className="works-metric"><span className="works-metric__val">−62%</span><span className="works-metric__lbl">Cost Per Lead</span></div><div className="works-metric__divider"></div><div className="works-metric"><span className="works-metric__val">3×</span><span className="works-metric__lbl">Qualified Leads</span></div></div>
-            </div>
-          </div>
-          <div className="works-card">
-            <div className="works-card__screen works-card__screen--green">
-              <div className="works-screen__chrome"><div className="works-screen__dots"><span className="works-screen__dot"></span><span className="works-screen__dot"></span><span className="works-screen__dot"></span></div><div className="works-screen__url"></div></div>
-              <div className="works-screen__body">
-                <div className="wk-ai__pipeline"><div className="wk-ai__node"><i className="fa-solid fa-database" style={{fontSize:"12px"}}></i></div><div className="wk-ai__connector"></div><div className="wk-ai__node wk-ai__node--main"><i className="fa-solid fa-microchip" style={{fontSize:"14px"}}></i></div><div className="wk-ai__connector"></div><div className="wk-ai__node"><i className="fa-solid fa-chart-bar" style={{fontSize:"12px"}}></i></div></div>
-                <div className="wk-ai__metrics">{[{w:"95%",p:"95%"},{w:"88%",p:"88%"},{w:"72%",p:"72%"}].map((r,i)=><div key={i} className="wk-ai__row"><div className="wk-ai__row-lbl"></div><div className="wk-ai__row-track"><div className="wk-ai__row-fill" style={{width:r.w}}></div></div><span className="wk-ai__row-pct">{r.p}</span></div>)}</div>
-                <div className="wk-ai__status"><span className="wk-ai__status-dot"></span><div className="wk-ai__status-text"></div></div>
-              </div>
-            </div>
-            <div className="works-card__body">
-              <span className="works-card__tag works-card__tag--green">AI Integration</span>
-              <h3 className="works-card__title">Automated Reporting Pipeline</h3>
-              <p className="works-card__desc">Built a custom AI pipeline that automated client reporting and data processing — eliminating manual weekly work entirely.</p>
-              <div className="works-card__metrics"><div className="works-metric"><span className="works-metric__val">12hrs</span><span className="works-metric__lbl">Saved Per Week</span></div><div className="works-metric__divider"></div><div className="works-metric"><span className="works-metric__val">95%</span><span className="works-metric__lbl">Accuracy Rate</span></div></div>
-            </div>
-          </div>
-        </div></div>
-      </section>
-
       {/* Client proof */}
       <section className="client-proof" id="client-proof">
         <div className="container">
@@ -512,9 +415,6 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* Team */}
-      <Team />
-
       {/* Tech Stack */}
       <section className="tech-stack" id="tech-stack">
         <div className="container">
@@ -524,7 +424,12 @@ export default function HomePage() {
             <p className="section__subtitle">Best-in-class tools, integrated and maintained by our team — so you don't have to.</p>
           </div>
           <div className="tech-stack__grid">
-            {dataStack.map((t, i) => <div key={i} className="tech-item"><i className={t.icon}></i><span>{t.label}</span></div>)}
+            {dataStack.map((t, i) => (
+              <div key={i} className="tech-item">
+                <Image src={t.src} alt={t.label} width={64} height={64} className="tech-item__logo" />
+                <span>{t.label}</span>
+              </div>
+            ))}
           </div>
         </div>
       </section>

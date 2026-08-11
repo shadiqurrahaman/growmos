@@ -837,6 +837,12 @@
 .exp-card__sub { color: var(--premium-muted); }
 .exp-card__icon { background: var(--premium-accent-soft); color: var(--premium-accent); }
 
+/* Override styles.css dark-bg colors so they read on premium-paper light bg */
+.exp-title { color: var(--premium-ink); }
+.exp-title__accent { background: linear-gradient(90deg, var(--premium-accent), #a855f7); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+.exp-badge { background: var(--premium-accent-soft); color: var(--premium-accent); border-color: transparent; }
+.exp-desc { color: var(--premium-muted); }
+
 .roadmap { background: var(--premium-paper); }
 .method-section { background: var(--premium-ink); }
 
