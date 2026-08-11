@@ -4,6 +4,8 @@ import Link from "next/link";
 import Image from "next/image";
 import DataStack from "@/components/DataStack";
 import Reviews from "@/components/Reviews";
+import Product from "@/components/Product";
+import Pricing from "@/components/Pricing";
 
 const workedLogos = [
  { file: "Logo - GJW.webp", alt: "GJW Direct" },
@@ -195,6 +197,12 @@ export default function HomePage() {
  <div><strong>24h</strong><span>typical response time</span></div>
  </div>
  </section>
+
+ {/* Product — the GrowMos platform */}
+ <Product />
+
+ {/* Pricing — packages */}
+ <Pricing />
 
  {/* Methodology */}
  <section className="method-section" id="methodology">
