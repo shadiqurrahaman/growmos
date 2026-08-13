@@ -1,36 +1,27 @@
 "use client";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { useSearchParams } from "next/navigation";
 import { Suspense } from "react";
 
 function UnsubscribeForm() {
   const params = useSearchParams();
-  const email = params.get("email") || "";
+  const email = (params.get("email") || "").trim().toLowerCase();
   const [status, setStatus] = useState<"idle" | "loading" | "done" | "error">("idle");
 
-  useEffect(() => {
+  async function confirmUnsubscribe() {
     if (!email) return;
     setStatus("loading");
-    fetch("/api/subscribers", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ email, status: "unsubscribed" }),
-    })
-      .then(async (r) => {
-        if (r.ok) setStatus("done");
-        else setStatus("error");
-      })
-      .catch(() => setStatus("error"));
-  }, [email]);
-
-  async function unsubscribeViaUpdate() {
-    setStatus("loading");
-    const res = await fetch("/api/subscribers/unsubscribe", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ email }),
-    });
-    setStatus(res.ok ? "done" : "error");
+    try {
+      const res = await fetch("/api/subscribers/unsubscribe", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email }),
+      });
+      if (res.ok) setStatus("done");
+      else setStatus("error");
+    } catch {
+      setStatus("error");
+    }
   }
 
   return (
@@ -47,8 +38,13 @@ function UnsubscribeForm() {
           <p style={{ color: "#ef4444" }}>Something went wrong. Please contact us at hello@growmos.com</p>
         ) : (
           <>
-            <p style={{ color: "#444", marginBottom: 20 }}>You&apos;re about to unsubscribe <strong>{email}</strong> from GrowMos marketing emails.</p>
-            <button onClick={unsubscribeViaUpdate} style={{ background: "#ef4444", color: "white", border: "none", borderRadius: 8, padding: "12px 28px", cursor: "pointer", fontSize: 15 }}>
+            <p style={{ color: "#444", marginBottom: 20 }}>
+              You&apos;re about to unsubscribe <strong>{email}</strong> from GrowMos marketing emails.
+            </p>
+            <button
+              onClick={confirmUnsubscribe}
+              style={{ background: "#ef4444", color: "white", border: "none", borderRadius: 8, padding: "12px 28px", cursor: "pointer", fontSize: 15 }}
+            >
               Confirm Unsubscribe
             </button>
           </>

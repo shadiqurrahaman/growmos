@@ -6,7 +6,8 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "eslint"
+    "lint": "eslint",
+    "seed-posts": "node --no-warnings --experimental-strip-types --env-file-if-exists=.env --env-file-if-exists=.env.local scripts/seed-posts.ts"
   },
   "dependencies": {
     "@neondatabase/serverless": "^1.1.0",
@@ -24,12 +25,14 @@
     "resend": "^6.12.4"
   },
   "devDependencies": {
+    "@playwright/test": "^1.62.1",
     "@tailwindcss/postcss": "^4",
     "@types/node": "^20",
     "@types/react": "^19",
     "@types/react-dom": "^19",
     "eslint": "^9",
     "eslint-config-next": "16.2.6",
+    "playwright": "^1.62.1",
     "tailwindcss": "^4",
     "typescript": "^5"
   }

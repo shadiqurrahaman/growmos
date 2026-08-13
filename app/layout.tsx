@@ -42,10 +42,21 @@ const organizationJsonLd = {
   email: "hello@growmos.com",
   contactPoint: {
     "@type": "ContactPoint",
-    telephone: "+880-1731-438768",
     contactType: "customer service",
     email: "hello@growmos.com",
+    url: "https://calendly.com/hello-growmos/30min",
+    availableLanguage: ["English"],
   },
+  knowsAbout: [
+    "Data Engineering",
+    "Business Intelligence",
+    "Cloud Data Warehousing",
+    "Performance Marketing",
+    "Revenue Operations",
+    "Customer Data Platforms",
+  ],
+  areaServed: "Worldwide",
+  slogan: "Data systems for ambitious B2B teams.",
 };
 
 export default function RootLayout({
@@ -75,7 +86,7 @@ export default function RootLayout({
           dangerouslySetInnerHTML={{ __html: JSON.stringify(organizationJsonLd) }}
         />
       </head>
-      <body>{children}</body>
+      <body suppressHydrationWarning>{children}</body>
     </html>
   );
 }

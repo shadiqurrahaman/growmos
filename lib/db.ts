@@ -101,4 +101,19 @@ export async function initDB() {
     CREATE UNIQUE INDEX IF NOT EXISTS received_emails_message_id_idx
     ON received_emails (message_id) WHERE message_id IS NOT NULL
   `;
+
+  await sql`
+    CREATE TABLE IF NOT EXISTS data_maturity_leads (
+      id SERIAL PRIMARY KEY,
+      name TEXT NOT NULL,
+      email TEXT NOT NULL,
+      company TEXT,
+      role TEXT,
+      company_size TEXT,
+      current_stack TEXT,
+      biggest_pain TEXT,
+      source TEXT DEFAULT 'data-maturity-assessment',
+      created_at TIMESTAMPTZ DEFAULT NOW()
+    )
+  `;
 }
