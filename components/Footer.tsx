@@ -76,23 +76,10 @@ export default function Footer() {
           </div>
 
           <div className="footer__links">
-            <h4 className="footer__title">Industries</h4>
-            <ul className="footer__list">
-              <li><Link href="/industries/saas">SaaS</Link></li>
-              <li><Link href="/industries/ecommerce">E-commerce</Link></li>
-              <li><Link href="/industries/edtech">EdTech</Link></li>
-              <li><Link href="/industries/retail">Retail</Link></li>
-            </ul>
-          </div>
-
-          <div className="footer__links">
             <h4 className="footer__title">Company</h4>
             <ul className="footer__list">
               <li>
-                <Link href="/boss-model">The Boss Model</Link>
-              </li>
-              <li>
-                <Link href="/resources/data-maturity-assessment">Free Data Maturity Assessment</Link>
+                <Link href="/about">About Us</Link>
               </li>
               <li>
                 <Link href="/blog">Blog</Link>

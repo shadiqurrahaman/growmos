@@ -114,7 +114,6 @@ export default function ContactPage() {
  <option value="digital-marketing">Digital Marketing</option>
  <option value="software-development">Custom Software Development</option>
  <option value="bi-reporting-ai">BI, Reporting &amp; AI Integration</option>
- <option value="boss-model">The Boss Model (Full Team)</option>
  <option value="other">Other</option>
  </select>
  </div>

@@ -4,8 +4,9 @@ import Link from "next/link";
 import Image from "next/image";
 import DataStack from "@/components/DataStack";
 import Reviews from "@/components/Reviews";
-import Product from "@/components/Product";
 import Pricing from "@/components/Pricing";
+import Timezones from "@/components/Timezones";
+import Team from "@/components/Team";
 
 const workedLogos = [
  { file: "Logo - GJW.webp", alt: "GJW Direct" },
@@ -32,17 +33,6 @@ const dataStack = [
  { src: "/images/stack/hubspot.svg", label: "HubSpot" },
  { src: "/images/stack/postgresql.svg", label: "PostgreSQL" },
  { src: "/images/stack/python.svg", label: "Python" },
-];
-
-const industries = [
- { icon: "fa-solid fa-cloud", name: "SaaS", sub: "Product analytics, attribution & warehouse foundations", color: "indigo" },
- { icon: "fa-solid fa-cart-shopping", name: "E-commerce", sub: "Multi-channel attribution, LTV & inventory analytics", color: "blue" },
- { icon: "fa-solid fa-graduation-cap", name: "EdTech", sub: "Learner analytics, dashboards & engagement pipelines", color: "amber" },
- { icon: "fa-solid fa-store", name: "Retail", sub: "POS, inventory & unified customer data platforms", color: "purple" },
- { icon: "fa-solid fa-heart-pulse", name: "Healthcare", sub: "Patient platforms & clinic management software", color: "green" },
- { icon: "fa-solid fa-building-columns", name: "Finance", sub: "FinTech apps, dashboards & compliance systems", color: "teal" },
- { icon: "fa-solid fa-truck-fast", name: "Logistics", sub: "Fleet tracking, route ops & supply chain tech", color: "orange" },
- { icon: "fa-solid fa-utensils", name: "Food & Beverage", sub: "Ordering platforms, POS & loyalty programmes", color: "red" },
 ];
 
 const faqs = [
@@ -114,7 +104,7 @@ export default function HomePage() {
  <p className="hero-new__description">We design and run the data infrastructure behind faster decisions, clearer reporting, and measurable growth without the cost of building an in-house team.</p>
  <div className="hero-new__actions">
  <a href="https://calendly.com/hello-growmos/30min" target="_blank" rel="noopener noreferrer" className="btn btn--primary btn--lg">Book a 30-minute call <i className="fa-solid fa-arrow-right"></i></a>
- <Link href="/resources/data-maturity-assessment" className="hero-premium__secondary">Take the free data assessment <i className="fa-solid fa-arrow-right"></i></Link>
+ <Link href="/contact" className="hero-premium__secondary">Talk to our team <i className="fa-solid fa-arrow-right"></i></Link>
  </div>
  <div className="hero-premium__assurance">
  <span><i className="fa-solid fa-circle-check"></i> No-obligation discovery</span>
@@ -198,8 +188,8 @@ export default function HomePage() {
  </div>
  </section>
 
- {/* Product — the GrowMos platform */}
- <Product />
+ {/* Working across timezones */}
+ <Timezones />
 
  {/* Pricing — packages */}
  <Pricing />
@@ -399,6 +389,9 @@ export default function HomePage() {
  {/* Reviews highlighted customer outcomes (blacktwist.app pattern) */}
  <Reviews />
 
+ {/* Team — the humans behind the work */}
+ <Team />
+
  {/* Tech Stack */}
  <section className="tech-stack" id="tech-stack">
  <div className="container">
@@ -420,29 +413,6 @@ export default function HomePage() {
 
  {/* Data Stack Pipeline */}
  <DataStack />
-
- {/* Industries */}
- <section className="exp-section" id="industries">
- <div className="container">
- <div className="exp-head">
- <div className="exp-head__left">
- <span className="exp-badge">Built For</span>
- <h2 className="exp-title">Industries We<br /><span className="exp-title__accent">Transform</span></h2>
- </div>
- <div className="exp-head__right">
- <p className="exp-desc">We bring deep domain knowledge and proven execution across SaaS, E-commerce, EdTech, and Retail plus the adjacent verticals that share their data problems.</p>
- </div>
- </div>
- <div className="exp-grid">
- {industries.map((ind, i) => (
- <div key={i} className={`exp-card exp-card--${ind.color}`}>
- <div className="exp-card__icon"><i className={ind.icon}></i></div>
- <div className="exp-card__content"><h3 className="exp-card__name">{ind.name}</h3><p className="exp-card__sub">{ind.sub}</p></div>
- </div>
- ))}
- </div>
- </div>
- </section>
 
  {/* FAQ */}
  <section className="faq" id="faq">
@@ -554,7 +524,6 @@ export default function HomePage() {
  <option>Custom Software Development</option>
  <option>Digital Marketing</option>
  <option>BI Reporting &amp; AI</option>
- <option>Boss Model</option>
  <option>Other</option>
  </select>
  </div>

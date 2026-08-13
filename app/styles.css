@@ -1001,7 +1001,7 @@ section {
 }
 
 /* --------------------------------------------------------------------------
- Solution Section (Boss Model)
+ Solution Section
  -------------------------------------------------------------------------- */
 .solution {
  background: linear-gradient(180deg, var(--gray-50) 0%, var(--white) 100%);
@@ -2797,6 +2797,7 @@ section {
  background: var(--secondary);
  padding: 100px 0;
  position: relative;
+ scroll-margin-top: 90px;
 }
 
 .svc-section .container {
@@ -4577,6 +4578,8 @@ section {
  font-weight: 800;
  font-size: 1.25rem;
  letter-spacing: 0.02em;
+ overflow: hidden;
+ position: relative;
 }
 
 .team-card--blue .team-card__avatar { background: linear-gradient(135deg, #6366f1, #8b5cf6); }
@@ -4584,6 +4587,14 @@ section {
 .team-card--purple .team-card__avatar { background: linear-gradient(135deg, #8b5cf6, #db2777); }
 .team-card--pink .team-card__avatar { background: linear-gradient(135deg, #ec4899, #f97316); }
 .team-card--orange .team-card__avatar { background: linear-gradient(135deg, #f59e0b, #ea580c); }
+
+.team-card__photo {
+ display: block;
+ width: 100%;
+ height: 100%;
+ object-fit: cover;
+ object-position: center;
+}
 
 .team-card__initials {
  line-height: 1;
@@ -4594,6 +4605,14 @@ section {
  font-weight: 700;
  color: var(--secondary, #0f172a);
  margin: 0 0 0.25rem;
+}
+
+/* When the heading IS the role (no personal name), keep the same size/weight
+   but borrow the primary color so it still reads as the team member's role. */
+.team-card__name--role {
+ color: var(--primary, #6366f1);
+ font-size: 1.1rem;
+ margin: 0 0 0.85rem;
 }
 
 .team-card__role {
@@ -4617,6 +4636,99 @@ section {
  font-size: 0.9rem;
  color: var(--gray-500, #64748b);
  font-style: italic;
+}
+
+.team-card__link {
+ display: inline-flex;
+ align-items: center;
+ gap: 0.4rem;
+ margin-top: 0.85rem;
+ font-size: 0.8rem;
+ font-weight: 600;
+ color: var(--primary, #6366f1);
+ text-decoration: none;
+ padding: 0.35rem 0.7rem;
+ border-radius: 999px;
+ background: rgba(99, 102, 241, 0.08);
+ transition: background 0.2s ease, transform 0.2s ease;
+}
+
+.team-card__link:hover {
+ background: rgba(99, 102, 241, 0.16);
+ transform: translateY(-1px);
+}
+
+.team-card__link i {
+ font-size: 0.85rem;
+}
+
+/* Photo override for team-card avatar — handled by .team-card__photo */
+
+
+/* --------------------------------------------------------------------------
+ About Page — "Why GrowMos exists" pillars
+ -------------------------------------------------------------------------- */
+.about-pillars {
+ padding: var(--spacing-4xl, 5rem) 0;
+ background: linear-gradient(180deg, var(--white) 0%, var(--gray-50) 100%);
+}
+
+.about-pillars__grid {
+ display: grid;
+ grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+ gap: 1.75rem;
+ margin-top: 3rem;
+}
+
+.about-pillar {
+ background: var(--white);
+ border: 1px solid var(--gray-100, #eef0f4);
+ border-radius: var(--radius-2xl, 1.5rem);
+ padding: 2rem 1.75rem;
+ transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.about-pillar:hover {
+ transform: translateY(-4px);
+ box-shadow: 0 16px 32px -16px rgba(15, 23, 42, 0.12);
+}
+
+.about-pillar__icon {
+ width: 56px;
+ height: 56px;
+ border-radius: 16px;
+ display: inline-flex;
+ align-items: center;
+ justify-content: center;
+ color: #fff;
+ font-size: 1.4rem;
+ margin-bottom: 1.25rem;
+}
+
+.about-pillar__icon--blue {
+ background: linear-gradient(135deg, #6366f1, #8b5cf6);
+}
+
+.about-pillar__icon--green {
+ background: linear-gradient(135deg, #10b981, #059669);
+}
+
+.about-pillar__icon--purple {
+ background: linear-gradient(135deg, #8b5cf6, #db2777);
+}
+
+.about-pillar__title {
+ font-size: 1.15rem;
+ font-weight: 700;
+ color: var(--secondary, #0f172a);
+ margin: 0 0 0.5rem;
+}
+
+.about-pillar__body {
+ font-size: 0.95rem;
+ color: var(--gray-600, #475569);
+ line-height: 1.6;
+ margin: 0;
 }
 
 
@@ -7875,4 +7987,324 @@ section {
  .pricing-tier {
  padding: 28px 22px;
  }
+}
+
+/* ==========================================================================
+ Timezones section
+ Sits between the dark .method-section and the white .svc-section, so it uses
+ a light surface with a subtle gradient to soften the seam on both sides.
+ ========================================================================== */
+.tz-section {
+ position: relative;
+ padding: 96px 0;
+ background:
+ radial-gradient(1200px 600px at 50% -10%, rgba(108, 92, 231, 0.06), transparent 60%),
+ radial-gradient(900px 500px at 50% 110%, rgba(56, 178, 172, 0.05), transparent 60%),
+ #fafbff;
+ color: #0f172a;
+ overflow: hidden;
+}
+
+.tz-section .section__header {
+ margin-bottom: 56px;
+}
+
+.tz-section .section__title {
+ max-width: 820px;
+ margin-left: auto;
+ margin-right: auto;
+}
+
+.tz-section .section__subtitle {
+ color: #475569;
+}
+
+/* Grid: 3 columns desktop, 2 tablet, 1 mobile */
+.tz-grid {
+ list-style: none;
+ margin: 0 0 48px;
+ padding: 0;
+ display: grid;
+ grid-template-columns: repeat(3, minmax(0, 1fr));
+ gap: 20px;
+ max-width: 1136px;
+ margin-left: auto;
+ margin-right: auto;
+}
+
+@media (max-width: 960px) {
+ .tz-grid {
+ grid-template-columns: repeat(2, minmax(0, 1fr));
+ }
+}
+
+@media (max-width: 560px) {
+ .tz-grid {
+ grid-template-columns: 1fr;
+ }
+}
+
+/* Card */
+.tz-card {
+ background: #ffffff;
+ border: 1px solid rgba(15, 23, 42, 0.06);
+ border-radius: 18px;
+ padding: 22px 22px 18px;
+ display: flex;
+ flex-direction: column;
+ gap: 16px;
+ box-shadow:
+ 0 1px 2px rgba(15, 23, 42, 0.04),
+ 0 12px 32px -16px rgba(15, 23, 42, 0.12);
+ transition: transform 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease;
+ position: relative;
+ overflow: hidden;
+}
+
+.tz-card::before {
+ content: "";
+ position: absolute;
+ inset: 0 0 auto 0;
+ height: 3px;
+ background: linear-gradient(90deg, #6c5ce7, #38b2ac);
+ opacity: 0;
+ transition: opacity 0.25s ease;
+}
+
+.tz-card:hover {
+ transform: translateY(-4px);
+ box-shadow:
+ 0 4px 8px rgba(15, 23, 42, 0.06),
+ 0 24px 48px -16px rgba(15, 23, 42, 0.18);
+ border-color: rgba(108, 92, 231, 0.18);
+}
+
+.tz-card:hover::before {
+ opacity: 1;
+}
+
+.tz-card__head {
+ display: flex;
+ align-items: center;
+ gap: 12px;
+}
+
+.tz-card__flag {
+ display: inline-flex;
+ align-items: center;
+ justify-content: center;
+ width: 36px;
+ height: 36px;
+ border-radius: 50%;
+ overflow: hidden;
+ background: rgba(15, 23, 42, 0.04);
+ box-shadow:
+ inset 0 0 0 1px rgba(15, 23, 42, 0.08),
+ 0 2px 6px rgba(15, 23, 42, 0.06);
+ flex-shrink: 0;
+}
+
+.tz-card__flag-img {
+ display: block;
+ width: 100%;
+ height: 100%;
+ object-fit: cover;
+}
+
+/* Mini flag inline next to the clock */
+.tz-card__clock-row {
+ display: inline-flex;
+ align-items: center;
+ gap: 8px;
+}
+
+.tz-card__mini-flag {
+ display: inline-flex;
+ align-items: center;
+ justify-content: center;
+ width: 22px;
+ height: 16px;
+ border-radius: 3px;
+ overflow: hidden;
+ background: rgba(15, 23, 42, 0.04);
+ box-shadow: inset 0 0 0 1px rgba(15, 23, 42, 0.06);
+ flex-shrink: 0;
+}
+
+.tz-card__mini-flag-img {
+ display: block;
+ width: 100%;
+ height: 100%;
+ object-fit: cover;
+}
+
+/* Pill mini-flag stack */
+.tz-pill__flags {
+ display: inline-flex;
+ align-items: center;
+ gap: 4px;
+ margin-left: 4px;
+ padding-left: 10px;
+ border-left: 1px solid rgba(15, 23, 42, 0.1);
+}
+
+.tz-pill__flag {
+ display: inline-flex;
+ align-items: center;
+ justify-content: center;
+ width: 20px;
+ height: 14px;
+ border-radius: 3px;
+ overflow: hidden;
+ background: rgba(15, 23, 42, 0.03);
+ box-shadow: inset 0 0 0 1px rgba(15, 23, 42, 0.05);
+ flex-shrink: 0;
+}
+
+.tz-pill__flag-img {
+ display: block;
+ width: 100%;
+ height: 100%;
+ object-fit: cover;
+}
+
+.tz-card__city {
+ display: flex;
+ flex-direction: column;
+ line-height: 1.2;
+}
+
+.tz-card__city strong {
+ font-size: 1rem;
+ font-weight: 600;
+ color: #0f172a;
+}
+
+.tz-card__city small {
+ font-size: 0.78rem;
+ color: #64748b;
+ text-transform: uppercase;
+ letter-spacing: 0.06em;
+ margin-top: 2px;
+}
+
+/* Time + day */
+.tz-card__time {
+ display: flex;
+ flex-direction: column;
+ gap: 2px;
+}
+
+.tz-card__clock {
+ font-size: 2.1rem;
+ font-weight: 700;
+ letter-spacing: -0.02em;
+ color: #0f172a;
+ font-variant-numeric: tabular-nums;
+ font-feature-settings: "tnum" 1;
+ line-height: 1.05;
+}
+
+.tz-card__day {
+ font-size: 0.82rem;
+ color: #64748b;
+ font-weight: 500;
+}
+
+/* Status pill — color-coded by business hour */
+.tz-card__status {
+ display: inline-flex;
+ align-items: center;
+ gap: 8px;
+ font-size: 0.78rem;
+ font-weight: 600;
+ padding: 6px 10px;
+ border-radius: 999px;
+ align-self: flex-start;
+ background: #f1f5f9;
+ color: #475569;
+}
+
+.tz-card__dot {
+ width: 8px;
+ height: 8px;
+ border-radius: 50%;
+ background: currentColor;
+ display: inline-block;
+ position: relative;
+}
+
+.tz-card__status--open {
+ background: rgba(34, 197, 94, 0.1);
+ color: #15803d;
+}
+
+.tz-card__status--open .tz-card__dot::after {
+ content: "";
+ position: absolute;
+ inset: -3px;
+ border-radius: 50%;
+ border: 2px solid rgba(34, 197, 94, 0.5);
+ animation: tz-pulse 2s ease-out infinite;
+}
+
+.tz-card__status--soon {
+ background: rgba(234, 179, 8, 0.12);
+ color: #a16207;
+}
+
+.tz-card__status--closed {
+ background: rgba(99, 102, 241, 0.08);
+ color: #4338ca;
+}
+
+@keyframes tz-pulse {
+ 0% { transform: scale(0.8); opacity: 0.8; }
+ 100% { transform: scale(2.2); opacity: 0; }
+}
+
+/* Respect prefers-reduced-motion */
+@media (prefers-reduced-motion: reduce) {
+ .tz-card,
+ .tz-card::before { transition: none; }
+ .tz-card:hover { transform: none; }
+ .tz-card__status--open .tz-card__dot::after { animation: none; }
+}
+
+/* Trust pills row */
+.tz-pills {
+ list-style: none;
+ margin: 0;
+ padding: 0;
+ display: flex;
+ flex-wrap: wrap;
+ justify-content: center;
+ gap: 12px;
+ max-width: 900px;
+ margin-left: auto;
+ margin-right: auto;
+}
+
+.tz-pill {
+ display: inline-flex;
+ align-items: center;
+ gap: 10px;
+ padding: 12px 18px;
+ border-radius: 999px;
+ background: #ffffff;
+ border: 1px solid rgba(15, 23, 42, 0.08);
+ font-size: 0.92rem;
+ font-weight: 500;
+ color: #0f172a;
+ box-shadow: 0 1px 2px rgba(15, 23, 42, 0.04);
+}
+
+.tz-pill i {
+ color: #6c5ce7;
+ font-size: 1rem;
+}
+
+@media (max-width: 720px) {
+ .tz-section { padding: 72px 0; }
+ .tz-card__clock { font-size: 1.85rem; }
 }

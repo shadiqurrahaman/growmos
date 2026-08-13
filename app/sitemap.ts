@@ -22,7 +22,6 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     { url: siteUrl, changeFrequency: "weekly" as const, priority: 1 },
     { url: `${siteUrl}/blog`, changeFrequency: "weekly" as const, priority: 0.8 },
     { url: `${siteUrl}/contact`, changeFrequency: "monthly" as const, priority: 0.6 },
-    { url: `${siteUrl}/boss-model`, changeFrequency: "monthly" as const, priority: 0.6 },
     // Legal
     { url: `${siteUrl}/privacy-policy`, changeFrequency: "yearly" as const, priority: 0.3 },
     { url: `${siteUrl}/terms-of-service`, changeFrequency: "yearly" as const, priority: 0.3 },
@@ -39,16 +38,9 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     { url: `${siteUrl}/ai-video-editing`, changeFrequency: "monthly" as const, priority: 0.7 },
     { url: `${siteUrl}/custom-software-development`, changeFrequency: "monthly" as const, priority: 0.7 },
     { url: `${siteUrl}/bi-reporting-ai`, changeFrequency: "monthly" as const, priority: 0.7 },
-    // Industries
-    { url: `${siteUrl}/industries/saas`, changeFrequency: "monthly" as const, priority: 0.7 },
-    { url: `${siteUrl}/industries/ecommerce`, changeFrequency: "monthly" as const, priority: 0.7 },
-    { url: `${siteUrl}/industries/edtech`, changeFrequency: "monthly" as const, priority: 0.7 },
-    { url: `${siteUrl}/industries/retail`, changeFrequency: "monthly" as const, priority: 0.7 },
     // Integrations
     { url: `${siteUrl}/integrations/salesforce`, changeFrequency: "monthly" as const, priority: 0.7 },
     { url: `${siteUrl}/integrations/hubspot`, changeFrequency: "monthly" as const, priority: 0.7 },
-    // Resources
-    { url: `${siteUrl}/resources/data-maturity-assessment`, changeFrequency: "monthly" as const, priority: 0.7 },
   ].map((p) => ({ ...p, lastModified: now }));
 
   const posts = await getPostSlugs();

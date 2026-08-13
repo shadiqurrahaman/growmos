@@ -137,31 +137,14 @@ const services = [
   },
 ];
 
-const industries = [
-  { name: "SaaS", desc: "Product-led & sales-led data platforms", href: "/industries/saas" },
-  { name: "E-commerce", desc: "Multi-channel attribution & LTV", href: "/industries/ecommerce" },
-  { name: "EdTech", desc: "Learner analytics & privacy", href: "/industries/edtech" },
-  { name: "Retail", desc: "POS + online customer 360", href: "/industries/retail" },
-];
-
-const resources = [
-  { name: "Blog", desc: "Data engineering deep-dives", href: "/blog", icon: "fa-solid fa-newspaper" },
-  { name: "Data Maturity Assessment", desc: "Free 5-minute scoring", href: "/resources/data-maturity-assessment", icon: "fa-solid fa-clipboard-check" },
-];
-
 export default function Header() {
   const [menuOpen, setMenuOpen] = useState(false);
-  const [openDropdown, setOpenDropdown] = useState<"services" | "industries" | "resources" | null>(null);
+  const [openDropdown, setOpenDropdown] = useState<"services" | null>(null);
   const [openSub, setOpenSub] = useState<number | null>(null);
 
   const closeMenu = () => {
     setMenuOpen(false);
     setOpenDropdown(null);
-    setOpenSub(null);
-  };
-
-  const toggleDropdown = (name: "services" | "industries" | "resources") => {
-    setOpenDropdown(openDropdown === name ? null : name);
     setOpenSub(null);
   };
 
@@ -182,20 +165,21 @@ export default function Header() {
 
         <div className={`nav__menu${menuOpen ? " show-menu" : ""}`} id="nav-menu">
           <ul className="nav__list">
-            {/* Services dropdown */}
+            {/* Services dropdown — trigger is an anchor to /#services */}
             <li
               className="nav__item nav__item--has-dropdown"
               onMouseEnter={() => setOpenDropdown("services")}
               onMouseLeave={() => { setOpenDropdown(null); setOpenSub(null); }}
             >
-              <button
-                type="button"
+              <Link
+                href="/#services"
                 className="nav__link nav__link--dropdown"
-                onClick={() => toggleDropdown("services")}
+                onClick={closeMenu}
+                aria-label="Jump to services section"
               >
                 Services
                 <i className="fa-solid fa-chevron-down nav__dropdown-arrow"></i>
-              </button>
+              </Link>
               {openDropdown === "services" && (
                 <div className="nav__dropdown" id="services-dropdown">
                   <div className="nav__dropdown-section">
@@ -283,78 +267,9 @@ export default function Header() {
               )}
             </li>
 
-            {/* Industries dropdown */}
-            <li
-              className="nav__item nav__item--has-dropdown"
-              onMouseEnter={() => setOpenDropdown("industries")}
-              onMouseLeave={() => { setOpenDropdown(null); setOpenSub(null); }}
-            >
-              <button
-                type="button"
-                className="nav__link nav__link--dropdown"
-                onClick={() => toggleDropdown("industries")}
-              >
-                Industries
-                <i className="fa-solid fa-chevron-down nav__dropdown-arrow"></i>
-              </button>
-              {openDropdown === "industries" && (
-                <div className="nav__dropdown nav__dropdown--simple" id="industries-dropdown">
-                  <ul className="nav__svc-list">
-                    {industries.map((ind, idx) => (
-                      <li className="nav__svc-item" key={idx}>
-                        <Link href={ind.href} className="nav__svc-link" onClick={closeMenu}>
-                          <span className="nav__svc-info">
-                            <span className="nav__svc-name">{ind.name}</span>
-                            <span className="nav__svc-desc">{ind.desc}</span>
-                          </span>
-                          <i className="fa-solid fa-arrow-right nav__svc-chevron"></i>
-                        </Link>
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-              )}
-            </li>
-
-            {/* Resources dropdown */}
-            <li
-              className="nav__item nav__item--has-dropdown"
-              onMouseEnter={() => setOpenDropdown("resources")}
-              onMouseLeave={() => { setOpenDropdown(null); setOpenSub(null); }}
-            >
-              <button
-                type="button"
-                className="nav__link nav__link--dropdown"
-                onClick={() => toggleDropdown("resources")}
-              >
-                Resources
-                <i className="fa-solid fa-chevron-down nav__dropdown-arrow"></i>
-              </button>
-              {openDropdown === "resources" && (
-                <div className="nav__dropdown nav__dropdown--simple" id="resources-dropdown">
-                  <ul className="nav__svc-list">
-                    {resources.map((r, idx) => (
-                      <li className="nav__svc-item" key={idx}>
-                        <Link href={r.href} className="nav__svc-link" onClick={closeMenu}>
-                          <span className={`nav__dropdown-icon nav__dropdown-icon--purple`}>
-                            <i className={r.icon}></i>
-                          </span>
-                          <span className="nav__svc-info">
-                            <span className="nav__svc-name">{r.name}</span>
-                            <span className="nav__svc-desc">{r.desc}</span>
-                          </span>
-                          <i className="fa-solid fa-arrow-right nav__svc-chevron"></i>
-                        </Link>
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-              )}
-            </li>
-
             <li className="nav__item">
-              <Link href="/boss-model" className="nav__link" onClick={closeMenu}>
-                The &quot;Boss&quot; Model
+              <Link href="/about" className="nav__link" onClick={closeMenu}>
+                About
               </Link>
             </li>
             <li className="nav__item">
