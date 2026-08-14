@@ -178,16 +178,6 @@ export default function HomePage() {
  </div>
  </section>
 
- {/* Proof metrics */}
- <section className="proof-strip">
- <div className="container proof-strip__grid">
- <div><strong>120+</strong><span>projects delivered</span></div>
- <div><strong>20+</strong><span>specialists across data and growth</span></div>
- <div><strong>4+</strong><span>years building client systems</span></div>
- <div><strong>24h</strong><span>typical response time</span></div>
- </div>
- </section>
-
  {/* Working across timezones */}
  <Timezones />
 

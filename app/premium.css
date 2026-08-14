@@ -793,6 +793,11 @@
  .proof-strip__grid strong { font-size: 2rem; }
  .client-proof__outcomes { grid-template-columns: 1fr; }
  .client-proof__outcomes > div:last-child { grid-column: span 1; }
+ .trusted-section { padding: 28px 0; }
+ .trusted-section__label { margin-bottom: 18px; font-size: 0.66rem; letter-spacing: 0.16em; }
+ .trusted-section__logos { gap: 14px 20px; justify-content: center; }
+ .trusted-section__logo { height: 32px; flex: 0 0 auto; }
+ .trusted-section__logo img { max-width: 110px; }
 }
 
 /* --------------------------------------------------------------------------
@@ -1315,14 +1320,58 @@
 }
 
 @media (max-width: 760px) {
- .method-section { padding: 90px 0 80px; }
- .method-header { margin-bottom: 48px; }
+ /* Mobile redesign: tighten the methodology section. The single-column
+    timeline makes each card stack vertically, so we shrink the header,
+    compact the cards, and reduce the giant watermark number. */
+ .method-section { padding: 56px 0 64px; }
+ .method-header { margin-bottom: 28px; gap: 10px; }
+ .method-title { font-size: 1.7rem; line-height: 1.15; }
+ .method-description { font-size: 0.92rem; line-height: 1.55; }
  .method-timeline {
  grid-template-columns: 1fr;
- row-gap: 28px;
+ row-gap: 18px;
  }
  .method-timeline__rail { display: none; }
- .method-card { text-align: left; }
+ .method-step { gap: 14px; }
+ .method-step__node {
+ width: 36px;
+ height: 36px;
+ box-shadow: 0 0 0 5px var(--premium-ink), 0 4px 12px -4px rgba(7, 22, 32, 0.7);
+ }
+ .method-step__num { font-size: 0.82rem; }
+ .method-card {
+ min-height: 0;
+ height: auto;
+ padding: 18px 18px 16px;
+ border-radius: 20px;
+ grid-template-rows: 42px auto auto;
+ gap: 12px;
+ }
+ .method-card__num { font-size: 3rem; top: 8px; right: 12px; }
+ .method-card__icon {
+ width: 42px;
+ height: 42px;
+ border-radius: 11px;
+ font-size: 1.1rem;
+ }
+ .method-card__title {
+ font-size: 1.05rem;
+ line-height: 1.2;
+ height: auto;
+ }
+ .method-card__deliver {
+ font-size: 0.88rem;
+ line-height: 1.5;
+ padding-top: 10px;
+ }
+ .method-card__body { gap: 10px; }
+}
+
+@media (max-width: 380px) {
+ .method-section { padding: 48px 0 56px; }
+ .method-card { padding: 16px; }
+ .method-card__title { font-size: 0.98rem; }
+ .method-card__deliver { font-size: 0.84rem; }
 }
 
 /* --------------------------------------------------------------------------
