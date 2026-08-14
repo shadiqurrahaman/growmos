@@ -793,6 +793,11 @@
  .proof-strip__grid strong { font-size: 2rem; }
  .client-proof__outcomes { grid-template-columns: 1fr; }
  .client-proof__outcomes > div:last-child { grid-column: span 1; }
+ .trusted-section { padding: 28px 0; }
+ .trusted-section__label { margin-bottom: 18px; font-size: 0.66rem; letter-spacing: 0.16em; }
+ .trusted-section__logos { gap: 14px 20px; justify-content: center; }
+ .trusted-section__logo { height: 32px; flex: 0 0 auto; }
+ .trusted-section__logo img { max-width: 110px; }
 }
 
 /* --------------------------------------------------------------------------

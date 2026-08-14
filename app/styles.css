@@ -8308,3 +8308,11 @@ section {
  .tz-section { padding: 72px 0; }
  .tz-card__clock { font-size: 1.85rem; }
 }
+
+/* Hide Next.js dev tools floating indicator ("N" badge).
+   The badge overlaps content on mobile screens. It's a dev-only widget
+   injected by Next.js and is not present in production builds, but we
+   hide it in dev too so it doesn't appear in screenshots and demos. */
+nextjs-portal {
+  display: none !important;
+}
