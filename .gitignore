@@ -4,3 +4,14 @@ node_modules/
 .env.local
 *.Zone.Identifier
 tsconfig.tsbuildinfo
+
+# Local Puku CLI tooling (not part of the app)
+.puku-cli/
+
+# Throwaway debug/responsive-check scripts
+scripts/check-all-mobile.js
+scripts/check-desktop-tz.js
+scripts/check-devtools.js
+scripts/check-mobile-full.js
+scripts/check-responsive.js
+scripts/check-sections.js
