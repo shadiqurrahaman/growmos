@@ -8038,12 +8038,6 @@ section {
  }
 }
 
-@media (max-width: 560px) {
- .tz-grid {
- grid-template-columns: 1fr;
- }
-}
-
 /* Card */
 .tz-card {
  background: #ffffff;
@@ -8304,9 +8298,101 @@ section {
  font-size: 1rem;
 }
 
+/* --------------------------------------------------------------------------
+ Mobile redesign: dense, scannable list of regions.
+
+ On phones the full vertical card eats too much vertical space. So we
+ collapse each card into a compact horizontal row: flag on the left,
+ city + time stacked on the right, and a status dot on the far right.
+ Two cards per row down to 380px, then single-column below.
+
+ Desktop / tablet are completely untouched.
+ -------------------------------------------------------------------------- */
 @media (max-width: 720px) {
- .tz-section { padding: 72px 0; }
- .tz-card__clock { font-size: 1.85rem; }
+ .tz-section { padding: 56px 0 64px; }
+ .tz-section .section__title { font-size: 1.85rem; }
+ .tz-section .section__subtitle { font-size: 0.95rem; margin-bottom: 28px; }
+ .tz-grid {
+ grid-template-columns: repeat(2, minmax(0, 1fr));
+ gap: 12px;
+ margin-bottom: 36px;
+ }
+ /* Mobile card: compact 2-row vertical, but with clock + status on
+    one row at the bottom. */
+ .tz-card {
+ padding: 14px 14px 12px;
+ gap: 8px;
+ border-radius: 14px;
+ }
+ .tz-card__head {
+ gap: 10px;
+ min-width: 0;
+ }
+ .tz-card__flag {
+ width: 28px;
+ height: 28px;
+ flex-shrink: 0;
+ }
+ .tz-card__city strong {
+ font-size: 0.92rem;
+ line-height: 1.2;
+ white-space: nowrap;
+ overflow: hidden;
+ text-overflow: ellipsis;
+ }
+ .tz-card__city small {
+ font-size: 0.62rem;
+ letter-spacing: 0.05em;
+ line-height: 1.2;
+ }
+ .tz-card__time {
+ display: flex;
+ flex-direction: column;
+ gap: 2px;
+ }
+ .tz-card__clock {
+ font-size: 1.35rem;
+ }
+ .tz-card__day {
+ font-size: 0.7rem;
+ }
+ .tz-card__status {
+ align-self: flex-end;
+ font-size: 0.66rem;
+ padding: 4px 8px;
+ gap: 5px;
+ }
+ .tz-card__dot {
+ width: 6px;
+ height: 6px;
+ }
+ .tz-pills {
+ gap: 8px;
+ }
+ .tz-pill {
+ padding: 10px 14px;
+ font-size: 0.82rem;
+ gap: 8px;
+ }
+ .tz-pill i {
+ font-size: 0.92rem;
+ }
+}
+
+/* Single column below 380px so city names don't truncate. */
+@media (max-width: 380px) {
+ .tz-grid {
+ grid-template-columns: 1fr;
+ }
+ .tz-card {
+ padding: 12px 14px;
+ }
+}
+
+/* Hide the mobile-only clock by default (desktop uses the stacked layout). */
+.tz-card__clock-mobile,
+.tz-card__clock-mobile-sub {
+ display: none;
 }
 
 /* Hide Next.js dev tools floating indicator ("N" badge).
