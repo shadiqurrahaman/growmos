@@ -20,7 +20,7 @@ export const reviews: Review[] = [
  company: "Northwind Logistics",
  initials: "DO",
  metric: "3 days → minutes",
- avatar: "/images/avatars/daniel-okafor.jpg",
+ avatar: "/images/review/AhmedF.jpg",
  },
  {
  quote:
@@ -30,7 +30,7 @@ export const reviews: Review[] = [
  company: "Caesarstone UK",
  initials: "IR",
  metric: "18 sources → 1 source",
- avatar: "/images/avatars/isabel-rojas.jpg",
+ avatar: "/images/review/Natasha Manners.jpg",
  },
  {
  quote:
@@ -40,7 +40,7 @@ export const reviews: Review[] = [
  company: "Moda Furnishings",
  initials: "RM",
  metric: "ROAS up 41%",
- avatar: "/images/avatars/rajiv-mehta.jpg",
+ avatar: "/images/review/matdye.jpg",
  },
  {
  quote:
@@ -50,6 +50,6 @@ export const reviews: Review[] = [
  company: "GJW Direct",
  initials: "OB",
  metric: "Sales–data parity, day 1",
- avatar: "/images/avatars/olivia-bennett.jpg",
+ avatar: "/images/review/Destiny Gaines.jpg",
  },
 ];
