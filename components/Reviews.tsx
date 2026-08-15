@@ -35,7 +35,20 @@ export default function Reviews() {
  width={44}
  height={44}
  className="reviews-card__avatar-img"
+ onError={(e) => {
+ const target = e.currentTarget as HTMLImageElement;
+ target.style.display = "none";
+ const sibling = target.nextElementSibling as HTMLElement | null;
+ if (sibling) sibling.style.display = "flex";
+ }}
  />
+ <span
+ className="reviews-card__initials"
+ style={{ display: "none" }}
+ aria-hidden="true"
+ >
+ {r.initials}
+ </span>
  </div>
  <div className="reviews-card__author-meta">
  <strong className="reviews-card__name">{r.name}</strong>
