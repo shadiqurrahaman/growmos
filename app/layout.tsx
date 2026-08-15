@@ -1,6 +1,9 @@
 import type { Metadata } from "next";
+import Script from "next/script";
 import "./tailwind-only.css";
 import { siteUrl, siteName } from "@/lib/seo";
+
+const gaId = process.env.NEXT_PUBLIC_GA_ID || "G-YJHB4R4V6R";
 
 const title = "GrowMos | AI Driven Business Growth And Marketing Solution";
 const description =
@@ -67,6 +70,20 @@ export default function RootLayout({
   return (
     <html lang="en">
       <head>
+        <Script
+          async
+          src={`https://www.googletagmanager.com/gtag/js?id=${gaId}`}
+          strategy="afterInteractive"
+        />
+        <Script id="google-analytics" strategy="afterInteractive">
+          {`
+            window.dataLayer = window.dataLayer || [];
+            function gtag(){dataLayer.push(arguments);}
+            gtag('js', new Date());
+
+            gtag('config', '${gaId}');
+          `}
+        </Script>
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link
           rel="preconnect"
