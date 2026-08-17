@@ -1,5 +1,6 @@
 "use client";
 import { useState } from "react";
+import emailjs from "@emailjs/browser";
 
 export default function ContactPage() {
  const [form, setForm] = useState({ firstName:"", lastName:"", email:"", phone:"", service:"", message:"" });
@@ -9,13 +10,23 @@ export default function ContactPage() {
  e.preventDefault();
  setStatus("sending");
  try {
- const res = await fetch("/api/contact", {
- method: "POST",
- headers: { "Content-Type": "application/json" },
- body: JSON.stringify({ name: `${form.firstName} ${form.lastName}`, ...form }),
- });
- setStatus(res.ok ? "ok" : "err");
- } catch { setStatus("err"); }
+ await emailjs.send(
+ process.env.NEXT_PUBLIC_EMAILJS_SERVICE_ID!,
+ process.env.NEXT_PUBLIC_EMAILJS_TEMPLATE_ID!,
+ {
+ from_name: `${form.firstName} ${form.lastName}`,
+ reply_to: form.email,
+ phone: form.phone,
+ service: form.service,
+ message: form.message,
+ },
+ { publicKey: process.env.NEXT_PUBLIC_EMAILJS_PUBLIC_KEY! }
+ );
+ setStatus("ok");
+ } catch (err) {
+ console.error("EmailJS error:", err);
+ setStatus("err");
+ }
  }
 
  return (

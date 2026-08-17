@@ -10,6 +10,7 @@
     "seed-posts": "node --no-warnings --experimental-strip-types --env-file-if-exists=.env --env-file-if-exists=.env.local scripts/seed-posts.ts"
   },
   "dependencies": {
+    "@emailjs/browser": "^4.4.1",
     "@neondatabase/serverless": "^1.1.0",
     "@types/mailparser": "^3.4.6",
     "@types/nodemailer": "^8.0.0",

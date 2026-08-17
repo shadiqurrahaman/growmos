@@ -2,6 +2,7 @@
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
+import emailjs from "@emailjs/browser";
 import DataStack from "@/components/DataStack";
 import Reviews from "@/components/Reviews";
 import Pricing from "@/components/Pricing";
@@ -73,9 +74,23 @@ export default function HomePage() {
  e.preventDefault();
  setStatus("sending");
  try {
- const res = await fetch("/api/contact", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(form) });
- setStatus(res.ok ? "ok" : "err");
- } catch { setStatus("err"); }
+ await emailjs.send(
+ process.env.NEXT_PUBLIC_EMAILJS_SERVICE_ID!,
+ process.env.NEXT_PUBLIC_EMAILJS_TEMPLATE_ID!,
+ {
+ from_name: form.name,
+ reply_to: form.email,
+ phone: form.phone,
+ service: form.service,
+ message: form.message,
+ },
+ { publicKey: process.env.NEXT_PUBLIC_EMAILJS_PUBLIC_KEY! }
+ );
+ setStatus("ok");
+ } catch (err) {
+ console.error("EmailJS error:", err);
+ setStatus("err");
+ }
  }
 
  const faqJsonLd = {
