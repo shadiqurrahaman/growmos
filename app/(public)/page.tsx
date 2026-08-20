@@ -8,6 +8,7 @@ import Reviews from "@/components/Reviews";
 import Pricing from "@/components/Pricing";
 import Timezones from "@/components/Timezones";
 import Team from "@/components/Team";
+import DashboardSlider from "@/components/DashboardSlider";
 
 const workedLogos = [
  { file: "Logo - GJW.webp", alt: "GJW Direct" },
@@ -129,30 +130,8 @@ export default function HomePage() {
  </div>
  <div className="hero-premium__visual" aria-label="GrowMos data platform overview">
  <div className="hero-platform">
- <div className="hero-platform__header">
- <div><span className="hero-platform__eyebrow">Live data platform</span><strong>Executive overview</strong></div>
- <span className="hero-platform__status"><i></i> All systems healthy</span>
+ <DashboardSlider />
  </div>
- <div className="hero-platform__metrics">
- <div><span>Pipeline uptime</span><strong>99.9%</strong><small>Last 90 days</small></div>
- <div><span>Reporting time</span><strong>−72%</strong><small>After automation</small></div>
- <div><span>Sources unified</span><strong>18</strong><small>One source of truth</small></div>
- </div>
- <div className="hero-platform__chart">
- <div className="hero-platform__chart-head"><span>Revenue visibility</span><strong>+28.4%</strong></div>
- <svg viewBox="0 0 560 170" role="img" aria-label="Upward analytics trend">
- <defs><linearGradient id="chartFill" x1="0" x2="0" y1="0" y2="1"><stop offset="0%" stopColor="#6c5ce7" stopOpacity=".28"/><stop offset="100%" stopColor="#6c5ce7" stopOpacity="0"/></linearGradient></defs>
- <path className="hero-platform__gridline" d="M0 30H560M0 85H560M0 140H560" />
- <path className="hero-platform__area" d="M0 146 C70 142 82 124 132 126 S205 107 252 113 S325 85 369 91 S450 53 560 30 L560 170 L0 170 Z" />
- <path className="hero-platform__line" d="M0 146 C70 142 82 124 132 126 S205 107 252 113 S325 85 369 91 S450 53 560 30" />
- </svg>
- </div>
- <div className="hero-platform__footer">
- <div className="hero-platform__stack"><span>F</span><span>dbt</span><span>BQ</span><span>BI</span></div>
- <small>Fivetran · dbt · BigQuery · Power BI</small>
- </div>
- </div>
- <div className="hero-platform__note"><i className="fa-solid fa-check"></i><span><strong>Decision-ready data</strong><small>Built, tested and documented</small></span></div>
  </div>
  </div>
  </div>
