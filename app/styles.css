@@ -8488,20 +8488,20 @@ section {
 .wa-inline {
   display: flex;
   align-items: center;
-  gap: 16px;
+  gap: 20px;
   background: #fff;
   border: 1px solid #e5e7eb;
-  border-radius: 14px;
-  padding: 16px;
+  border-radius: 16px;
+  padding: 18px;
 }
 
 .wa-inline__qr {
   flex: 0 0 auto;
-  width: 110px;
-  height: 110px;
+  width: 180px;
+  height: 180px;
   background: #f9fafb;
-  border-radius: 10px;
-  padding: 6px;
+  border-radius: 12px;
+  padding: 8px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -8521,16 +8521,16 @@ section {
 
 .wa-inline__title {
   display: block;
-  font-size: 1rem;
+  font-size: 1.1rem;
   font-weight: 600;
   color: var(--secondary, #1f2937);
-  margin-bottom: 4px;
+  margin-bottom: 6px;
 }
 
 .wa-inline__sub {
-  font-size: 0.85rem;
+  font-size: 0.9rem;
   color: #6b7280;
-  margin: 0 0 10px;
+  margin: 0 0 12px;
   line-height: 1.4;
 }
 
@@ -8541,8 +8541,8 @@ section {
   background: #25d366;
   color: #fff;
   font-weight: 600;
-  font-size: 0.85rem;
-  padding: 8px 14px;
+  font-size: 0.9rem;
+  padding: 10px 16px;
   border-radius: 999px;
   text-decoration: none;
   transition: background 0.2s ease;
@@ -8553,10 +8553,10 @@ section {
 }
 
 .wa-inline__cta i {
-  font-size: 1rem;
+  font-size: 1.1rem;
 }
 
-/* Mobile responsive — stack the card vertically, shrink QR */
+/* Mobile responsive — stack the card vertically, keep QR scannable */
 
 @media (max-width: 600px) {
  .wa-card {
@@ -8566,8 +8566,8 @@ section {
   gap: 18px;
  }
  .wa-card__qr {
-  width: 180px;
-  height: 180px;
+  width: 220px;
+  height: 220px;
  }
  .wa-card__sub {
   margin-left: auto;
@@ -8580,14 +8580,18 @@ section {
  .wa-inline {
   flex-direction: column;
   text-align: center;
+  padding: 20px;
  }
  .wa-inline__qr {
-  width: 130px;
-  height: 130px;
+  width: 220px;
+  height: 220px;
+  padding: 10px;
  }
  .wa-inline__cta {
   width: 100%;
   justify-content: center;
+  padding: 12px 18px;
+  font-size: 1rem;
  }
 }
 
@@ -8610,7 +8614,7 @@ section {
 /* WhatsApp integration inside contact sections */
 .contact-us__whatsapp-card {
   margin-top: 1.5rem;
-  max-width: 360px;
+  max-width: 460px;
 }
 .contact-quick__item--qr {
   flex: 1 1 100%;
@@ -8620,7 +8624,7 @@ section {
 }
 .contact-quick__item--qr .wa-inline {
   width: 100%;
-  max-width: 420px;
+  max-width: 520px;
 }
 .contact-quick__item--whatsapp {
   cursor: default;

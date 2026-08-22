@@ -33,9 +33,9 @@ export default function WhatsAppContact({
           <Image
             src="/images/whatsapp-qr-growmos.webp"
             alt="GrowMos WhatsApp QR code"
-            width={540}
-            height={535}
-            sizes="(max-width: 719px) 180px, 220px"
+            width={1080}
+            height={1070}
+            sizes="(max-width: 600px) 220px, 180px"
             className="wa-inline__img"
             priority
           />
