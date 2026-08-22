@@ -834,8 +834,15 @@
 
 .blog { background: var(--premium-paper-2); }
 .blog__title { color: var(--premium-ink); letter-spacing: -0.02em; }
+.blog__subtitle { color: var(--premium-muted); }
+.blog__view-all { color: var(--premium-ink); border-color: var(--premium-line-strong); }
+.blog__view-all:hover { background: var(--premium-ink); color: #ffffff; border-color: var(--premium-ink); }
+.blog__empty { color: var(--premium-muted); }
+.blog::before { opacity: 0.15; }
 .blog-card { background: #ffffff; border: 1px solid var(--premium-line); border-radius: 18px; }
 .blog-card:hover { border-color: var(--premium-ink); }
+.blog-card__read-more { background: var(--premium-ink); }
+.blog-card:hover .blog-card__read-more { background: #1a1a2e; }
 
 .tech-stack { background: #ffffff; }
 .tech-item { background: var(--premium-paper); border: 1px solid var(--premium-line); border-radius: 14px; }

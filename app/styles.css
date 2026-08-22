@@ -8497,11 +8497,11 @@ section {
 
 .wa-inline__qr {
   flex: 0 0 auto;
-  width: 180px;
-  height: 180px;
+  width: 220px;
+  height: 220px;
   background: #f9fafb;
   border-radius: 12px;
-  padding: 8px;
+  padding: 10px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -8583,9 +8583,9 @@ section {
   padding: 20px;
  }
  .wa-inline__qr {
-  width: 220px;
-  height: 220px;
-  padding: 10px;
+  width: 260px;
+  height: 260px;
+  padding: 12px;
  }
  .wa-inline__cta {
   width: 100%;
@@ -8614,7 +8614,7 @@ section {
 /* WhatsApp integration inside contact sections */
 .contact-us__whatsapp-card {
   margin-top: 1.5rem;
-  max-width: 460px;
+  max-width: 520px;
 }
 .contact-quick__item--qr {
   flex: 1 1 100%;
@@ -8624,7 +8624,7 @@ section {
 }
 .contact-quick__item--qr .wa-inline {
   width: 100%;
-  max-width: 520px;
+  max-width: 580px;
 }
 .contact-quick__item--whatsapp {
   cursor: default;
