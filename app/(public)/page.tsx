@@ -9,6 +9,7 @@ import Pricing from "@/components/Pricing";
 import Timezones from "@/components/Timezones";
 import Team from "@/components/Team";
 import DashboardSlider from "@/components/DashboardSlider";
+import WhatsAppContact from "@/components/WhatsAppContact";
 
 const workedLogos = [
  { file: "Logo - GJW.webp", alt: "GJW Direct" },
@@ -474,9 +475,15 @@ export default function HomePage() {
  <span className="contact-us__badge"><i className="fa-solid fa-envelope-open-text"></i> Get In Touch</span>
  <h2 className="contact-us__title">Let&apos;s Build Something <span>Great</span> Together</h2>
  <ul className="contact-us__details">
- <li><span className="contact-us__detail-icon"><i className="fa-solid fa-envelope"></i></span><div><strong>Email Us</strong><a href="mailto:hello@growmos.com">hello@growmos.com</a></div></li>
+ <li className="contact-us__detail contact-us__detail--whatsapp">
+ <span className="contact-us__detail-icon contact-us__detail-icon--whatsapp"><i className="fa-brands fa-whatsapp"></i></span>
+ <div><strong>WhatsApp Us</strong><a href="https://wa.me/15551234567" target="_blank" rel="noopener noreferrer">Scan the QR or tap to chat</a></div>
+ </li>
  <li><span className="contact-us__detail-icon contact-us__detail-icon--whatsapp"><i className="fa-solid fa-calendar-check"></i></span><div><strong>Schedule</strong><a href="https://calendly.com/hello-growmos/30min" target="_blank" rel="noopener noreferrer">Book a 30-minute call</a></div></li>
  </ul>
+ <div className="contact-us__whatsapp-card">
+ <WhatsAppContact variant="inline" title="Message us on WhatsApp" subtitle="Scan the QR with your phone, or tap the button below on mobile." />
+ </div>
  <div className="contact-us__trust">
  <div className="contact-us__trust-item"><i className="fa-solid fa-shield-halved"></i><span>Your data is safe with us</span></div>
  <div className="contact-us__trust-item"><i className="fa-solid fa-bolt"></i><span>Response within 24 hours</span></div>

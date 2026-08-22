@@ -1,6 +1,7 @@
 "use client";
 import { useState } from "react";
 import emailjs from "@emailjs/browser";
+import WhatsAppContact from "@/components/WhatsAppContact";
 
 export default function ContactPage() {
  const [form, setForm] = useState({ firstName:"", lastName:"", email:"", phone:"", service:"", message:"" });
@@ -49,9 +50,12 @@ export default function ContactPage() {
  <div className="container">
  <div className="contact-quick">
  <div className="contact-quick__items">
- <div className="contact-quick__item">
- <div className="contact-quick__icon contact-quick__icon--blue"><i className="fa-solid fa-envelope"></i></div>
- <div><p className="contact-quick__label">Email</p><p className="contact-quick__value"><a href="mailto:hello@growmos.com">hello@growmos.com</a></p></div>
+ <div className="contact-quick__item contact-quick__item--whatsapp">
+ <div className="contact-quick__icon contact-quick__icon--green"><i className="fa-brands fa-whatsapp"></i></div>
+ <div><p className="contact-quick__label">WhatsApp</p><p className="contact-quick__value">Scan the QR or tap to chat</p></div>
+ </div>
+ <div className="contact-quick__item contact-quick__item--qr">
+ <WhatsAppContact variant="inline" title="Chat on WhatsApp" subtitle="Scan the QR with your phone, or tap the button below on mobile." />
  </div>
  <div className="contact-quick__item">
  <div className="contact-quick__icon contact-quick__icon--green"><i className="fa-solid fa-calendar-check"></i></div>
