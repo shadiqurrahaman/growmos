@@ -44,7 +44,7 @@ const faqs = [
  { q: "How is a data engagement structured?", a: "Most engagements start with a discovery sprint (2–3 weeks) to map your sources, define KPIs, and design the warehouse. Then we build the pipeline in 4–8 weeks, hand off with documentation, and offer ongoing support. Detailed scope is set in a written proposal." },
 ];
 
-type Post = { id: number; title: string; slug: string; excerpt: string; image_url: string | null; category: string; author: string; created_at: string };
+type Post = { id: number; title: string; slug: string; excerpt: string; image_url: string | null; image_alt?: string | null; category: string; author: string; created_at: string; updated_at?: string | null };
 
 const problemsSolutions = [
  {
@@ -68,7 +68,7 @@ export default function HomePage() {
  const [status, setStatus] = useState<"idle"|"sending"|"ok"|"err">("idle");
 
  useEffect(() => {
- fetch("/api/posts?published=true&limit=3").then(r => r.json()).then(d => setPosts(d.posts || [])).catch(() => {});
+ fetch("/api/posts?published=true&limit=3&sort=recent").then(r => r.json()).then(d => setPosts(d.posts || [])).catch(() => {});
  }, []);
 
  async function handleContact(e: React.FormEvent) {

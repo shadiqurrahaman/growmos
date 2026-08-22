@@ -12,23 +12,27 @@ type Post = {
   published: boolean;
   sort_order: number;
   created_at: string;
+  updated_at?: string | null;
 };
+
+type SortMode = "recent" | "default";
 
 export default function AdminDashboard() {
   const [posts, setPosts] = useState<Post[]>([]);
   const [loading, setLoading] = useState(true);
   const [deleting, setDeleting] = useState<number | null>(null);
+  const [sort, setSort] = useState<SortMode>("recent");
   const router = useRouter();
 
   async function fetchPosts() {
     setLoading(true);
-    const res = await fetch("/api/posts");
+    const res = await fetch(`/api/posts?sort=${sort}`);
     const data = await res.json();
     setPosts(data.posts || []);
     setLoading(false);
   }
 
-  useEffect(() => { fetchPosts(); }, []);
+  useEffect(() => { fetchPosts(); }, [sort]);
 
   async function togglePublished(post: Post) {
     await fetch(`/api/posts/${post.id}`, {
@@ -92,6 +96,27 @@ export default function AdminDashboard() {
       </div>
 
       <div className="max-w-6xl mx-auto px-6 py-8">
+        {/* Sort toggle */}
+        <div className="flex items-center justify-between mb-4">
+          <div className="flex items-center gap-1 bg-white rounded-lg border border-gray-200 p-1">
+            <button
+              onClick={() => setSort("recent")}
+              className={`px-3 py-1.5 text-xs font-semibold rounded-md transition-colors ${sort === "recent" ? "bg-purple-600 text-white" : "text-gray-600 hover:text-gray-900"}`}
+            >
+              <i className="fa-solid fa-clock-rotate-left mr-1.5"></i>Most recent
+            </button>
+            <button
+              onClick={() => setSort("default")}
+              className={`px-3 py-1.5 text-xs font-semibold rounded-md transition-colors ${sort === "default" ? "bg-purple-600 text-white" : "text-gray-600 hover:text-gray-900"}`}
+            >
+              <i className="fa-solid fa-arrow-down-wide-short mr-1.5"></i>Manual order
+            </button>
+          </div>
+          <span className="text-xs text-gray-400">
+            {sort === "recent" ? "Sorted by last created or updated" : "Sorted by sort_order"}
+          </span>
+        </div>
+
         {loading ? (
           <div className="flex items-center justify-center py-16">
             <div className="text-center">
@@ -158,7 +183,22 @@ export default function AdminDashboard() {
                       </div>
                     </td>
                     <td className="px-4 py-4 text-xs text-gray-500">
-                      {new Date(post.created_at).toLocaleDateString("en-US", { month:"short", day:"numeric", year:"numeric" })}
+                      {(() => {
+                        const created = new Date(post.created_at).getTime();
+                        const updated = post.updated_at ? new Date(post.updated_at).getTime() : 0;
+                        const wasEdited = updated > created + 1000; // >1s difference = edited
+                        const dt = wasEdited ? post.updated_at! : post.created_at;
+                        return (
+                          <div>
+                            <div className="text-gray-700 font-medium">
+                              {new Date(dt).toLocaleDateString("en-US", { month:"short", day:"numeric", year:"numeric" })}
+                            </div>
+                            <div className={`text-[10px] uppercase tracking-wide ${wasEdited ? "text-amber-600" : "text-gray-400"}`}>
+                              {wasEdited ? "updated" : "created"}
+                            </div>
+                          </div>
+                        );
+                      })()}
                     </td>
                     <td className="px-6 py-4">
                       <div className="flex items-center justify-end gap-2">

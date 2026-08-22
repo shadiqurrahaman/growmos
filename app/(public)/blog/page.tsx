@@ -1,6 +1,6 @@
 import Link from "next/link";
 import type { Metadata } from "next";
-import { getDB } from "@/lib/db";
+import { ensureDB } from "@/lib/db";
 export const dynamic = "force-dynamic";
 
 export const metadata: Metadata = {
@@ -10,11 +10,11 @@ export const metadata: Metadata = {
 
 async function getPosts() {
   try {
-    const sql = getDB();
+    const sql = await ensureDB();
     const posts = await sql`
-      SELECT id, title, slug, excerpt, image_url, category, author, created_at
+      SELECT id, title, slug, excerpt, image_url, image_alt, category, author, created_at, updated_at
       FROM posts WHERE published = true
-      ORDER BY sort_order DESC, created_at DESC
+      ORDER BY COALESCE(updated_at, created_at) DESC, created_at DESC
     `;
     return posts;
   } catch { return []; }
@@ -66,7 +66,16 @@ export default async function BlogPage() {
                           <div className="blog-card__avatar"><i className="fa-solid fa-user"></i></div>
                           <div className="blog-card__author-info">
                             <span className="blog-card__author-name">{String(post.author)}</span>
-                            <span className="blog-card__date">{new Date(String(post.created_at)).toLocaleDateString("en-US",{year:"numeric",month:"long",day:"numeric"})}</span>
+                            <span className="blog-card__date">
+                              {(() => {
+                                const created = new Date(String(post.created_at)).getTime();
+                                const updated = post.updated_at ? new Date(String(post.updated_at)).getTime() : 0;
+                                const wasEdited = updated > created + 1000;
+                                const label = wasEdited ? "Updated " : "";
+                                const dt = wasEdited ? post.updated_at : post.created_at;
+                                return label + new Date(String(dt)).toLocaleDateString("en-US",{year:"numeric",month:"long",day:"numeric"});
+                              })()}
+                            </span>
                           </div>
                         </div>
                         <span className="blog-card__read-more">Read more <i className="fa-solid fa-arrow-right"></i></span>

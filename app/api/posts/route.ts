@@ -9,24 +9,41 @@ export async function GET(req: NextRequest) {
   const published = searchParams.get("published");
   const limit = parseInt(searchParams.get("limit") || "50");
   const offset = parseInt(searchParams.get("offset") || "0");
+  const sort = searchParams.get("sort") || "default"; // "default" | "recent"
 
   try {
     const sql = await ensureDB();
     let posts;
+    // "recent" = most recently created OR updated first. Falls back to created_at
+    // for posts whose updated_at equals created_at (never edited).
     if (published === "true") {
-      posts = await sql`
-        SELECT id, title, slug, excerpt, image_url, image_alt, category, author, created_at
-        FROM posts WHERE published = true
-        ORDER BY sort_order DESC, created_at DESC
-        LIMIT ${limit} OFFSET ${offset}
-      `;
+      posts = sort === "recent"
+        ? await sql`
+            SELECT id, title, slug, excerpt, image_url, image_alt, category, author, created_at, updated_at
+            FROM posts WHERE published = true
+            ORDER BY COALESCE(updated_at, created_at) DESC, created_at DESC
+            LIMIT ${limit} OFFSET ${offset}
+          `
+        : await sql`
+            SELECT id, title, slug, excerpt, image_url, image_alt, category, author, created_at
+            FROM posts WHERE published = true
+            ORDER BY sort_order DESC, created_at DESC
+            LIMIT ${limit} OFFSET ${offset}
+          `;
     } else {
-      posts = await sql`
-        SELECT id, title, slug, excerpt, image_url, image_alt, category, author, published, sort_order, created_at, updated_at, seo_title, seo_description, seo_keywords
-        FROM posts
-        ORDER BY sort_order DESC, created_at DESC
-        LIMIT ${limit} OFFSET ${offset}
-      `;
+      posts = sort === "recent"
+        ? await sql`
+            SELECT id, title, slug, excerpt, image_url, image_alt, category, author, published, sort_order, created_at, updated_at, seo_title, seo_description, seo_keywords
+            FROM posts
+            ORDER BY COALESCE(updated_at, created_at) DESC, created_at DESC
+            LIMIT ${limit} OFFSET ${offset}
+          `
+        : await sql`
+            SELECT id, title, slug, excerpt, image_url, image_alt, category, author, published, sort_order, created_at, updated_at, seo_title, seo_description, seo_keywords
+            FROM posts
+            ORDER BY sort_order DESC, created_at DESC
+            LIMIT ${limit} OFFSET ${offset}
+          `;
     }
     return NextResponse.json({ posts });
   } catch (err) {
