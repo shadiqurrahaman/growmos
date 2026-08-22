@@ -13,6 +13,8 @@ export function getDB() {
       ssl: url.includes("sslmode=require") || url.includes("neon.tech") ? "require" : false,
       max: 10,
       idle_timeout: 20,
+      // Disable prepared statement caching so each statement auto-commits.
+      no_prepare: false,
     });
   }
   // Kick off initDB on first use per process so schema migrations are always
@@ -43,7 +45,16 @@ export async function ensureDB() {
 export async function initDB() {
   const sql = getDB();
 
-  await sql`
+  // Helper: run a migration step independently — if one fails, others still apply.
+  async function step(name: string, fn: () => Promise<unknown>) {
+    try {
+      await fn();
+    } catch (err) {
+      console.error(`[initDB] step "${name}" failed:`, err);
+    }
+  }
+
+  await step("create posts table", () => sql`
     CREATE TABLE IF NOT EXISTS posts (
       id SERIAL PRIMARY KEY,
       title TEXT NOT NULL,
@@ -62,15 +73,15 @@ export async function initDB() {
       created_at TIMESTAMPTZ DEFAULT NOW(),
       updated_at TIMESTAMPTZ DEFAULT NOW()
     )
-  `;
+  `);
 
-  // ── Idempotent migrations for older databases ────────────────────────────
-  await sql`ALTER TABLE posts ADD COLUMN IF NOT EXISTS image_alt TEXT`;
-  await sql`ALTER TABLE posts ADD COLUMN IF NOT EXISTS seo_title TEXT`;
-  await sql`ALTER TABLE posts ADD COLUMN IF NOT EXISTS seo_description TEXT`;
-  await sql`ALTER TABLE posts ADD COLUMN IF NOT EXISTS seo_keywords TEXT`;
+  // ── Idempotent migrations for older databases (run independently) ────────
+  await step("add image_alt column",       () => sql`ALTER TABLE posts ADD COLUMN IF NOT EXISTS image_alt TEXT`);
+  await step("add seo_title column",       () => sql`ALTER TABLE posts ADD COLUMN IF NOT EXISTS seo_title TEXT`);
+  await step("add seo_description column", () => sql`ALTER TABLE posts ADD COLUMN IF NOT EXISTS seo_description TEXT`);
+  await step("add seo_keywords column",    () => sql`ALTER TABLE posts ADD COLUMN IF NOT EXISTS seo_keywords TEXT`);
 
-  await sql`
+  await step("create subscribers table", () => sql`
     CREATE TABLE IF NOT EXISTS subscribers (
       id SERIAL PRIMARY KEY,
       email TEXT NOT NULL UNIQUE,
@@ -79,9 +90,9 @@ export async function initDB() {
       tags TEXT[] DEFAULT '{}',
       created_at TIMESTAMPTZ DEFAULT NOW()
     )
-  `;
+  `);
 
-  await sql`
+  await step("create email_campaigns table", () => sql`
     CREATE TABLE IF NOT EXISTS email_campaigns (
       id SERIAL PRIMARY KEY,
       subject TEXT NOT NULL,
@@ -95,9 +106,9 @@ export async function initDB() {
       created_at TIMESTAMPTZ DEFAULT NOW(),
       sent_at TIMESTAMPTZ
     )
-  `;
+  `);
 
-  await sql`
+  await step("create contact_submissions table", () => sql`
     CREATE TABLE IF NOT EXISTS contact_submissions (
       id SERIAL PRIMARY KEY,
       name TEXT NOT NULL,
@@ -109,9 +120,9 @@ export async function initDB() {
       replied BOOLEAN DEFAULT false,
       created_at TIMESTAMPTZ DEFAULT NOW()
     )
-  `;
+  `);
 
-  await sql`
+  await step("create received_emails table", () => sql`
     CREATE TABLE IF NOT EXISTS received_emails (
       id SERIAL PRIMARY KEY,
       from_address TEXT NOT NULL,
@@ -124,18 +135,17 @@ export async function initDB() {
       received_at TIMESTAMPTZ DEFAULT NOW(),
       message_id TEXT UNIQUE
     )
-  `;
+  `);
 
-  // Add message_id column to existing tables that predate this migration
-  await sql`
+  await step("add message_id column", () => sql`
     ALTER TABLE received_emails ADD COLUMN IF NOT EXISTS message_id TEXT
-  `;
-  await sql`
+  `);
+  await step("create message_id index", () => sql`
     CREATE UNIQUE INDEX IF NOT EXISTS received_emails_message_id_idx
     ON received_emails (message_id) WHERE message_id IS NOT NULL
-  `;
+  `);
 
-  await sql`
+  await step("create data_maturity_leads table", () => sql`
     CREATE TABLE IF NOT EXISTS data_maturity_leads (
       id SERIAL PRIMARY KEY,
       name TEXT NOT NULL,
@@ -148,5 +158,5 @@ export async function initDB() {
       source TEXT DEFAULT 'data-maturity-assessment',
       created_at TIMESTAMPTZ DEFAULT NOW()
     )
-  `;
+  `);
 }
