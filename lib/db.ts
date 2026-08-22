@@ -1,6 +1,7 @@
 import postgres from "postgres";
 
 let _sql: ReturnType<typeof postgres> | null = null;
+let _initPromise: Promise<void> | null = null;
 
 export function getDB() {
   if (!process.env.DATABASE_URL) {
@@ -12,6 +13,16 @@ export function getDB() {
       ssl: url.includes("sslmode=require") || url.includes("neon.tech") ? "require" : false,
       max: 10,
       idle_timeout: 20,
+    });
+  }
+  // Ensure the schema is up-to-date on every cold start. This runs once per
+  // process and is idempotent (CREATE TABLE IF NOT EXISTS + ALTER TABLE IF NOT EXISTS).
+  if (!_initPromise) {
+    _initPromise = initDB().catch((err) => {
+      console.error("initDB failed:", err);
+      // Reset so a future call can retry
+      _initPromise = null;
+      // Don't throw — let the calling query fail with a clearer error if the DB is truly down.
     });
   }
   return _sql;
