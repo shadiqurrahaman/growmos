@@ -28,14 +28,24 @@ export async function initDB() {
       content TEXT NOT NULL,
       excerpt TEXT,
       image_url TEXT,
+      image_alt TEXT,
       category TEXT DEFAULT 'Blog',
       author TEXT DEFAULT 'GrowMos Team',
       published BOOLEAN DEFAULT false,
       sort_order INTEGER DEFAULT 0,
+      seo_title TEXT,
+      seo_description TEXT,
+      seo_keywords TEXT,
       created_at TIMESTAMPTZ DEFAULT NOW(),
       updated_at TIMESTAMPTZ DEFAULT NOW()
     )
   `;
+
+  // ── Idempotent migrations for older databases ────────────────────────────
+  await sql`ALTER TABLE posts ADD COLUMN IF NOT EXISTS image_alt TEXT`;
+  await sql`ALTER TABLE posts ADD COLUMN IF NOT EXISTS seo_title TEXT`;
+  await sql`ALTER TABLE posts ADD COLUMN IF NOT EXISTS seo_description TEXT`;
+  await sql`ALTER TABLE posts ADD COLUMN IF NOT EXISTS seo_keywords TEXT`;
 
   await sql`
     CREATE TABLE IF NOT EXISTS subscribers (

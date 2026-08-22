@@ -15,3 +15,6 @@ scripts/check-devtools.js
 scripts/check-mobile-full.js
 scripts/check-responsive.js
 scripts/check-sections.js
+
+# Local disk upload fallback — Cloudinary is the production storage path
+public/uploads/

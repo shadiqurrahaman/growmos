@@ -6,7 +6,8 @@ import Link from "next/link";
 export default function NewPostPage() {
   const router = useRouter();
   const [form, setForm] = useState({
-    title: "", slug: "", content: "", excerpt: "", image_url: "", category: "Blog", author: "GrowMos Team", published: false, sort_order: 0,
+    title: "", slug: "", content: "", excerpt: "", image_url: "", image_alt: "", category: "Blog", author: "GrowMos Team", published: false, sort_order: 0,
+    seo_title: "", seo_description: "", seo_keywords: "",
   });
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState("");
@@ -141,13 +142,68 @@ export default function NewPostPage() {
                 {uploading ? "Uploading…" : "Upload Image"}
                 <input type="file" accept="image/*" onChange={handleImageUpload} className="hidden" />
               </label>
-              <p className="text-xs text-gray-400 mt-1.5">JPG, PNG, WebP up to 10MB</p>
+              <p className="text-xs text-gray-400 mt-1.5">JPG, PNG, WebP up to 10MB · auto-converted to webp @ 1600×900</p>
               {form.image_url && (
                 <button type="button" onClick={() => setForm(p => ({ ...p, image_url: "" }))} className="text-xs text-red-500 hover:text-red-700 mt-1 transition-colors">
                   Remove image
                 </button>
               )}
             </div>
+          </div>
+          <div>
+            <label className="block text-sm font-semibold text-gray-700 mb-1">Image alt text</label>
+            <input
+              type="text"
+              value={form.image_alt}
+              onChange={e => setForm(p => ({ ...p, image_alt: e.target.value }))}
+              placeholder="Describe the image for screen readers and SEO (e.g. 'Dashboard showing revenue by channel')"
+              className="w-full px-4 py-2.5 border border-gray-200 rounded-xl text-gray-900 focus:outline-none focus:ring-2 focus:ring-purple-500"
+            />
+            <p className="text-xs text-gray-400 mt-1">Used as the &lt;img alt&gt; attribute and in the Article JSON-LD schema.</p>
+          </div>
+        </div>
+
+        <div className="bg-white rounded-2xl border border-gray-200 p-6 space-y-4">
+          <div className="flex items-center justify-between">
+            <h2 className="font-semibold text-gray-900 text-sm uppercase tracking-wide text-gray-500">SEO & Sharing</h2>
+            <span className="text-xs text-gray-400">Optional — leave blank to use post title & excerpt</span>
+          </div>
+          <div>
+            <label className="block text-sm font-semibold text-gray-700 mb-1">
+              SEO title <span className="text-gray-400 font-normal">({form.seo_title.length}/60)</span>
+            </label>
+            <input
+              type="text"
+              maxLength={70}
+              value={form.seo_title}
+              onChange={e => setForm(p => ({ ...p, seo_title: e.target.value }))}
+              placeholder="Custom title for search engines (≤ 60 chars)"
+              className="w-full px-4 py-2.5 border border-gray-200 rounded-xl text-gray-900 focus:outline-none focus:ring-2 focus:ring-purple-500"
+            />
+          </div>
+          <div>
+            <label className="block text-sm font-semibold text-gray-700 mb-1">
+              Meta description <span className="text-gray-400 font-normal">({form.seo_description.length}/155)</span>
+            </label>
+            <textarea
+              rows={2}
+              maxLength={170}
+              value={form.seo_description}
+              onChange={e => setForm(p => ({ ...p, seo_description: e.target.value }))}
+              placeholder="Shown under your title in Google search results (≤ 155 chars)"
+              className="w-full px-4 py-2.5 border border-gray-200 rounded-xl text-gray-900 focus:outline-none focus:ring-2 focus:ring-purple-500 resize-none"
+            />
+          </div>
+          <div>
+            <label className="block text-sm font-semibold text-gray-700 mb-1">Keywords</label>
+            <input
+              type="text"
+              value={form.seo_keywords}
+              onChange={e => setForm(p => ({ ...p, seo_keywords: e.target.value }))}
+              placeholder="e.g. data engineering, dbt, bigquery"
+              className="w-full px-4 py-2.5 border border-gray-200 rounded-xl text-gray-900 focus:outline-none focus:ring-2 focus:ring-purple-500"
+            />
+            <p className="text-xs text-gray-400 mt-1">Comma-separated. Used in the Article JSON-LD schema as keywords.</p>
           </div>
         </div>
 

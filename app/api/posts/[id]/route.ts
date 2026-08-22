@@ -26,7 +26,7 @@ export async function PUT(req: NextRequest, { params }: { params: Promise<{ id: 
   const { id } = await params;
   try {
     const sql = getDB();
-    const { title, slug, content, excerpt, image_url, category, author, published, sort_order } = await req.json();
+    const { title, slug, content, excerpt, image_url, image_alt, category, author, published, sort_order, seo_title, seo_description, seo_keywords } = await req.json();
     const [post] = await sql`
       UPDATE posts SET
         title = COALESCE(${title}, title),
@@ -34,10 +34,14 @@ export async function PUT(req: NextRequest, { params }: { params: Promise<{ id: 
         content = COALESCE(${content}, content),
         excerpt = COALESCE(${excerpt}, excerpt),
         image_url = ${image_url ?? null},
+        image_alt = COALESCE(${image_alt}, image_alt),
         category = COALESCE(${category}, category),
         author = COALESCE(${author}, author),
         published = COALESCE(${published}, published),
         sort_order = COALESCE(${sort_order}, sort_order),
+        seo_title = COALESCE(${seo_title}, seo_title),
+        seo_description = COALESCE(${seo_description}, seo_description),
+        seo_keywords = COALESCE(${seo_keywords}, seo_keywords),
         updated_at = NOW()
       WHERE id = ${Number(id)}
       RETURNING *
