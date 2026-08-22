@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { getDB } from "@/lib/db";
+import { ensureDB } from "@/lib/db";
 import { siteUrl, siteName } from "@/lib/seo";
 export const dynamic = "force-dynamic";
 
@@ -23,7 +23,7 @@ type Post = {
 
 async function getPost(slug: string): Promise<Post | null> {
   try {
-    const sql = getDB();
+    const sql = await ensureDB();
     const [post] = await sql`SELECT * FROM posts WHERE slug = ${slug} AND published = true`;
     return (post as unknown as Post) || null;
   } catch { return null; }

@@ -15,17 +15,29 @@ export function getDB() {
       idle_timeout: 20,
     });
   }
-  // Ensure the schema is up-to-date on every cold start. This runs once per
-  // process and is idempotent (CREATE TABLE IF NOT EXISTS + ALTER TABLE IF NOT EXISTS).
+  // Kick off initDB on first use per process so schema migrations are always
+  // applied. We do NOT await here to keep getDB() synchronous; callers that
+  // need to wait should use ensureDB() instead (e.g. via /api/init).
   if (!_initPromise) {
     _initPromise = initDB().catch((err) => {
       console.error("initDB failed:", err);
-      // Reset so a future call can retry
-      _initPromise = null;
-      // Don't throw — let the calling query fail with a clearer error if the DB is truly down.
+      _initPromise = null; // allow retry on next call
     });
   }
   return _sql;
+}
+
+/**
+ * Ensures the schema is fully migrated before returning the SQL client.
+ * Use in routes that depend on newly-added columns (e.g. the posts API).
+ * Safe to call multiple times — idempotent migrations.
+ */
+export async function ensureDB() {
+  getDB(); // starts initDB if not already running
+  if (_initPromise) {
+    try { await _initPromise; } catch { /* error already logged; let call proceed */ }
+  }
+  return _sql!;
 }
 
 export async function initDB() {

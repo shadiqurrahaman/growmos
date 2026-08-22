@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { getDB } from "@/lib/db";
+import { ensureDB } from "@/lib/db";
 import { getAdminFromCookie } from "@/lib/auth";
 
 export const dynamic = "force-dynamic";
@@ -11,7 +11,7 @@ export async function GET(req: NextRequest) {
   const offset = parseInt(searchParams.get("offset") || "0");
 
   try {
-    const sql = getDB();
+    const sql = await ensureDB();
     let posts;
     if (published === "true") {
       posts = await sql`
@@ -40,7 +40,7 @@ export async function POST(req: NextRequest) {
   if (!admin) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
 
   try {
-    const sql = getDB();
+    const sql = await ensureDB();
     const { title, slug, content, excerpt, image_url, image_alt, category, author, published, sort_order, seo_title, seo_description, seo_keywords } = await req.json();
     if (!title || !slug || !content) {
       return NextResponse.json({ error: "title, slug, and content are required" }, { status: 400 });

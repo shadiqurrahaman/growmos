@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { getDB } from "@/lib/db";
+import { ensureDB } from "@/lib/db";
 import { getAdminFromCookie } from "@/lib/auth";
 
 export const dynamic = "force-dynamic";
@@ -7,7 +7,7 @@ export const dynamic = "force-dynamic";
 export async function GET(_req: NextRequest, { params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;
   try {
-    const sql = getDB();
+    const sql = await ensureDB();
     const isSlug = isNaN(Number(id));
     const [post] = isSlug
       ? await sql`SELECT * FROM posts WHERE slug = ${id}`
@@ -25,7 +25,7 @@ export async function PUT(req: NextRequest, { params }: { params: Promise<{ id: 
 
   const { id } = await params;
   try {
-    const sql = getDB();
+    const sql = await ensureDB();
     const { title, slug, content, excerpt, image_url, image_alt, category, author, published, sort_order, seo_title, seo_description, seo_keywords } = await req.json();
     const [post] = await sql`
       UPDATE posts SET
@@ -60,7 +60,7 @@ export async function DELETE(_req: NextRequest, { params }: { params: Promise<{ 
 
   const { id } = await params;
   try {
-    const sql = getDB();
+    const sql = await ensureDB();
     await sql`DELETE FROM posts WHERE id = ${Number(id)}`;
     return NextResponse.json({ success: true });
   } catch {
