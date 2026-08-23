@@ -1,4 +1,6 @@
 import Link from "next/link";
+import { JsonLd } from "@/lib/jsonld";
+import { siteUrl, siteName, pageUrl } from "@/lib/seo";
 
 export interface IntegrationPageData {
   accent: string;
@@ -15,11 +17,74 @@ export interface IntegrationPageData {
   ctaTitle: string;
   ctaGradient: string;
   ctaText: string;
+  // Optional schema-rendering fields.
+  path?: string;
+  serviceType?: string;
+  pageTitle?: string;
 }
 
 export default function IntegrationPage(data: IntegrationPageData) {
+  // Derive schema fields.
+  const derivedPath = data.path ?? "/";
+  const derivedTitle =
+    data.pageTitle ?? `${data.titleTop} ${data.titleGradient}`.trim();
+  const derivedServiceType = data.serviceType ?? `${data.brand} Integration`;
+  const pageUrlAbsolute = pageUrl(derivedPath);
+
+  const serviceJsonLd = {
+    "@context": "https://schema.org",
+    "@type": "Service",
+    "@id": `${pageUrlAbsolute}#service`,
+    name: derivedTitle,
+    serviceType: derivedServiceType,
+    description: data.description,
+    url: pageUrlAbsolute,
+    provider: { "@id": `${siteUrl}#organization` },
+    areaServed: { "@type": "Place", name: "Worldwide" },
+    brand: { "@type": "Brand", name: siteName },
+    offers: {
+      "@type": "Offer",
+      priceCurrency: "USD",
+      priceRange: "$$$",
+      availability: "https://schema.org/InStock",
+      url: pageUrlAbsolute,
+    },
+  };
+
+  const faqJsonLd = {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "@id": `${pageUrlAbsolute}#faq`,
+    mainEntity: data.faqs.map((f) => ({
+      "@type": "Question",
+      name: f.q,
+      acceptedAnswer: { "@type": "Answer", text: f.a },
+    })),
+  };
+
+  const breadcrumbJsonLd = {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    itemListElement: [
+      { "@type": "ListItem", position: 1, name: "Home", item: siteUrl },
+      {
+        "@type": "ListItem",
+        position: 2,
+        name: "Integrations",
+        item: pageUrl("/crm-data-integration"),
+      },
+      {
+        "@type": "ListItem",
+        position: 3,
+        name: derivedTitle,
+        item: pageUrlAbsolute,
+      },
+    ],
+  };
+
   return (
     <main className="main integration" style={{ ["--int-accent" as string]: data.accent }}>
+      <JsonLd data={[serviceJsonLd, faqJsonLd, breadcrumbJsonLd]} />
       {/* Hero */}
       <section className="page-hero integration-hero">
         <div className="hero__bg-shapes">

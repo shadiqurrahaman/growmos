@@ -132,5 +132,13 @@ const data: ServicePageData = {
 };
 
 export default function DataPipelinePage() {
- return <ServicePage {...data} />;
+ return (
+   <ServicePage
+     {...data}
+     path="/data-pipeline-engineering"
+     serviceType="Data Engineering"
+     pageTitle="Data Pipeline Engineering — Fivetran, Airbyte & dbt"
+     parentSection={{ name: "Services", path: "/#services" }}
+   />
+ );
 }

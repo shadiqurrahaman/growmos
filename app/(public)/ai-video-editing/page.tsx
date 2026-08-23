@@ -129,5 +129,13 @@ const data: ServicePageData = {
 };
 
 export default function AiVideoEditingPage() {
- return <ServicePage {...data} />;
+ return (
+   <ServicePage
+     {...data}
+     path="/ai-video-editing"
+     serviceType="AI Video Editing"
+     pageTitle="AI Video Editing — Repurpose Long-Form into Short-Form"
+     parentSection={{ name: "Services", path: "/#services" }}
+   />
+ );
 }

@@ -106,5 +106,12 @@ const data: IntegrationPageData = {
 };
 
 export default function HubspotPage() {
- return <IntegrationPage {...data} />;
+ return (
+   <IntegrationPage
+     {...data}
+     path="/integrations/hubspot"
+     serviceType="HubSpot Integration"
+     pageTitle="GrowMos × HubSpot — Data, Attribution & BI"
+   />
+ );
 }

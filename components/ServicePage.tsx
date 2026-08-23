@@ -1,4 +1,6 @@
 import Link from "next/link";
+import { JsonLd } from "@/lib/jsonld";
+import { siteUrl, siteName, pageUrl } from "@/lib/seo";
 import { reviews } from "@/lib/reviews";
 
 export interface ServiceCapability {
@@ -56,11 +58,95 @@ export interface ServicePageData {
   ctaTitle: string;
   ctaGradient: string;
   ctaText: string;
+  // Optional fields used for schema generation. If omitted, defaults
+  // are derived from the existing data (badge / titleTop+titleGradient).
+  path?: string;            // e.g. "/data-pipeline-engineering"
+  serviceType?: string;     // e.g. "Data Engineering"
+  pageTitle?: string;       // Full <title>, used as Service.name
+  parentSection?: {
+    name: string;          // e.g. "Services"
+    path: string;          // e.g. "/#services"
+  };
 }
 
 export default function ServicePage(data: ServicePageData) {
+  // Derive schema fields when not explicitly passed.
+  const derivedPath = data.path ?? "/";
+  const derivedTitle = data.pageTitle ?? `${data.titleTop} ${data.titleGradient}`.trim();
+  const derivedServiceType = data.serviceType ?? data.badge;
+  const derivedParent = data.parentSection ?? { name: "Home", path: "/" };
+
+  const pageUrlAbsolute = pageUrl(derivedPath);
+  // Schema.org structured data for capability pages.
+  // Three blocks: Service, FAQPage, BreadcrumbList — all server-rendered
+  // so every crawler (including non-Google AI crawlers) sees them in
+  // the static HTML.
+  const serviceJsonLd = {
+    "@context": "https://schema.org",
+    "@type": "Service",
+    "@id": `${pageUrlAbsolute}#service`,
+    name: derivedTitle,
+    serviceType: derivedServiceType,
+    description: data.description,
+    url: pageUrlAbsolute,
+    provider: { "@id": `${siteUrl}#organization` },
+    areaServed: { "@type": "Place", name: "Worldwide" },
+    brand: { "@type": "Brand", name: siteName },
+    offers: {
+      "@type": "Offer",
+      priceCurrency: "USD",
+      priceRange: "$$$",
+      availability: "https://schema.org/InStock",
+      url: pageUrlAbsolute,
+    },
+    hasOfferCatalog: {
+      "@type": "OfferCatalog",
+      name: `${siteName} ${derivedServiceType} Capabilities`,
+      itemListElement: data.capabilities.map((c) => ({
+        "@type": "Offer",
+        itemOffered: {
+          "@type": "Service",
+          name: c.title,
+          description: c.desc,
+        },
+      })),
+    },
+  };
+
+  const faqJsonLd = {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "@id": `${pageUrlAbsolute}#faq`,
+    mainEntity: data.faqs.map((f) => ({
+      "@type": "Question",
+      name: f.q,
+      acceptedAnswer: { "@type": "Answer", text: f.a },
+    })),
+  };
+
+  const breadcrumbJsonLd = {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    itemListElement: [
+      { "@type": "ListItem", position: 1, name: "Home", item: siteUrl },
+      {
+        "@type": "ListItem",
+        position: 2,
+        name: derivedParent.name,
+        item: pageUrl(derivedParent.path),
+      },
+      {
+        "@type": "ListItem",
+        position: 3,
+        name: derivedTitle,
+        item: pageUrlAbsolute,
+      },
+    ],
+  };
+
   return (
     <main className="main sp" style={{ ["--sp-accent" as string]: data.accent }}>
+      <JsonLd data={[serviceJsonLd, faqJsonLd, breadcrumbJsonLd]} />
       {/* Hero */}
       <section className="page-hero sp-hero">
         <div className="hero__bg-shapes">

@@ -130,5 +130,13 @@ const data: ServicePageData = {
 };
 
 export default function CustomSoftwarePage() {
- return <ServicePage {...data} />;
+ return (
+   <ServicePage
+     {...data}
+     path="/custom-software-development"
+     serviceType="Custom Software Development"
+     pageTitle="Custom Software Development — Web Apps & Internal Tools"
+     parentSection={{ name: "Services", path: "/#services" }}
+   />
+ );
 }

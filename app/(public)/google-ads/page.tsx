@@ -129,5 +129,13 @@ const data: ServicePageData = {
 };
 
 export default function GoogleAdsPage() {
- return <ServicePage {...data} />;
+ return (
+   <ServicePage
+     {...data}
+     path="/google-ads"
+     serviceType="Performance Marketing"
+     pageTitle="Google Ads Management — Search, PMax & YouTube"
+     parentSection={{ name: "Services", path: "/#services" }}
+   />
+ );
 }

@@ -130,5 +130,13 @@ const data: ServicePageData = {
 };
 
 export default function MetaAdsPage() {
- return <ServicePage {...data} />;
+ return (
+   <ServicePage
+     {...data}
+     path="/meta-ads"
+     serviceType="Performance Marketing"
+     pageTitle="Meta Ads Management — Facebook & Instagram"
+     parentSection={{ name: "Services", path: "/#services" }}
+   />
+ );
 }

@@ -130,5 +130,13 @@ const data: ServicePageData = {
 };
 
 export default function CrmIntegrationPage() {
- return <ServicePage {...data} />;
+ return (
+   <ServicePage
+     {...data}
+     path="/crm-data-integration"
+     serviceType="CRM Data Integration"
+     pageTitle="CRM Data Integration — Salesforce & HubSpot Analytics"
+     parentSection={{ name: "Services", path: "/#services" }}
+   />
+ );
 }

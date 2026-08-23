@@ -130,5 +130,13 @@ const data: ServicePageData = {
 };
 
 export default function BiDashboardsPage() {
- return <ServicePage {...data} />;
+ return (
+   <ServicePage
+     {...data}
+     path="/bi-dashboards"
+     serviceType="Business Intelligence"
+     pageTitle="BI & Dashboard Development — Power BI & Metabase"
+     parentSection={{ name: "Services", path: "/#services" }}
+   />
+ );
 }

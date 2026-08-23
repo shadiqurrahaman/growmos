@@ -129,5 +129,13 @@ const data: ServicePageData = {
 };
 
 export default function SocialMediaPage() {
- return <ServicePage {...data} />;
+ return (
+   <ServicePage
+     {...data}
+     path="/social-media-management"
+     serviceType="Social Media Management"
+     pageTitle="Social Media Management — Content, Community & Growth"
+     parentSection={{ name: "Services", path: "/#services" }}
+   />
+ );
 }

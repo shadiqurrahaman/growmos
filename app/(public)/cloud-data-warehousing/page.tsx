@@ -130,5 +130,13 @@ const data: ServicePageData = {
 };
 
 export default function CloudWarehousingPage() {
- return <ServicePage {...data} />;
+ return (
+   <ServicePage
+     {...data}
+     path="/cloud-data-warehousing"
+     serviceType="Cloud Data Warehousing"
+     pageTitle="Cloud Data Warehousing — BigQuery, Snowflake & Microsoft Fabric"
+     parentSection={{ name: "Services", path: "/#services" }}
+   />
+ );
 }

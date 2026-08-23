@@ -130,5 +130,13 @@ const data: ServicePageData = {
 };
 
 export default function ReverseEtlPage() {
- return <ServicePage {...data} />;
+ return (
+   <ServicePage
+     {...data}
+     path="/reverse-etl-activation"
+     serviceType="Reverse ETL Activation"
+     pageTitle="Reverse ETL Activation — Warehouse to Tools"
+     parentSection={{ name: "Services", path: "/#services" }}
+   />
+ );
 }

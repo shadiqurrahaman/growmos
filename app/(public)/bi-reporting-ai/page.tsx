@@ -130,5 +130,13 @@ const data: ServicePageData = {
 };
 
 export default function BiReportingPage() {
- return <ServicePage {...data} />;
+ return (
+   <ServicePage
+     {...data}
+     path="/bi-reporting-ai"
+     serviceType="BI & AI Reporting"
+     pageTitle="BI & Reporting with AI — Insights that talk back"
+     parentSection={{ name: "Services", path: "/#services" }}
+   />
+ );
 }

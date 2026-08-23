@@ -106,5 +106,12 @@ const data: IntegrationPageData = {
 };
 
 export default function SalesforcePage() {
- return <IntegrationPage {...data} />;
+ return (
+   <IntegrationPage
+     {...data}
+     path="/integrations/salesforce"
+     serviceType="Salesforce Integration"
+     pageTitle="GrowMos × Salesforce — Data, Pipelines & BI"
+   />
+ );
 }
