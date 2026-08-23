@@ -407,15 +407,22 @@ export default function HomePage() {
  <h2 className="section__title">Frequently Asked Questions</h2>
  </div>
  <div className="faq__grid">
- {faqs.map((faq, i) => (
- <div key={i} className="faq__item">
- <button className="faq__question" onClick={() => setOpenFaq(openFaq === i ? null : i)}>
+ {faqs.map((faq, i) => {
+ const isOpen = openFaq === i;
+ return (
+ <div key={i} className={`faq__item${isOpen ? " active" : ""}`}>
+ <button
+ className="faq__question"
+ onClick={() => setOpenFaq(isOpen ? null : i)}
+ aria-expanded={isOpen}
+ >
  <span>{faq.q}</span>
- <i className={`fa-solid fa-chevron-${openFaq === i ? "up" : "down"}`}></i>
+ <i className={`fa-solid ${isOpen ? "fa-minus" : "fa-plus"}`}></i>
  </button>
- {openFaq === i && <div className="faq__answer"><p>{faq.a}</p></div>}
+ {isOpen && <div className="faq__answer"><p>{faq.a}</p></div>}
  </div>
- ))}
+ );
+ })}
  </div>
  </div>
  </section>

@@ -5852,17 +5852,19 @@ section {
 .faq__answer {
  max-height: 0;
  overflow: hidden;
- transition: all var(--transition-base);
+ transition: max-height var(--transition-base), padding var(--transition-base);
 }
 
 .faq__item.active .faq__answer {
- max-height: 200px;
+ max-height: 800px;
+ padding-top: 0;
 }
 
 .faq__answer p {
  padding: 0 var(--spacing-xl) var(--spacing-xl);
  color: var(--gray-600);
  margin: 0;
+ line-height: 1.6;
 }
 
 /* --------------------------------------------------------------------------
