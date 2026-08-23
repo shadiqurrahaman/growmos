@@ -189,7 +189,7 @@ const organizationJsonLd = {
       knowsAbout: siteFounder.expertise,
       worksFor: { "@id": `${siteUrl}#organization` },
       url: pageUrl("/about"),
-      sameAs: [siteFounder.linkedinUrl],
+      sameAs: [siteFounder.linkedinUrl, ...siteSocialLinks],
     },
   ],
 };
@@ -245,12 +245,70 @@ export default function RootLayout({
           href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap"
           rel="stylesheet"
         />
+        {/*
+          Non-blocking Font Awesome load: render-blocking CSS is one of the
+          top LCP/TBT contributors. The pattern:
+          1. <link rel="preload" as="style"> so the browser fetches it eagerly
+             but doesn't block render.
+          2. <link rel="stylesheet" media="print"> with an onload swap so
+             it doesn't apply until after first paint.
+          3. <noscript> fallback for users without JS.
+        */}
+        <link
+          rel="preload"
+          as="style"
+          href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
+        />
         <link
           rel="stylesheet"
           href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
+          media="print"
+          // @ts-expect-error — React DOM passes string onload attribute through.
+          onload="this.media='all'"
         />
+        <noscript>
+          <link
+            rel="stylesheet"
+            href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
+          />
+        </noscript>
 
         <JsonLd data={organizationJsonLd} />
+
+        {/*
+          Speculation Rules API — Chromium-based browsers will prefetch or
+          prerender the high-confidence navigations below. This dramatically
+          improves perceived navigation speed for users clicking the hero
+          CTAs. Conservative defaults: prerender only on pointer-down of
+          matching URLs to avoid wasting bandwidth.
+        */}
+        <script
+          type="speculationrules"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify({
+              prefetch: [
+                {
+                  source: "document",
+                  where: {
+                    and: [
+                      { href_matches: "/*" },
+                      { not: { href_matches: ["/admin/*", "/api/*", "/logout"] } },
+                      { not: { selector_matches: "a[rel~='nofollow']" } },
+                    ],
+                  },
+                  eagerness: "moderate",
+                },
+              ],
+              prerender: [
+                {
+                  source: "document",
+                  where: { href_matches: ["/contact", "/about"] },
+                  eagerness: "moderate",
+                },
+              ],
+            }),
+          }}
+        />
       </head>
       <body suppressHydrationWarning>{children}</body>
     </html>

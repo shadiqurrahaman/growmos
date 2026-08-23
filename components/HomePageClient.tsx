@@ -63,7 +63,6 @@ const problemsSolutions = [
 ];
 
 export default function HomePageClient() {
- const [openFaq, setOpenFaq] = useState<number | null>(null);
  const [posts, setPosts] = useState<Post[]>([]);
  const [form, setForm] = useState({ name: "", email: "", phone: "", service: "", message: "" });
  const [status, setStatus] = useState<"idle"|"sending"|"ok"|"err">("idle");
@@ -407,22 +406,20 @@ export default function HomePageClient() {
  <h2 className="section__title">Frequently Asked Questions</h2>
  </div>
  <div className="faq__grid">
- {faqs.map((faq, i) => {
- const isOpen = openFaq === i;
- return (
- <div key={i} className={`faq__item${isOpen ? " active" : ""}`}>
- <button
- className="faq__question"
- onClick={() => setOpenFaq(isOpen ? null : i)}
- aria-expanded={isOpen}
- >
+ {/*
+ Native <details>/<summary>: the answer is rendered in the static HTML by
+ default (good for SEO + AI crawlers), and toggled open/closed by the
+ browser without React state. CSS handles the visual transition.
+ */}
+ {faqs.map((faq, i) => (
+ <details key={i} className="faq__item">
+ <summary className="faq__question">
  <span>{faq.q}</span>
- <i className={`fa-solid ${isOpen ? "fa-minus" : "fa-plus"}`}></i>
- </button>
- {isOpen && <div className="faq__answer"><p>{faq.a}</p></div>}
- </div>
- );
- })}
+ <i className="fa-solid fa-chevron-down faq__chevron" aria-hidden="true"></i>
+ </summary>
+ <div className="faq__answer"><p>{faq.a}</p></div>
+ </details>
+ ))}
  </div>
  </div>
  </section>

@@ -38,7 +38,16 @@ const personJsonLd = {
     url: siteUrl,
   },
   url: pageUrl("/about"),
-  sameAs: [siteFounder.linkedinUrl],
+  // Entity disambiguation: link founder to every platform where GrowMos
+  // (or the founder personally) has a verified presence. Helps AI
+  // search engines and Google's Knowledge Graph match the entity.
+  sameAs: [
+    siteFounder.linkedinUrl,
+    "https://www.crunchbase.com/organization/growmos",
+    "https://g2.com/products/growmos",
+    "https://clutch.co/profile/growmos",
+    "https://www.linkedin.com/company/growmos",
+  ],
 };
 
 export default function AboutPage() {

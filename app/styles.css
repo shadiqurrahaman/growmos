@@ -5825,10 +5825,18 @@ section {
  transition: all var(--transition-base);
 }
 
+/* <details> renders the question/answer in static HTML by default. The
+ [open] attribute is what the browser sets when expanded. */
+.faq__item[open] {
+ border-color: var(--primary);
+}
+
 .faq__item:hover {
  border-color: var(--primary);
 }
 
+/* <summary> replaces the old <button class="faq__question">. Reset the
+ default disclosure triangle and keep the visual layout. */
 .faq__question {
  width: 100%;
  display: flex;
@@ -5839,32 +5847,38 @@ section {
  text-align: left;
  font-weight: 600;
  color: var(--secondary);
+ cursor: pointer;
+ list-style: none;
  transition: all var(--transition-fast);
 }
+.faq__question::-webkit-details-marker { display: none; }
 
 .faq__question span {
  flex: 1;
 }
 
-.faq__question i {
+.faq__question i,
+.faq__chevron {
  font-size: var(--font-size-sm);
  color: var(--gray-500);
  transition: transform var(--transition-fast);
 }
 
-.faq__item.active .faq__question i {
+.faq__item[open] .faq__chevron {
  transform: rotate(180deg);
 }
 
+/* Answer always renders in static HTML; CSS hides it visually when the
+ <details> is collapsed so the UX matches the old accordion behavior. */
 .faq__answer {
+ padding: 0 var(--spacing-xl);
  max-height: 0;
  overflow: hidden;
  transition: max-height var(--transition-base), padding var(--transition-base);
 }
-
-.faq__item.active .faq__answer {
+.faq__item[open] .faq__answer {
  max-height: 800px;
- padding-top: 0;
+ padding: 0 var(--spacing-xl) var(--spacing-xl);
 }
 
 .faq__answer p {
