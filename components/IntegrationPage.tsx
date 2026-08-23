@@ -32,8 +32,7 @@ export default function IntegrationPage(data: IntegrationPageData) {
               GrowMos × {data.brand}
             </span>
             <h1 className="page-hero__title">
-              {data.titleTop}
-              <br />
+              <span className="page-hero__title-line">{data.titleTop}</span>{" "}
               <span className="gradient-text integration-gradient">{data.titleGradient}</span>
             </h1>
             <p className="page-hero__description">{data.description}</p>

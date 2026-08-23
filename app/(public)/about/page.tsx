@@ -1,7 +1,7 @@
 import Link from "next/link";
 import type { Metadata } from "next";
 import Team from "@/components/Team";
-import { siteUrl, siteName, pageUrl, buildPageMetadata } from "@/lib/seo";
+import { siteUrl, siteName, siteFounder, pageUrl, buildPageMetadata } from "@/lib/seo";
 import { JsonLd } from "@/lib/jsonld";
 
 export const metadata: Metadata = buildPageMetadata({
@@ -26,15 +26,19 @@ export const metadata: Metadata = buildPageMetadata({
 const personJsonLd = {
   "@context": "https://schema.org",
   "@type": "Person",
-  name: "MD Sha",
-  jobTitle: "Founder & CEO",
+  "@id": `${siteUrl}#founder`,
+  name: siteFounder.name,
+  jobTitle: siteFounder.jobTitle,
+  description: siteFounder.bio,
+  knowsAbout: siteFounder.expertise,
   worksFor: {
     "@type": "Organization",
+    "@id": `${siteUrl}#organization`,
     name: siteName,
     url: siteUrl,
   },
   url: pageUrl("/about"),
-  sameAs: ["https://www.linkedin.com/in/mdshadataanalyst/"],
+  sameAs: [siteFounder.linkedinUrl],
 };
 
 export default function AboutPage() {
@@ -51,9 +55,8 @@ export default function AboutPage() {
           <div className="page-hero__content">
             <span className="page-hero__badge">About GrowMos</span>
             <h1 className="page-hero__title">
-              We exist for B2B teams that need a data
-              <br />
-              foundation that <span className="gradient-text">actually ships.</span>
+              <span>We exist for B2B teams that need a data foundation that </span>
+              <span className="gradient-text">actually ships.</span>
             </h1>
             <p className="page-hero__description">
               GrowMos was founded in 2022 with one belief: data work should ship,

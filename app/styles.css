@@ -3983,6 +3983,13 @@ section {
  Industry Page (bespoke pages: SaaS, E-commerce, EdTech, Retail, etc.)
  -------------------------------------------------------------------------- */
 .industry-hero .page-hero__title { line-height: 1.15; }
+
+/* Hero title line — forces line break between top/gradient spans without
+   using a <br/>, so the H1 stays a clean text node for SEO parsers. */
+.page-hero__title-line { display: block; }
+@media (max-width: 600px) {
+  .page-hero__title-line { display: inline; }
+}
 .industry-badge,
 .industry-gradient {
  --ind-accent: var(--primary);
@@ -8639,6 +8646,75 @@ section {
   .contact-quick__item--qr .wa-inline {
     max-width: 100%;
   }
+}
+
+/* --------------------------------------------------------------------------
+ Service-page proof section (real client outcomes)
+ Reuses design tokens from .sp and .reviews-card for visual consistency.
+ -------------------------------------------------------------------------- */
+.sp-proof {
+  padding: var(--spacing-4xl) 0;
+  background: linear-gradient(180deg, var(--gray-50) 0%, var(--white) 100%);
+}
+.sp-proof__grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--spacing-xl);
+  margin-top: var(--spacing-2xl);
+}
+.sp-proof__card {
+  background: var(--white);
+  border: 1px solid var(--gray-200);
+  border-radius: 16px;
+  padding: var(--spacing-2xl);
+  box-shadow: 0 4px 12px rgba(15, 23, 42, 0.04);
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-md);
+  position: relative;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+.sp-proof__card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgba(15, 23, 42, 0.08);
+}
+.sp-proof__metric {
+  display: inline-block;
+  align-self: flex-start;
+  background: var(--sp-accent, var(--primary));
+  color: #fff;
+  padding: 0.35rem 0.9rem;
+  border-radius: 9999px;
+  font-weight: 700;
+  font-size: 0.85rem;
+  letter-spacing: 0.01em;
+}
+.sp-proof__quote {
+  font-size: 1.05rem;
+  line-height: 1.6;
+  color: var(--gray-700);
+  margin: 0;
+  flex: 1;
+}
+.sp-proof__attrib {
+  display: flex;
+  flex-direction: column;
+  gap: 0.15rem;
+  border-top: 1px solid var(--gray-100);
+  padding-top: var(--spacing-md);
+  color: var(--gray-600);
+  font-size: 0.9rem;
+}
+.sp-proof__attrib strong {
+  color: var(--secondary);
+  font-weight: 700;
+}
+.sp-proof__cta {
+  margin-top: var(--spacing-2xl);
+  text-align: center;
+}
+@media (max-width: 768px) {
+  .sp-proof__grid { grid-template-columns: 1fr; }
 }
 nextjs-portal {
   display: none !important;

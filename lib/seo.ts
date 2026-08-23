@@ -12,7 +12,7 @@ export const siteTagline =
   "Data systems for ambitious B2B teams.";
 
 export const siteDescription =
-  "Data pipelines, cloud data warehouses, and BI dashboards built on dbt, Fivetran, BigQuery and Power BI. Trusted by B2B SaaS & e-commerce teams.";
+  "Production data pipelines, cloud warehouses, and BI dashboards for B2B teams. dbt, Fivetran, BigQuery, Power BI. First dashboard live in 4 weeks, 99.5% uptime, fixed-fee engagements.";
 
 // Homepage-specific overrides — concrete value-prop + proof + CTA.
 // Used only by app/(public)/page.tsx; other routes still inherit
@@ -86,6 +86,26 @@ export const siteEmail = "hello@growmos.com";
 export const sitePhone = "+1-555-123-4567";
 export const siteWhatsApp = "https://wa.me/15551234567";
 export const siteCalendly = "https://calendly.com/hello-growmos/30min";
+
+// Founder / E-E-A-T attribution. Re-used across layout JSON-LD, about page,
+// and blog article bylines so search engines see consistent authorship.
+export const siteFounder = {
+  name: "MD Sha",
+  jobTitle: "Founder & Lead Data Engineer",
+  linkedinUrl: "https://www.linkedin.com/in/mdshadataanalyst/",
+  bio:
+    "Data engineer with 8+ years building production pipelines, warehouses and BI for B2B SaaS, e-commerce, and agency clients. Hands-on across dbt, Fivetran, BigQuery, Snowflake, Power BI and Metabase.",
+  expertise: [
+    "Data engineering",
+    "Cloud data warehousing",
+    "Business intelligence",
+    "dbt",
+    "BigQuery",
+    "Snowflake",
+    "Power BI",
+    "Reverse ETL",
+  ],
+};
 
 // Default OG fallback image (home + service pages).
 export const defaultOgImage = "/images/dashboard.jpg";

@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { reviews } from "@/lib/reviews";
 
 export interface ServiceCapability {
   id: string;
@@ -70,8 +71,7 @@ export default function ServicePage(data: ServicePageData) {
           <div className="page-hero__content">
             <span className="page-hero__badge sp-badge">{data.badge}</span>
             <h1 className="page-hero__title">
-              {data.titleTop}
-              <br />
+              <span className="page-hero__title-line">{data.titleTop}</span>{" "}
               <span className="gradient-text sp-gradient">{data.titleGradient}</span>
             </h1>
             <p className="page-hero__description">{data.description}</p>
@@ -195,6 +195,42 @@ export default function ServicePage(data: ServicePageData) {
                 </div>
               </div>
             ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Quantified proof — real client outcomes tied to this service */}
+      <section className="sp-proof">
+        <div className="container">
+          <div className="section__header">
+            <span className="section__badge">Selected Outcomes</span>
+            <h2 className="section__title">
+              Numbers from <span className="gradient-text sp-gradient">real engagements</span>
+            </h2>
+            <p className="section__subtitle">
+              The metrics below come from named clients in B2B SaaS,
+              e-commerce, and logistics. Names and figures published with
+              their consent.
+            </p>
+          </div>
+          <div className="sp-proof__grid">
+            {reviews.map((r) => (
+              <article className="sp-proof__card" key={r.initials}>
+                {r.metric && (
+                  <div className="sp-proof__metric">{r.metric}</div>
+                )}
+                <p className="sp-proof__quote">&ldquo;{r.quote}&rdquo;</p>
+                <footer className="sp-proof__attrib">
+                  <strong>{r.name}</strong>
+                  <span>{r.role}, {r.company}</span>
+                </footer>
+              </article>
+            ))}
+          </div>
+          <div className="sp-proof__cta">
+            <Link href="/contact" className="btn btn--primary">
+              Book a similar engagement <i className="fa-solid fa-arrow-right"></i>
+            </Link>
           </div>
         </div>
       </section>

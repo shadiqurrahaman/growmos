@@ -13,6 +13,7 @@ import {
   siteEmail,
   sitePhone,
   siteCalendly,
+  siteFounder,
   defaultOgImage,
   pageUrl,
 } from "@/lib/seo";
@@ -20,7 +21,7 @@ import { JsonLd } from "@/lib/jsonld";
 
 const gaId = process.env.NEXT_PUBLIC_GA_ID || "G-YJHB4R4V6R";
 
-const defaultTitle = "Data Engineering & BI — dbt, BigQuery, Power BI";
+const defaultTitle = "Data Engineering & BI for B2B | dbt, BigQuery, Power BI | GrowMos";
 
 export const viewport: Viewport = {
   themeColor: "#0b1220",
@@ -163,6 +164,19 @@ const organizationJsonLd = {
         },
         "query-input": "required name=search_term_string",
       },
+    },
+    {
+      // E-E-A-T: explicit Person + founder-of link to Organization.
+      // Search engines use this for author/entity authority signals.
+      "@type": "Person",
+      "@id": `${siteUrl}#founder`,
+      name: siteFounder.name,
+      jobTitle: siteFounder.jobTitle,
+      description: siteFounder.bio,
+      knowsAbout: siteFounder.expertise,
+      worksFor: { "@id": `${siteUrl}#organization` },
+      url: pageUrl("/about"),
+      sameAs: [siteFounder.linkedinUrl],
     },
   ],
 };

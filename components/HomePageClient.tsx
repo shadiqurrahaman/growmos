@@ -117,7 +117,7 @@ export default function HomePageClient() {
  <div className="hero-premium">
  <div className="hero-premium__content">
  <span className="hero-new__badge"><span></span> Data systems for ambitious B2B teams</span>
- <h1 className="hero-new__title">Your business deserves<br /><em>better data.</em></h1>
+ <h1 className="hero-new__title"><span>Your business deserves </span><em>better data.</em></h1>
  <p className="hero-new__description">We design and run the data infrastructure behind faster decisions, clearer reporting, and measurable growth without the cost of building an in-house team.</p>
  <div className="hero-new__actions">
  <a href="https://calendly.com/hello-growmos/30min" target="_blank" rel="noopener noreferrer" className="btn btn--primary btn--lg">Book a 30-minute call <i className="fa-solid fa-arrow-right"></i></a>
