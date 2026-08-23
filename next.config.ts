@@ -12,6 +12,32 @@ const securityHeaders = [
     key: "Strict-Transport-Security",
     value: "max-age=63072000; includeSubDomains; preload",
   },
+  // Content-Security-Policy:
+  // - 'unsafe-inline' on script/style is required because Next.js emits inline
+  //   bootstrap + JSON-LD scripts/styles; a strict nonce policy would require
+  //   deeper middleware refactoring and is tracked separately.
+  // - frame-ancestors 'none' replaces X-Frame-Options for modern browsers
+  //   (we keep X-Frame-Options for legacy UAs).
+  // - GA4 endpoints, Vercel Blob, Google Fonts, Font Awesome CDN, Calendly
+  //   are explicit allowlist entries.
+  // - data:/blob: on img-src allow Next/Image generated sources.
+  {
+    key: "Content-Security-Policy",
+    value: [
+      "default-src 'self'",
+      "script-src 'self' 'unsafe-inline' https://www.googletagmanager.com https://*.googletagmanager.com",
+      "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://cdnjs.cloudflare.com",
+      "font-src 'self' data: https://fonts.gstatic.com https://cdnjs.cloudflare.com",
+      "img-src 'self' data: blob: https:",
+      "connect-src 'self' https://*.google-analytics.com https://*.analytics.google.com https://*.googletagmanager.com https://*.vercel-storage.com https://*.public.blob.vercel-storage.com",
+      "frame-src 'self' https://calendly.com https://www.google.com",
+      "frame-ancestors 'none'",
+      "base-uri 'self'",
+      "form-action 'self' https://calendly.com",
+      "object-src 'none'",
+      "upgrade-insecure-requests",
+    ].join("; "),
+  },
 ];
 
 const nextConfig: NextConfig = {

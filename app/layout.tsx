@@ -185,7 +185,26 @@ export default function RootLayout({
             window.dataLayer = window.dataLayer || [];
             function gtag(){dataLayer.push(arguments);}
             gtag('js', new Date());
-            gtag('config', '${gaId}');
+
+            // Google Consent Mode v2 — required for EEA compliance (Mar 2024+).
+            // Default all four consent signals to 'denied'. Any future CMP can
+            // call gtag('consent', 'update', {...}) to grant specific signals.
+            gtag('consent', 'default', {
+              ad_storage: 'denied',
+              ad_user_data: 'denied',
+              ad_personalization: 'denied',
+              analytics_storage: 'denied',
+              wait_for_update: 500
+            });
+
+            // For non-EEA regions where consent isn't required, grant analytics
+            // storage by default so GA4 still records sessions without a CMP.
+            gtag('consent', 'default', {
+              region: ['US','CA','AU','NZ','JP','SG','IN','BR','ZA','GB'],
+              analytics_storage: 'granted'
+            });
+
+            gtag('config', '${gaId}', { anonymize_ip: true });
           `}
         </Script>
 
