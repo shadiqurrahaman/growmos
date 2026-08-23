@@ -1,12 +1,33 @@
 import type { Metadata } from "next";
-import { siteUrl } from "@/lib/seo";
+import { siteUrl, defaultOgImage, defaultOgImageAlt } from "@/lib/seo";
+
+const tosUrl = `${siteUrl}/terms-of-service`;
 
 export const metadata: Metadata = {
   title: "Terms of Service",
   description:
     "The terms and conditions governing your use of the GrowMos website and data engineering services.",
-  alternates: { canonical: `${siteUrl}/terms-of-service` },
+  alternates: {
+    canonical: tosUrl,
+    languages: { en: tosUrl, "x-default": tosUrl },
+  },
   robots: { index: true, follow: true },
+  openGraph: {
+    type: "website",
+    title: "Terms of Service | GrowMos",
+    description:
+      "The terms and conditions governing your use of the GrowMos website and data engineering services.",
+    url: tosUrl,
+    siteName: "GrowMos",
+    images: [{ url: defaultOgImage, width: 1200, height: 630, alt: defaultOgImageAlt }],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Terms of Service | GrowMos",
+    description:
+      "The terms and conditions governing your use of the GrowMos website and data engineering services.",
+    images: [defaultOgImage],
+  },
 };
 
 const LAST_UPDATED = "31 July 2026";

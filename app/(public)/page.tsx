@@ -3,6 +3,7 @@ import HomePageClient from "@/components/HomePageClient";
 import {
   siteName,
   defaultOgImage,
+  defaultOgImageAlt,
   homeTitle,
   homeDescription,
   pageUrl,
@@ -14,7 +15,13 @@ import {
 export const metadata: Metadata = {
   title: { absolute: homeTitle },
   description: homeDescription,
-  alternates: { canonical: pageUrl("/") },
+  alternates: {
+    canonical: pageUrl("/"),
+    languages: {
+      en: pageUrl("/"),
+      "x-default": pageUrl("/"),
+    },
+  },
   openGraph: {
     type: "website",
     siteName,
@@ -26,7 +33,7 @@ export const metadata: Metadata = {
         url: defaultOgImage,
         width: 1200,
         height: 630,
-        alt: `${siteName} — ${homeTitle}`,
+        alt: defaultOgImageAlt,
       },
     ],
   },

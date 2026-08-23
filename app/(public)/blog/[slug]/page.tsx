@@ -53,7 +53,13 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
     description: seoDescription,
     keywords: post.seo_keywords || undefined,
     authors: [{ name: post.author }],
-    alternates: { canonical: url },
+    alternates: {
+      canonical: url,
+      languages: {
+        en: url,
+        "x-default": url,
+      },
+    },
     openGraph: {
       type: "article",
       title: seoTitle,

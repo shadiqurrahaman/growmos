@@ -15,6 +15,7 @@ import {
   siteCalendly,
   siteFounder,
   defaultOgImage,
+  defaultOgImageAlt,
   pageUrl,
 } from "@/lib/seo";
 import { JsonLd } from "@/lib/jsonld";
@@ -78,7 +79,7 @@ export const metadata: Metadata = {
         url: defaultOgImage,
         width: 1200,
         height: 630,
-        alt: `${siteName} — Data Engineering & BI Services`,
+        alt: defaultOgImageAlt,
       },
     ],
   },
@@ -92,6 +93,13 @@ export const metadata: Metadata = {
   },
   alternates: {
     canonical: siteUrl,
+    languages: {
+      // Site is en-US only; declare explicitly so search engines don't
+      // infer a wrong language variant. x-default points at the canonical
+      // English URL for users whose locale doesn't match.
+      en: siteUrl,
+      "x-default": siteUrl,
+    },
     types: {
       "text/markdown": [
         { url: pageUrl("/llms.txt"), title: `${siteName} for LLMs (short)` },
@@ -116,7 +124,12 @@ const organizationJsonLd = {
         width: 1408,
         height: 1275,
       },
-      image: `${siteUrl}/images/growmos.jpg`,
+      image: {
+        "@type": "ImageObject",
+        url: `${siteUrl}/images/growmos.jpg`,
+        width: 1408,
+        height: 1275,
+      },
       description: siteDescription,
       slogan: siteTagline,
       email: siteEmail,

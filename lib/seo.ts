@@ -110,6 +110,12 @@ export const siteFounder = {
 // Default OG fallback image (home + service pages).
 export const defaultOgImage = "/images/dashboard.jpg";
 
+// Default OG image alt — describes what's actually in /images/dashboard.jpg:
+// a data analyst reviewing BI dashboards and KPI charts on screen.
+// Used everywhere `defaultOgImage` is referenced so alt stays consistent.
+export const defaultOgImageAlt =
+  "GrowMos data analyst reviewing BI dashboards and KPI charts on screen";
+
 // Build a canonical absolute URL from a site-rooted path.
 export function pageUrl(path: string): string {
   return `${siteUrl}${path.startsWith("/") ? "" : "/"}${path}`;
@@ -137,11 +143,24 @@ export function buildPageMetadata(opts: {
 }): Metadata {
   const image = opts.image ?? defaultOgImage;
   const ogDesc = opts.ogDescription ?? opts.description;
+  // Alt falls back to defaultOgImageAlt when the page doesn't pass a custom
+  // one — ensures the image alt always describes what's in the picture,
+  // not just the page title.
+  const imageAlt =
+    opts.imageAlt ?? (image === defaultOgImage ? defaultOgImageAlt : opts.title);
   return {
     title: opts.title,
     description: opts.description,
     keywords: opts.keywords,
-    alternates: { canonical: pageUrl(opts.path) },
+    alternates: {
+      canonical: pageUrl(opts.path),
+      // Self-referencing hreflang for every page — keeps Google's
+      // language signals consistent across the site.
+      languages: {
+        en: pageUrl(opts.path),
+        "x-default": pageUrl(opts.path),
+      },
+    },
     openGraph: {
       type: opts.type ?? "article",
       title: opts.title,
@@ -152,7 +171,7 @@ export function buildPageMetadata(opts: {
           url: image,
           width: 1200,
           height: 630,
-          alt: opts.imageAlt ?? opts.title,
+          alt: imageAlt,
         },
       ],
     },

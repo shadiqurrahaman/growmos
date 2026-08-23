@@ -1,12 +1,33 @@
 import type { Metadata } from "next";
-import { siteUrl } from "@/lib/seo";
+import { siteUrl, defaultOgImage, defaultOgImageAlt } from "@/lib/seo";
+
+const privacyUrl = `${siteUrl}/privacy-policy`;
 
 export const metadata: Metadata = {
   title: "Privacy Policy",
   description:
     "How GrowMos collects, uses, and protects your personal data. GDPR-compliant privacy practices for our website, marketing, and data services.",
-  alternates: { canonical: `${siteUrl}/privacy-policy` },
+  alternates: {
+    canonical: privacyUrl,
+    languages: { en: privacyUrl, "x-default": privacyUrl },
+  },
   robots: { index: true, follow: true },
+  openGraph: {
+    type: "website",
+    title: "Privacy Policy | GrowMos",
+    description:
+      "How GrowMos collects, uses, and protects your personal data. GDPR-compliant privacy practices for our website, marketing, and data services.",
+    url: privacyUrl,
+    siteName: "GrowMos",
+    images: [{ url: defaultOgImage, width: 1200, height: 630, alt: defaultOgImageAlt }],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Privacy Policy | GrowMos",
+    description:
+      "How GrowMos collects, uses, and protects your personal data. GDPR-compliant privacy practices for our website, marketing, and data services.",
+    images: [defaultOgImage],
+  },
 };
 
 const LAST_UPDATED = "31 July 2026";
