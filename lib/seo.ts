@@ -14,6 +14,15 @@ export const siteTagline =
 export const siteDescription =
   "Data pipelines, cloud data warehouses, and BI dashboards built on dbt, Fivetran, BigQuery and Power BI. Trusted by B2B SaaS & e-commerce teams.";
 
+// Homepage-specific overrides — concrete value-prop + proof + CTA.
+// Used only by app/(public)/page.tsx; other routes still inherit
+// `defaultTitle` and `siteDescription` from app/layout.tsx.
+export const homeTitle =
+  "Data Engineering & BI Dashboards for B2B | GrowMos";
+
+export const homeDescription =
+  "Production dbt + BigQuery pipelines and Power BI dashboards for B2B teams. First dashboard in 4 weeks, 99.5% uptime. Book a free 30-min call.";
+
 export const siteKeywords = [
   "data engineering services",
   "data pipeline consulting",

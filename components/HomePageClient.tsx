@@ -1,0 +1,547 @@
+"use client";
+import { useEffect, useState } from "react";
+import Link from "next/link";
+import Image from "next/image";
+import emailjs from "@emailjs/browser";
+import DataStack from "@/components/DataStack";
+import Reviews from "@/components/Reviews";
+import Pricing from "@/components/Pricing";
+import Timezones from "@/components/Timezones";
+import Team from "@/components/Team";
+import DashboardSlider from "@/components/DashboardSlider";
+import WhatsAppContact from "@/components/WhatsAppContact";
+
+const workedLogos = [
+ { file: "Logo - GJW.webp", alt: "GJW Direct" },
+ { file: "Logo - Caeserstone.webp", alt: "Caesarstone" },
+ { file: "Logo - Moda.webp", alt: "Moda" },
+ { file: "Logo - Aspinall.webp", alt: "The Aspinall Foundation" },
+ { file: "Logo - Fusion21.webp", alt: "Fusion21" },
+ { file: "Logo - iVendi.webp", alt: "iVendi" },
+ { file: "Logo - Orega.webp", alt: "Orega" },
+ { file: "Logo - Credera.png", alt: "Credera" },
+ { file: "Logo - Lowell.webp", alt: "Lowell" },
+];
+
+const dataStack = [
+ { src: "/images/stack/fivetran.png", label: "Fivetran" },
+ { src: "/images/stack/airbyte.svg", label: "Airbyte" },
+ { src: "/images/stack/dbt.svg", label: "dbt" },
+ { src: "/images/stack/bigquery.svg", label: "BigQuery" },
+ { src: "/images/stack/snowflake.svg", label: "Snowflake" },
+ { src: "/images/stack/fabric.png", label: "Fabric" },
+ { src: "/images/stack/power-bi.svg", label: "Power BI" },
+ { src: "/images/stack/metabase.svg", label: "Metabase" },
+ { src: "/images/stack/salesforce.svg", label: "Salesforce" },
+ { src: "/images/stack/hubspot.svg", label: "HubSpot" },
+ { src: "/images/stack/postgresql.svg", label: "PostgreSQL" },
+ { src: "/images/stack/python.svg", label: "Python" },
+];
+
+const faqs = [
+ { q: "What does GrowMos actually do?", a: "We design, build, and maintain modern data platforms for B2B companies from ingestion (Fivetran, Airbyte) through transformation (dbt) to warehouse (BigQuery, Microsoft Fabric) and dashboards (Power BI, Metabase). We also integrate CRM and ad data, and surface insights through BI and AI." },
+ { q: "Who do you typically work with?", a: "Founders, decision-makers, and marketing leaders at SaaS, E-commerce, EdTech, and Retail companies usually teams that have outgrown spreadsheets but don't want to staff a full in-house data team yet." },
+ { q: "Which tools do you work with?", a: "Our core stack is Fivetran / Airbyte for ingestion, dbt for transformation, BigQuery / Microsoft Fabric / Snowflake for the warehouse, and Power BI / Metabase for dashboards. We also build custom integrations with Salesforce, HubSpot, Shopify, and ad platforms." },
+ { q: "How is a data engagement structured?", a: "Most engagements start with a discovery sprint (2–3 weeks) to map your sources, define KPIs, and design the warehouse. Then we build the pipeline in 4–8 weeks, hand off with documentation, and offer ongoing support. Detailed scope is set in a written proposal." },
+];
+
+type Post = { id: number; title: string; slug: string; excerpt: string; image_url: string | null; image_alt?: string | null; category: string; author: string; created_at: string; updated_at?: string | null };
+
+const problemsSolutions = [
+ {
+ problem: "Your data is everywhere and nowhere.",
+ resolution: "One source of truth unified, tested, documented.",
+ capability: "Data engineering",
+ tone: "ink",
+ },
+ {
+ problem: "Reports take longer to build than the decisions they inform.",
+ resolution: "Live dashboards your team actually trusts.",
+ capability: "BI & reporting",
+ tone: "violet",
+ },
+];
+
+export default function HomePageClient() {
+ const [openFaq, setOpenFaq] = useState<number | null>(null);
+ const [posts, setPosts] = useState<Post[]>([]);
+ const [form, setForm] = useState({ name: "", email: "", phone: "", service: "", message: "" });
+ const [status, setStatus] = useState<"idle"|"sending"|"ok"|"err">("idle");
+
+ useEffect(() => {
+ fetch("/api/posts?published=true&limit=3&sort=recent").then(r => r.json()).then(d => setPosts(d.posts || [])).catch(() => {});
+ }, []);
+
+ async function handleContact(e: React.FormEvent) {
+ e.preventDefault();
+ setStatus("sending");
+ try {
+ await emailjs.send(
+ process.env.NEXT_PUBLIC_EMAILJS_SERVICE_ID!,
+ process.env.NEXT_PUBLIC_EMAILJS_TEMPLATE_ID!,
+ {
+ from_name: form.name,
+ reply_to: form.email,
+ phone: form.phone,
+ service: form.service,
+ message: form.message,
+ },
+ { publicKey: process.env.NEXT_PUBLIC_EMAILJS_PUBLIC_KEY! }
+ );
+ setStatus("ok");
+ } catch (err) {
+ console.error("EmailJS error:", err);
+ setStatus("err");
+ }
+ }
+
+ const faqJsonLd = {
+ "@context": "https://schema.org",
+ "@type": "FAQPage",
+ mainEntity: faqs.map((faq) => ({
+ "@type": "Question",
+ name: faq.q,
+ acceptedAnswer: { "@type": "Answer", text: faq.a },
+ })),
+ };
+
+ return (
+ <main className="main">
+ <script
+ type="application/ld+json"
+ dangerouslySetInnerHTML={{ __html: JSON.stringify(faqJsonLd) }}
+ />
+ {/* Hero */}
+ <section className="hero-new" id="hero">
+ <div className="container">
+ <div className="hero-premium">
+ <div className="hero-premium__content">
+ <span className="hero-new__badge"><span></span> Data systems for ambitious B2B teams</span>
+ <h1 className="hero-new__title">Your business deserves<br /><em>better data.</em></h1>
+ <p className="hero-new__description">We design and run the data infrastructure behind faster decisions, clearer reporting, and measurable growth without the cost of building an in-house team.</p>
+ <div className="hero-new__actions">
+ <a href="https://calendly.com/hello-growmos/30min" target="_blank" rel="noopener noreferrer" className="btn btn--primary btn--lg">Book a 30-minute call <i className="fa-solid fa-arrow-right"></i></a>
+ <Link href="/contact" className="hero-premium__secondary">Talk to our team <i className="fa-solid fa-arrow-right"></i></Link>
+ </div>
+ <div className="hero-premium__assurance">
+ <span><i className="fa-solid fa-circle-check"></i> No-obligation discovery</span>
+ <span><i className="fa-solid fa-circle-check"></i> Senior experts from day one</span>
+ <span><i className="fa-solid fa-circle-check"></i> Clear scope and documentation</span>
+ </div>
+ </div>
+ <div className="hero-premium__visual" aria-label="GrowMos data platform overview">
+ <div className="hero-platform">
+ <DashboardSlider />
+ </div>
+ </div>
+ </div>
+ </div>
+ </section>
+
+ {/* Trusted by */}
+ <section className="trusted-section" aria-label="Companies we have worked with">
+ <div className="container">
+ <p className="trusted-section__label">Trusted to deliver for teams at</p>
+ <div className="trusted-section__logos">
+ {workedLogos.slice(0, 7).map((logo) => (
+ <div className="trusted-section__logo" key={logo.file}>
+ <Image src={`/images/workedlogos/${logo.file}`} alt={logo.alt} width={120} height={48} style={{objectFit:"contain"}} />
+ </div>
+ ))}
+ </div>
+ </div>
+ </section>
+
+ {/* Problems we solve */}
+ <section className="problems" id="problems">
+ <div className="container problems__layout">
+ <header className="problems__header">
+ <span className="section__badge">Problems we solve</span>
+ <h2 className="problems__title">Four pains we hear on every <span className="gradient-text">first call</span>.</h2>
+ <p className="problems__lede">B2B founders and marketing leaders who&apos;ve outgrown spreadsheets but can&apos;t yet staff a full in-house team. We solve the four problems that bring them to us.</p>
+ </header>
+
+ <div className="problems-grid" aria-label="Problems we solve">
+ {problemsSolutions.map((p, i) => (
+ <article className={`problems-card problems-card--${p.tone}`} key={p.problem}>
+ <span className="problems-card__tag">{p.capability}</span>
+ <h3 className="problems-card__problem">{p.problem}</h3>
+ <p className="problems-card__resolution">{p.resolution}</p>
+ </article>
+ ))}
+ </div>
+ </div>
+ </section>
+
+ {/* Working across timezones */}
+ <Timezones />
+
+ {/* Pricing — packages */}
+ <Pricing />
+
+ {/* Methodology */}
+ <section className="method-section" id="methodology">
+ <div className="container">
+ <header className="method-header">
+ <span className="method-badge">Our Methodology</span>
+ <h2 className="method-title">Our Methodology to Collaboration</h2>
+ <p className="method-description">A clear, outcome-driven process designed for B2B founders and marketing leaders not another black-box software engagement.</p>
+ </header>
+
+ <ol className="method-timeline" aria-label="Engagement phases">
+ <li className="method-timeline__rail" aria-hidden="true"></li>
+ {[
+ {
+ num: "01",
+ title: "Discovery & Data Audit",
+ deliver: "A written brief current state, gaps, and a 90-day plan.",
+ timeline: "1 week",
+ cost: "Fixed-fee",
+ outcome: null,
+ icon: "fa-solid fa-magnifying-glass-chart",
+ color: "blue",
+ },
+ {
+ num: "02",
+ title: "Architecture & Roadmap",
+ deliver: "A blueprint covering sources, stack, KPIs, and success metrics.",
+ timeline: null,
+ cost: null,
+ outcome: "A locked roadmap before any code is written.",
+ icon: "fa-solid fa-compass-drafting",
+ color: "purple",
+ },
+ {
+ num: "03",
+ title: "Build & Migrate",
+ deliver: "Working dashboards in sprints, weekly demos.",
+ timeline: "First dashboard in 2–3 weeks; full rollout in 6–12 weeks.",
+ cost: null,
+ outcome: null,
+ icon: "fa-solid fa-cubes-stacked",
+ color: "green",
+ },
+ {
+ num: "04",
+ title: "Validate & Launch",
+ deliver: "Tested pipelines, validated metrics, full documentation, team training.",
+ timeline: null,
+ cost: null,
+ outcome: "A platform your team can run.",
+ icon: "fa-solid fa-rocket",
+ color: "amber",
+ },
+ {
+ num: "05",
+ title: "Monitor & Optimize",
+ deliver: "24/7 monitoring, alerting, monthly reports, quarterly reviews.",
+ timeline: null,
+ cost: null,
+ outcome: "A trusted platform with SLAs and a long-term partner.",
+ icon: "fa-solid fa-chart-line",
+ color: "rose",
+ },
+ ].map((phase) => (
+ <li className="method-step" key={phase.num}>
+ <div className="method-step__node">
+ <span className="method-step__num">{phase.num}</span>
+ </div>
+ <article className={`method-card method-card--${phase.color}`}>
+ <span className="method-card__num" aria-hidden="true">{phase.num}</span>
+ <div className="method-card__icon" aria-hidden="true">
+ <i className={phase.icon}></i>
+ </div>
+ <h3 className="method-card__title">{phase.title}</h3>
+ <div className="method-card__body">
+ <p className="method-card__deliver">{phase.deliver}</p>
+ </div>
+ </article>
+ </li>
+ ))}
+ </ol>
+ </div>
+ </section>
+
+ {/* Services */}
+ <section className="svc-section" id="services">
+ <div className="container">
+ <header className="svc-header">
+ <span className="svc-header__label">What We Do</span>
+ <h2 className="svc-title">Services Built to<br />Grow Your Business</h2>
+ <p className="svc-description">End-to-end data services from pipelines to dashboards to long-term data operations. Built for B2B teams that need a partner, not another vendor.</p>
+ </header>
+ <div className="svc-grid">
+ {[
+ {
+ num: "01",
+ tone: "blue",
+ icon: "fa-solid fa-database",
+ title: "Data Pipeline Engineering",
+ desc: "Automated, reliable data ingestion from every source your business runs on.",
+ subs: ["Fivetran & Airbyte connectors", "Custom API & webhook ingestion", "Database replication (CDC)", "Schema management & monitoring"],
+ href: "/data-pipeline-engineering",
+ cta: "Explore Pipelines",
+ img: "/images/services/data-pipeline.jpg",
+ },
+ {
+ num: "02",
+ tone: "violet",
+ icon: "fa-solid fa-cube",
+ title: "Data Warehousing",
+ desc: "Scalable cloud data warehouses built for B2B scale without the bloat.",
+ subs: ["BigQuery setup, optimization & cost control", "Microsoft Fabric implementation", "Multi-source consolidation", "Security, access control & governance"],
+ href: "/cloud-data-warehousing",
+ cta: "Explore Warehousing",
+ img: "/images/services/data-warehousing.jpg",
+ },
+ {
+ num: "03",
+ tone: "green",
+ icon: "fa-solid fa-code-branch",
+ title: "Data Transformation & Modeling",
+ desc: "Production-grade dbt models your analytics team can trust.",
+ subs: ["dbt project setup & best-practice architecture", "Staging → intermediate → marts layered modeling", "Tests, documentation, and CI/CD", "Incremental models & performance tuning"],
+ href: "/contact",
+ cta: "Explore dbt Modeling",
+ img: "/images/services/data-transformation.jpg",
+ },
+ {
+ num: "04",
+ tone: "amber",
+ icon: "fa-solid fa-chart-line",
+ title: "BI & Dashboard Development",
+ desc: "Executive-grade dashboards that turn your warehouse into decisions.",
+ subs: ["Power BI development & deployment", "Metabase setup & customization", "Self-serve analytics enablement", "KPI definition & metric governance"],
+ href: "/bi-dashboards",
+ cta: "Explore BI",
+ img: "/images/services/bi-dashboard.jpg",
+ },
+ {
+ num: "05",
+ tone: "rose",
+ icon: "fa-solid fa-plug",
+ title: "CRM & Marketing Data Integration",
+ desc: "Unify Salesforce, HubSpot, and ad platforms into a single source of truth.",
+ subs: ["Salesforce & HubSpot data extraction", "Multi-touch attribution modeling", "Customer 360 & lifecycle analytics", "Paid media + CRM unified reporting"],
+ href: "/crm-data-integration",
+ cta: "Explore CRM Integration",
+ img: "/images/services/crm-integration.jpg",
+ },
+ {
+ num: "06",
+ tone: "sage",
+ icon: "fa-solid fa-gears",
+ title: "Managed DataOps & Advisory",
+ desc: "A long-term data partner monitoring, optimization, and strategy on retainer.",
+ subs: ["24/7 pipeline monitoring & alerting", "Monthly health & cost reports", "Quarterly roadmap reviews", "Data strategy & team enablement"],
+ href: "/contact",
+ cta: "Explore Managed DataOps",
+ img: "/images/services/managed-dataops.jpg",
+ },
+ ].map((svc, i) => (
+ <article className={`svc-card svc-card--${svc.tone}`} key={i}>
+ <span className="svc-card__num" aria-hidden="true">{svc.num}</span>
+ <div className="svc-card__media">
+ <Image
+ src={svc.img}
+ alt=""
+ fill
+ sizes="(max-width: 719px) 100vw, 828px"
+ className="svc-card__img"
+ priority={i === 0}
+ />
+ <div className="svc-card__media-overlay" aria-hidden="true">
+ <div className="svc-card__media-tag">
+ <i className={svc.icon}></i>
+ <span>Service {svc.num}</span>
+ </div>
+ </div>
+ </div>
+ <div className="svc-card__body">
+ <h3 className="svc-card__title">{svc.title}</h3>
+ <p className="svc-card__desc">{svc.desc}</p>
+ <ul className="svc-card__subs">
+ {svc.subs.map((s, j) => <li key={j}><i className="fa-solid fa-circle-check"></i> {s}</li>)}
+ </ul>
+ <Link href={svc.href} className="svc-card__cta">{svc.cta} <i className="fa-solid fa-arrow-right"></i></Link>
+ </div>
+ </article>
+ ))}
+ </div>
+ </div>
+ </section>
+
+ {/* Reviews highlighted customer outcomes (blacktwist.app pattern) */}
+ <Reviews />
+
+ {/* Team — the humans behind the work */}
+ <Team />
+
+ {/* Tech Stack */}
+ <section className="tech-stack" id="tech-stack">
+ <div className="container">
+ <div className="section__header">
+ <span className="section__badge">Our Stack</span>
+ <h2 className="section__title">The Modern Data Stack, <span className="gradient-text">Done Right</span></h2>
+ <p className="section__subtitle">Best-in-class tools, integrated and maintained by our team so you don't have to.</p>
+ </div>
+ <div className="tech-stack__grid">
+ {dataStack.map((t, i) => (
+ <div key={i} className="tech-item">
+ <Image src={t.src} alt={t.label} width={64} height={64} className="tech-item__logo" />
+ <span>{t.label}</span>
+ </div>
+ ))}
+ </div>
+ </div>
+ </section>
+
+ {/* Data Stack Pipeline */}
+ <DataStack />
+
+ {/* FAQ */}
+ <section className="faq" id="faq">
+ <div className="container">
+ <div className="section__header">
+ <span className="section__badge">Have Questions?</span>
+ <h2 className="section__title">Frequently Asked Questions</h2>
+ </div>
+ <div className="faq__grid">
+ {faqs.map((faq, i) => {
+ const isOpen = openFaq === i;
+ return (
+ <div key={i} className={`faq__item${isOpen ? " active" : ""}`}>
+ <button
+ className="faq__question"
+ onClick={() => setOpenFaq(isOpen ? null : i)}
+ aria-expanded={isOpen}
+ >
+ <span>{faq.q}</span>
+ <i className={`fa-solid ${isOpen ? "fa-minus" : "fa-plus"}`}></i>
+ </button>
+ {isOpen && <div className="faq__answer"><p>{faq.a}</p></div>}
+ </div>
+ );
+ })}
+ </div>
+ </div>
+ </section>
+
+ {/* Blog */}
+ <section className="blog" id="blog">
+ <div className="container">
+ <div className="blog__header">
+ <h2 className="blog__title">Our Recent Blogs</h2>
+ <p className="blog__subtitle">Insights, guides and industry deep-dives from the GrowMos team.</p>
+ <Link href="/blog" className="blog__view-all">View All Posts <i className="fa-solid fa-arrow-right"></i></Link>
+ </div>
+ <div className="blog__grid">
+ {posts.length === 0 ? (
+ <p className="blog__empty">No posts published yet.</p>
+ ) : posts.map((post, idx) => {
+ const colors = ["pink","purple","green"];
+ const color = colors[idx % 3];
+ return (
+ <Link key={post.id} href={`/blog/${post.slug}`} className="blog-card">
+ <div className="blog-card__image">
+ {post.image_url ? <img src={post.image_url} alt={post.title} className="blog-card__img" /> : (
+ <div className={`blog-card__placeholder blog-card__placeholder--${color}`}>
+ <div className="blog-card__placeholder-badge">{post.category}</div>
+ <div className="blog-card__placeholder-icon"><i className="fa-solid fa-newspaper"></i></div>
+ </div>
+ )}
+ </div>
+ <div className="blog-card__content">
+ <span className={`blog-card__category blog-card__category--${color}`}>{post.category}</span>
+ <h3 className="blog-card__title">{post.title}</h3>
+ <p className="blog-card__excerpt">{post.excerpt}</p>
+ <div className="blog-card__footer">
+ <div className="blog-card__author">
+ <div className="blog-card__avatar"><i className="fa-solid fa-user"></i></div>
+ <div className="blog-card__author-info">
+ <span className="blog-card__author-name">{post.author}</span>
+ <span className="blog-card__date">{new Date(post.created_at).toLocaleDateString("en-US",{year:"numeric",month:"long",day:"numeric"})}</span>
+ </div>
+ </div>
+ <span className="blog-card__read-more">Read more <i className="fa-solid fa-arrow-right"></i></span>
+ </div>
+ </div>
+ </Link>
+ );
+ })}
+ </div>
+ </div>
+ </section>
+
+ {/* Contact */}
+ <section className="contact-us" id="contact">
+ <div className="contact-us__bg"><div className="contact-us__blob contact-us__blob--1"></div><div className="contact-us__blob contact-us__blob--2"></div><div className="contact-us__blob contact-us__blob--3"></div></div>
+ <div className="container">
+ <div className="contact-us__layout">
+ <div className="contact-us__info">
+ <span className="contact-us__badge"><i className="fa-solid fa-envelope-open-text"></i> Get In Touch</span>
+ <h2 className="contact-us__title">Let&apos;s Build Something <span>Great</span> Together</h2>
+ <ul className="contact-us__details">
+ <li className="contact-us__detail contact-us__detail--whatsapp">
+ <span className="contact-us__detail-icon contact-us__detail-icon--whatsapp"><i className="fa-brands fa-whatsapp"></i></span>
+ <div><strong>WhatsApp Us</strong><a href="https://wa.me/15551234567" target="_blank" rel="noopener noreferrer">Scan the QR or tap to chat</a></div>
+ </li>
+ <li><span className="contact-us__detail-icon contact-us__detail-icon--whatsapp"><i className="fa-solid fa-calendar-check"></i></span><div><strong>Schedule</strong><a href="https://calendly.com/hello-growmos/30min" target="_blank" rel="noopener noreferrer">Book a 30-minute call</a></div></li>
+ </ul>
+ <div className="contact-us__whatsapp-card">
+ <WhatsAppContact variant="inline" title="Message us on WhatsApp" subtitle="Scan the QR with your phone, or tap the button below on mobile." />
+ </div>
+ <div className="contact-us__trust">
+ <div className="contact-us__trust-item"><i className="fa-solid fa-shield-halved"></i><span>Your data is safe with us</span></div>
+ <div className="contact-us__trust-item"><i className="fa-solid fa-bolt"></i><span>Response within 24 hours</span></div>
+ <div className="contact-us__trust-item"><i className="fa-solid fa-star"></i><span>100+ projects delivered</span></div>
+ </div>
+ </div>
+ <div className="contact-us__card">
+ <form className="contact-us__form" noValidate onSubmit={handleContact}>
+ <div className="contact-us__row">
+ <div className="contact-us__field">
+ <label>Full Name <span>*</span></label>
+ <div className="contact-us__input-wrap"><i className="fa-solid fa-user"></i><input type="text" placeholder="John Smith" required value={form.name} onChange={e=>setForm(p=>({...p,name:e.target.value}))} /></div>
+ </div>
+ <div className="contact-us__field">
+ <label>Email Address <span>*</span></label>
+ <div className="contact-us__input-wrap"><i className="fa-solid fa-envelope"></i><input type="email" placeholder="john@company.com" required value={form.email} onChange={e=>setForm(p=>({...p,email:e.target.value}))} /></div>
+ </div>
+ </div>
+ <div className="contact-us__row">
+ <div className="contact-us__field">
+ <label>Phone Number</label>
+ <div className="contact-us__input-wrap"><i className="fa-solid fa-phone"></i><input type="tel" placeholder="+1 (234) 567-890" value={form.phone} onChange={e=>setForm(p=>({...p,phone:e.target.value}))} /></div>
+ </div>
+ <div className="contact-us__field">
+ <label>Service Interested In</label>
+ <div className="contact-us__input-wrap contact-us__input-wrap--select"><i className="fa-solid fa-briefcase"></i>
+ <select value={form.service} onChange={e=>setForm(p=>({...p,service:e.target.value}))}>
+ <option value="">Select a service…</option>
+ <option>Custom Software Development</option>
+ <option>Digital Marketing</option>
+ <option>BI Reporting &amp; AI</option>
+ <option>Other</option>
+ </select>
+ </div>
+ </div>
+ </div>
+ <div className="contact-us__field">
+ <label>Your Message <span>*</span></label>
+ <div className="contact-us__input-wrap contact-us__input-wrap--textarea"><i className="fa-solid fa-comment-dots"></i><textarea rows={5} placeholder="Tell us about your project, goals, or questions…" required value={form.message} onChange={e=>setForm(p=>({...p,message:e.target.value}))}></textarea></div>
+ </div>
+ <button type="submit" className="contact-us__submit" disabled={status==="sending"}>
+ <span className="contact-us__submit-text">{status==="sending"?"Sending…":"Send Message"}</span>
+ <i className="fa-solid fa-paper-plane"></i>
+ </button>
+ {status==="ok" && <div className="contact-us__feedback" style={{color:"var(--success)"}}>Message sent! We&apos;ll be in touch within 24 hours.</div>}
+ {status==="err" && <div className="contact-us__feedback" style={{color:"var(--error)"}}>Something went wrong. Please try again.</div>}
+ </form>
+ </div>
+ </div>
+ </div>
+ </section>
+ </main>
+ );
+}
