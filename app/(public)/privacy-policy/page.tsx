@@ -1,9 +1,12 @@
 import type { Metadata } from "next";
+import { siteUrl } from "@/lib/seo";
 
 export const metadata: Metadata = {
-  title: "Privacy Policy | GrowMos",
+  title: "Privacy Policy",
   description:
     "How GrowMos collects, uses, and protects your personal data. GDPR-compliant privacy practices for our website, marketing, and data services.",
+  alternates: { canonical: `${siteUrl}/privacy-policy` },
+  robots: { index: true, follow: true },
 };
 
 const LAST_UPDATED = "31 July 2026";

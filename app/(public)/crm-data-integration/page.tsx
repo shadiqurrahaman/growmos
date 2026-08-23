@@ -1,11 +1,25 @@
 import type { Metadata } from "next";
 import ServicePage, { type ServicePageData } from "@/components/ServicePage";
+import { buildPageMetadata } from "@/lib/seo";
 
-export const metadata: Metadata = {
- title: "CRM Data Integration Salesforce & HubSpot",
+export const metadata: Metadata = buildPageMetadata({
+ title: "CRM Data Integration — Salesforce & HubSpot",
  description:
- "Unify Salesforce and HubSpot data with the rest of your stack. Customer 360, attribution, and lead-to-revenue reporting.",
-};
+ "Unify Salesforce, HubSpot and ad platforms into a single source of truth. Multi-touch attribution and customer-360 analytics.",
+ path: "/crm-data-integration",
+ keywords: [
+ "CRM data integration",
+ "Salesforce data integration",
+ "HubSpot data integration",
+ "customer 360",
+ "multi-touch attribution",
+ "lead-to-revenue reporting",
+ "CRM analytics",
+ "B2B attribution",
+ ],
+ image: "/images/services/crm-integration.jpg",
+ imageAlt: "CRM Data Integration for Salesforce and HubSpot",
+});
 
 const data: ServicePageData = {
  accent: "#f97316",

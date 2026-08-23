@@ -1,12 +1,26 @@
 import Link from "next/link";
 import type { Metadata } from "next";
 import { ensureDB } from "@/lib/db";
+import { buildPageMetadata, defaultOgImage } from "@/lib/seo";
 export const dynamic = "force-dynamic";
 
-export const metadata: Metadata = {
-  title: "Blog | GrowMos",
-  description: "Insights, guides and industry deep-dives from the GrowMos team.",
-};
+export const metadata: Metadata = buildPageMetadata({
+  title: "Blog | Data Engineering, BI & Analytics Insights",
+  description:
+    "Insights, guides and industry deep-dives on data pipelines, dbt, BigQuery, Snowflake, Power BI, Metabase, CRM analytics, and B2B data strategy.",
+  path: "/blog",
+  type: "website",
+  keywords: [
+    "data engineering blog",
+    "dbt tutorials",
+    "BigQuery guides",
+    "BI insights",
+    "Snowflake tips",
+    "data strategy blog",
+  ],
+  image: defaultOgImage,
+  imageAlt: "GrowMos Blog — Data engineering and BI insights",
+});
 
 async function getPosts() {
   try {

@@ -1,11 +1,24 @@
 import type { Metadata } from "next";
 import IntegrationPage, { type IntegrationPageData } from "@/components/IntegrationPage";
+import { buildPageMetadata, defaultOgImage } from "@/lib/seo";
 
-export const metadata: Metadata = {
- title: "GrowMos + Salesforce Unified Customer Data",
+export const metadata: Metadata = buildPageMetadata({
+ title: "Salesforce Data Integration & Analytics",
  description:
- "Sync Salesforce into your warehouse with confidence. Customer 360, attribution, and lead-to-revenue reporting backed by dbt-tested models.",
-};
+ "Sync Salesforce contacts, accounts, opportunities and custom objects into your warehouse. Customer 360, multi-touch attribution, lead scoring.",
+ path: "/integrations/salesforce",
+ keywords: [
+ "Salesforce data integration",
+ "Salesforce analytics",
+ "Salesforce to warehouse",
+ "Salesforce ETL",
+ "Customer 360",
+ "Salesforce attribution",
+ "dbt Salesforce models",
+ ],
+ image: defaultOgImage,
+ imageAlt: "Salesforce data integration and analytics",
+});
 
 const data: IntegrationPageData = {
  accent: "#00a1e0",

@@ -1,11 +1,27 @@
 import type { Metadata } from "next";
 import ServicePage, { type ServicePageData } from "@/components/ServicePage";
+import { buildPageMetadata } from "@/lib/seo";
 
-export const metadata: Metadata = {
- title: "Data Pipeline Engineering Fivetran, Airbyte & dbt",
+export const metadata: Metadata = buildPageMetadata({
+ title: "Data Pipeline Engineering — Fivetran, Airbyte & dbt",
  description:
- "End-to-end ingestion and transformation for B2B data. Fivetran, Airbyte, and dbt pipelines that are reliable, modelled, and ready for analysis.",
-};
+ "Production Fivetran, Airbyte and dbt pipelines with 99.5% uptime. Tested, documented, and observed end-to-end. Trusted by B2B data teams.",
+ path: "/data-pipeline-engineering",
+ keywords: [
+ "data pipeline engineering",
+ "Fivetran implementation",
+ "Airbyte connectors",
+ "dbt consulting",
+ "dbt project setup",
+ "ETL pipeline",
+ "B2B data engineering services",
+ "data ingestion",
+ "data transformation",
+ "schema management",
+ ],
+ image: "/images/services/data-pipeline.jpg",
+ imageAlt: "GrowMos Data Pipeline Engineering — Fivetran, Airbyte & dbt",
+});
 
 const data: ServicePageData = {
  accent: "#10b981",

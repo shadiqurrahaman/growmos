@@ -1,28 +1,28 @@
 import Link from "next/link";
 import type { Metadata } from "next";
 import Team from "@/components/Team";
+import { siteUrl, siteName, pageUrl, buildPageMetadata } from "@/lib/seo";
+import { JsonLd } from "@/lib/jsonld";
 
-const SITE_URL =
-  process.env.NEXT_PUBLIC_BASE_URL?.replace(/\/$/, "") ?? "https://growmos.com";
-
-export const metadata: Metadata = {
-  title: "About GrowMos | The Team Behind Your Data Platform",
+export const metadata: Metadata = buildPageMetadata({
+  title: "About | The Team Behind Your Data Platform",
   description:
-    "GrowMos was founded in 2022 with one belief: data work should ship, stay shipped, and pay for itself within a quarter. Meet the team behind every B2B engagement.",
-  alternates: { canonical: `${SITE_URL}/about` },
-  openGraph: {
-    title: "About GrowMos | The Team Behind Your Data Platform",
-    description:
-      "Real engineers, real strategists. The team behind every GrowMos B2B data engagement.",
-    url: `${SITE_URL}/about`,
-    type: "website",
-  },
-};
+    "GrowMos was founded in 2022 with one belief: data work should ship, stay shipped, and pay for itself within a quarter. Senior engineers and strategists behind every B2B data engagement.",
+  path: "/about",
+  type: "website",
+  keywords: [
+    "about GrowMos",
+    "data engineering team",
+    "B2B data consultancy",
+    "dbt consultants",
+    "Power BI consultants",
+  ],
+  image: "/images/team_coloboration.jpg",
+  imageAlt: "The GrowMos team",
+  ogDescription:
+    "Real engineers, real strategists. The team behind every GrowMos B2B data engagement.",
+});
 
-/**
- * Person JSON-LD for the named founder. Non-founder seats are shown by role
- * title and therefore do not get a Person schema.
- */
 const personJsonLd = {
   "@context": "https://schema.org",
   "@type": "Person",
@@ -30,23 +30,18 @@ const personJsonLd = {
   jobTitle: "Founder & CEO",
   worksFor: {
     "@type": "Organization",
-    name: "GrowMos",
-    url: SITE_URL,
+    name: siteName,
+    url: siteUrl,
   },
-  url: `${SITE_URL}/about`,
+  url: pageUrl("/about"),
   sameAs: ["https://www.linkedin.com/in/mdshadataanalyst/"],
 };
 
 export default function AboutPage() {
   return (
     <main className="main">
-      {/* JSON-LD: founder Person schema for SEO/knowledge-panel signals */}
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(personJsonLd) }}
-      />
+      <JsonLd data={personJsonLd} />
 
-      {/* Hero */}
       <section className="page-hero">
         <div className="hero__bg-shapes">
           <div className="shape shape--1"></div>

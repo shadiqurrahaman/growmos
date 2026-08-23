@@ -1,11 +1,25 @@
 import type { Metadata } from "next";
 import ServicePage, { type ServicePageData } from "@/components/ServicePage";
+import { buildPageMetadata } from "@/lib/seo";
 
-export const metadata: Metadata = {
- title: "BI & Dashboard Development Power BI & Metabase",
+export const metadata: Metadata = buildPageMetadata({
+ title: "BI & Dashboard Development — Power BI & Metabase",
  description:
- "Decision-ready dashboards in Power BI and Metabase, built around the KPIs your team actually uses.",
-};
+ "Executive-grade Power BI and Metabase dashboards tied to KPIs your team uses. First dashboard in 4 weeks. Self-serve analytics that sticks.",
+ path: "/bi-dashboards",
+ keywords: [
+ "BI dashboard development",
+ "Power BI development",
+ "Metabase consulting",
+ "dashboard design",
+ "self-serve analytics",
+ "KPI dashboards",
+ "business intelligence services",
+ "B2B dashboards",
+ ],
+ image: "/images/services/bi-dashboard.jpg",
+ imageAlt: "BI & Dashboard Development on Power BI and Metabase",
+});
 
 const data: ServicePageData = {
  accent: "#8b5cf6",

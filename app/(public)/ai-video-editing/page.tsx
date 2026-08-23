@@ -1,11 +1,24 @@
 import type { Metadata } from "next";
 import ServicePage, { type ServicePageData } from "@/components/ServicePage";
+import { buildPageMetadata } from "@/lib/seo";
 
-export const metadata: Metadata = {
- title: "AI Video & Editing Scroll-Stopping Content",
+export const metadata: Metadata = buildPageMetadata({
+ title: "AI Video Editing — Ads, UGC & E-commerce",
  description:
- "AI video generation, UGC ad editing, and e-commerce product videos that stop the scroll and sell. Content built to convert, produced fast and affordably.",
-};
+ "AI-assisted video generation, UGC ad editing, and e-commerce product videos. Captioning, B-roll, and platform-native variants delivered fast.",
+ path: "/ai-video-editing",
+ keywords: [
+ "AI video editing",
+ "UGC video ads",
+ "e-commerce video production",
+ "AI video generation",
+ "video ads",
+ "TikTok ads",
+ "Reels editing",
+ ],
+ image: "/images/social-media-management.jpg",
+ imageAlt: "AI Video Editing for ads and organic content",
+});
 
 const data: ServicePageData = {
  accent: "#e0457b",

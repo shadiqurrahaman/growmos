@@ -1,11 +1,25 @@
 import type { Metadata } from "next";
 import ServicePage, { type ServicePageData } from "@/components/ServicePage";
+import { buildPageMetadata } from "@/lib/seo";
 
-export const metadata: Metadata = {
- title: "Cloud Data Warehousing BigQuery, Microsoft Fabric & Snowflake",
+export const metadata: Metadata = buildPageMetadata({
+ title: "Cloud Data Warehousing — BigQuery, Fabric & Snowflake",
  description:
- "Modern warehouses designed for B2B scale. BigQuery, Microsoft Fabric, and Snowflake architecture, migration, and cost optimisation.",
-};
+ "Modern cloud data warehouses on BigQuery, Microsoft Fabric and Snowflake. Architecture, migration, and cost optimisation for B2B scale.",
+ path: "/cloud-data-warehousing",
+ keywords: [
+ "cloud data warehouse",
+ "BigQuery consulting",
+ "Snowflake consulting",
+ "Microsoft Fabric implementation",
+ "data warehouse migration",
+ "BigQuery cost optimisation",
+ "warehouse architecture",
+ "data warehouse design",
+ ],
+ image: "/images/services/data-warehousing.jpg",
+ imageAlt: "Cloud Data Warehousing on BigQuery, Fabric & Snowflake",
+});
 
 const data: ServicePageData = {
  accent: "#3b82f6",

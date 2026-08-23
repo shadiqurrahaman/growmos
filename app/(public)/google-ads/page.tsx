@@ -1,11 +1,24 @@
 import type { Metadata } from "next";
 import ServicePage, { type ServicePageData } from "@/components/ServicePage";
+import { buildPageMetadata } from "@/lib/seo";
 
-export const metadata: Metadata = {
- title: "AI-Driven Google Ads Search, Shopping & PMax",
+export const metadata: Metadata = buildPageMetadata({
+ title: "Google Ads Management — Search, Shopping & PMax",
  description:
- "Capture buyers the moment they search. Google Search, Shopping, and Performance Max campaigns built to bring in high-intent customers, not wasted clicks.",
-};
+ "AI-driven Google Search, Shopping and Performance Max campaigns tied to your CRM. High-intent traffic, closed-loop attribution, lower CPA.",
+ path: "/google-ads",
+ keywords: [
+ "Google Ads management",
+ "Google Ads agency",
+ "Performance Max campaigns",
+ "Google Shopping ads",
+ "Google Ads attribution",
+ "B2B Google Ads",
+ "paid search management",
+ ],
+ image: "/images/web_analytics.jpg",
+ imageAlt: "Google Ads management — Search, Shopping & PMax",
+});
 
 const data: ServicePageData = {
  accent: "#ea8600",

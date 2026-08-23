@@ -1,11 +1,25 @@
 import type { Metadata } from "next";
 import ServicePage, { type ServicePageData } from "@/components/ServicePage";
+import { buildPageMetadata } from "@/lib/seo";
 
-export const metadata: Metadata = {
- title: "Web Analytics & Business Intelligence",
+export const metadata: Metadata = buildPageMetadata({
+ title: "BI Reporting & AI-Driven Analytics",
  description:
- "GA4, Google Tag Manager, custom event tracking, funnel analysis, and clear dashboards. Turn messy data into decisions you can actually act on.",
-};
+ "AI-assisted BI reporting and natural-language Q&A on top of your warehouse. Dashboards plus insight generation and anomaly explanations.",
+ path: "/bi-reporting-ai",
+ keywords: [
+ "BI reporting",
+ "AI analytics",
+ "AI-driven BI",
+ "natural language Q&A",
+ "anomaly detection",
+ "executive reporting",
+ "GA4 consulting",
+ "funnel analysis",
+ ],
+ image: "/images/svc-bi-ai.jpg",
+ imageAlt: "AI-driven BI reporting and analytics",
+});
 
 const data: ServicePageData = {
  accent: "#7c5cf0",

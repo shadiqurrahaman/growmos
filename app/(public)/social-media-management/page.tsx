@@ -1,11 +1,24 @@
 import type { Metadata } from "next";
 import ServicePage, { type ServicePageData } from "@/components/ServicePage";
+import { buildPageMetadata } from "@/lib/seo";
 
-export const metadata: Metadata = {
- title: "Social Media Management",
+export const metadata: Metadata = buildPageMetadata({
+ title: "Social Media Management — Strategy, Content & Analytics",
  description:
- "Full-service social media management strategy, branding, content, and creator partnerships that grow your audience and turn followers into customers.",
-};
+ "Full-service social media management — strategy, content, scheduling, and analytics for LinkedIn, Instagram, X and TikTok. Turn followers into customers.",
+ path: "/social-media-management",
+ keywords: [
+ "social media management",
+ "LinkedIn management",
+ "Instagram management",
+ "TikTok management",
+ "social media analytics",
+ "content calendar",
+ "B2B social media",
+ ],
+ image: "/images/social_media_marketing.jpg",
+ imageAlt: "Social media management and analytics",
+});
 
 const data: ServicePageData = {
  accent: "#0ea5b7",

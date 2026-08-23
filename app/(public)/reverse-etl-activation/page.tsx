@@ -1,11 +1,25 @@
 import type { Metadata } from "next";
 import ServicePage, { type ServicePageData } from "@/components/ServicePage";
+import { buildPageMetadata } from "@/lib/seo";
 
-export const metadata: Metadata = {
- title: "Reverse ETL & Activation Hightouch, Census & Warehouse-to-Business",
+export const metadata: Metadata = buildPageMetadata({
+ title: "Reverse ETL Activation — Warehouse to Tools",
  description:
- "Send warehouse insights back to the tools your team uses sales, marketing, support, and product. Hightouch, Census, and custom Activation.",
-};
+ "Push warehouse data into Salesforce, HubSpot and ad platforms with Hightouch and Census. Activate segments and audiences in minutes.",
+ path: "/reverse-etl-activation",
+ keywords: [
+ "reverse ETL",
+ "Hightouch implementation",
+ "Census reverse ETL",
+ "warehouse activation",
+ "segment syncing",
+ "audience activation",
+ "warehouse to Salesforce",
+ "warehouse to HubSpot",
+ ],
+ image: "/images/services/data-transformation.jpg",
+ imageAlt: "Reverse ETL Activation from warehouse to operational tools",
+});
 
 const data: ServicePageData = {
  accent: "#ec4899",

@@ -1,65 +1,170 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import Script from "next/script";
 import "./tailwind-only.css";
-import { siteUrl, siteName } from "@/lib/seo";
+import {
+  siteUrl,
+  siteName,
+  siteDescription,
+  siteTagline,
+  siteKeywords,
+  siteKnowsAbout,
+  siteServiceTypes,
+  siteSocialLinks,
+  siteEmail,
+  sitePhone,
+  siteCalendly,
+  defaultOgImage,
+  pageUrl,
+} from "@/lib/seo";
+import { JsonLd } from "@/lib/jsonld";
 
 const gaId = process.env.NEXT_PUBLIC_GA_ID || "G-YJHB4R4V6R";
 
-const title = "GrowMos | AI Driven Business Growth And Marketing Solution";
-const description =
-  "From concept to code GrowMos delivers tailored business solutions as your most trusted business growth solution provider.";
+const defaultTitle = "Data Engineering & BI — dbt, BigQuery, Power BI";
+
+export const viewport: Viewport = {
+  themeColor: "#0b1220",
+  width: "device-width",
+  initialScale: 1,
+  maximumScale: 5,
+  colorScheme: "light",
+};
 
 export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),
+  applicationName: siteName,
+  authors: [{ name: siteName, url: siteUrl }],
+  creator: siteName,
+  publisher: siteName,
+  formatDetection: {
+    email: false,
+    address: false,
+    telephone: false,
+  },
   title: {
-    default: title,
+    default: defaultTitle,
     template: "%s | GrowMos",
   },
-  description,
+  description: siteDescription,
+  keywords: siteKeywords,
+  category: "Data Engineering & Business Intelligence",
+  classification: "B2B Technology Services",
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: {
+      index: true,
+      follow: true,
+      "max-snippet": -1,
+      "max-image-preview": "large",
+      "max-video-preview": -1,
+    },
+  },
+  icons: {
+    icon: "/favicon.ico",
+    shortcut: "/favicon.ico",
+    apple: "/favicon.ico",
+  },
   openGraph: {
     type: "website",
     siteName,
-    title,
-    description,
+    locale: "en_US",
+    title: defaultTitle,
+    description: siteDescription,
     url: siteUrl,
-    images: [{ url: "/images/growmos.jpg", width: 1408, height: 1275, alt: siteName }],
+    images: [
+      {
+        url: defaultOgImage,
+        width: 1200,
+        height: 630,
+        alt: `${siteName} — Data Engineering & BI Services`,
+      },
+    ],
   },
   twitter: {
     card: "summary_large_image",
-    title,
-    description,
-    images: ["/images/growmos.jpg"],
+    title: defaultTitle,
+    description: siteDescription,
+    images: [defaultOgImage],
+    creator: "@growmos",
+    site: "@growmos",
   },
   alternates: {
     canonical: siteUrl,
+    types: {
+      "text/markdown": [
+        { url: pageUrl("/llms.txt"), title: `${siteName} for LLMs (short)` },
+        { url: pageUrl("/llms-full.txt"), title: `${siteName} for LLMs (full)` },
+      ],
+    },
   },
 };
 
 const organizationJsonLd = {
   "@context": "https://schema.org",
-  "@type": "Organization",
-  name: siteName,
-  url: siteUrl,
-  logo: `${siteUrl}/images/growmos.jpg`,
-  description,
-  email: "hello@growmos.com",
-  contactPoint: {
-    "@type": "ContactPoint",
-    contactType: "customer service",
-    email: "hello@growmos.com",
-    url: "https://calendly.com/hello-growmos/30min",
-    availableLanguage: ["English"],
-  },
-  knowsAbout: [
-    "Data Engineering",
-    "Business Intelligence",
-    "Cloud Data Warehousing",
-    "Performance Marketing",
-    "Revenue Operations",
-    "Customer Data Platforms",
+  "@graph": [
+    {
+      "@type": ["Organization", "ProfessionalService"],
+      "@id": `${siteUrl}#organization`,
+      name: siteName,
+      legalName: siteName,
+      url: siteUrl,
+      logo: {
+        "@type": "ImageObject",
+        url: `${siteUrl}/images/growmos.jpg`,
+        width: 1408,
+        height: 1275,
+      },
+      image: `${siteUrl}/images/growmos.jpg`,
+      description: siteDescription,
+      slogan: siteTagline,
+      email: siteEmail,
+      telephone: sitePhone,
+      priceRange: "$$$",
+      foundingDate: "2022",
+      areaServed: { "@type": "Place", name: "Worldwide" },
+      address: {
+        "@type": "PostalAddress",
+        addressCountry: "Worldwide",
+      },
+      openingHoursSpecification: [
+        {
+          "@type": "OpeningHoursSpecification",
+          dayOfWeek: ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"],
+          opens: "09:00",
+          closes: "18:00",
+        },
+      ],
+      contactPoint: {
+        "@type": "ContactPoint",
+        contactType: "customer service",
+        email: siteEmail,
+        telephone: sitePhone,
+        url: siteCalendly,
+        availableLanguage: ["English"],
+      },
+      knowsAbout: siteKnowsAbout,
+      serviceType: siteServiceTypes,
+      sameAs: siteSocialLinks,
+    },
+    {
+      "@type": "WebSite",
+      "@id": `${siteUrl}#website`,
+      url: siteUrl,
+      name: siteName,
+      description: siteDescription,
+      publisher: { "@id": `${siteUrl}#organization` },
+      inLanguage: "en-US",
+      potentialAction: {
+        "@type": "SearchAction",
+        target: {
+          "@type": "EntryPoint",
+          urlTemplate: `${siteUrl}/blog?q={search_term_string}`,
+        },
+        "query-input": "required name=search_term_string",
+      },
+    },
   ],
-  areaServed: "Worldwide",
-  slogan: "Data systems for ambitious B2B teams.",
 };
 
 export default function RootLayout({
@@ -80,10 +185,10 @@ export default function RootLayout({
             window.dataLayer = window.dataLayer || [];
             function gtag(){dataLayer.push(arguments);}
             gtag('js', new Date());
-
             gtag('config', '${gaId}');
           `}
         </Script>
+
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link
           rel="preconnect"
@@ -98,10 +203,8 @@ export default function RootLayout({
           rel="stylesheet"
           href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
         />
-        <script
-          type="application/ld+json"
-          dangerouslySetInnerHTML={{ __html: JSON.stringify(organizationJsonLd) }}
-        />
+
+        <JsonLd data={organizationJsonLd} />
       </head>
       <body suppressHydrationWarning>{children}</body>
     </html>

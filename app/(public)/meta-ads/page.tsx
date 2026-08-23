@@ -1,11 +1,25 @@
 import type { Metadata } from "next";
 import ServicePage, { type ServicePageData } from "@/components/ServicePage";
+import { buildPageMetadata } from "@/lib/seo";
 
-export const metadata: Metadata = {
- title: "AI-Driven Meta Ads (Facebook & Instagram)",
+export const metadata: Metadata = buildPageMetadata({
+ title: "Meta Ads Management — Facebook & Instagram",
  description:
- "Facebook and Instagram ads that find your buyers and turn ad spend into revenue. Audience research, Pixel & Conversions API, funnels, and hands-on account management.",
-};
+ "AI-driven Facebook and Instagram ads with closed-loop attribution back to your CRM and warehouse. Audience research, Pixel & CAPI, hands-on optimisation.",
+ path: "/meta-ads",
+ keywords: [
+ "Meta Ads management",
+ "Facebook Ads agency",
+ "Instagram Ads",
+ "Conversions API",
+ "Meta Pixel",
+ "B2B Meta Ads",
+ "paid social management",
+ "closed-loop attribution",
+ ],
+ image: "/images/svc-digital-marketing.jpg",
+ imageAlt: "Meta Ads management for Facebook and Instagram",
+});
 
 const data: ServicePageData = {
  accent: "#1877f2",

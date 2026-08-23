@@ -1,11 +1,24 @@
 import type { Metadata } from "next";
 import IntegrationPage, { type IntegrationPageData } from "@/components/IntegrationPage";
+import { buildPageMetadata, defaultOgImage } from "@/lib/seo";
 
-export const metadata: Metadata = {
- title: "GrowMos + HubSpot Marketing Attribution & Pipeline Analytics",
+export const metadata: Metadata = buildPageMetadata({
+ title: "HubSpot Data Integration & Marketing Attribution",
  description:
- "Sync HubSpot contacts, deals, and engagement into your warehouse. Multi-touch attribution, lifecycle analytics, and lead scoring.",
-};
+ "Sync HubSpot contacts, deals and engagement into your warehouse. Multi-touch attribution, lifecycle analytics, and lead scoring.",
+ path: "/integrations/hubspot",
+ keywords: [
+ "HubSpot data integration",
+ "HubSpot analytics",
+ "HubSpot to warehouse",
+ "HubSpot ETL",
+ "marketing attribution",
+ "lifecycle analytics",
+ "HubSpot lead scoring",
+ ],
+ image: defaultOgImage,
+ imageAlt: "HubSpot data integration and marketing attribution",
+});
 
 const data: IntegrationPageData = {
  accent: "#ff7a59",

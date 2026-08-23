@@ -1,9 +1,12 @@
 import type { Metadata } from "next";
+import { siteUrl } from "@/lib/seo";
 
 export const metadata: Metadata = {
-  title: "Terms of Service | GrowMos",
+  title: "Terms of Service",
   description:
-    "The terms and conditions governing your use of the GrowMos website and services.",
+    "The terms and conditions governing your use of the GrowMos website and data engineering services.",
+  alternates: { canonical: `${siteUrl}/terms-of-service` },
+  robots: { index: true, follow: true },
 };
 
 const LAST_UPDATED = "31 July 2026";

@@ -1,11 +1,25 @@
 import type { Metadata } from "next";
 import ServicePage, { type ServicePageData } from "@/components/ServicePage";
+import { buildPageMetadata } from "@/lib/seo";
 
-export const metadata: Metadata = {
- title: "Custom Software Development & AI Integration",
+export const metadata: Metadata = buildPageMetadata({
+ title: "Custom Software Development for B2B",
  description:
- "Web apps, mobile apps, custom AI assistants, and workflow automation built around your business not a template. Software that saves time and makes money.",
-};
+ "Internal tools, dashboards, and data apps built for B2B teams. Senior engineers from day one. Fixed-fee discovery, weekly demos, clear deliverables.",
+ path: "/custom-software-development",
+ keywords: [
+ "custom software development",
+ "B2B software development",
+ "internal tools",
+ "data apps",
+ "web app development",
+ "AI integration",
+ "workflow automation",
+ "Next.js development",
+ ],
+ image: "/images/svc-software-dev.jpg",
+ imageAlt: "Custom Software Development for B2B teams",
+});
 
 const data: ServicePageData = {
  accent: "#0fa968",

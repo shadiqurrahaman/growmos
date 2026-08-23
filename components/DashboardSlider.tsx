@@ -66,6 +66,7 @@ export default function DashboardSlider() {
             aria-hidden={i !== index}
             aria-roledescription="slide"
             aria-label={`${i + 1} of ${dashboards.length}`}
+            style={{ width: "100%", height: "100%" }}
           >
             <Image
               src={d.src}
@@ -73,7 +74,10 @@ export default function DashboardSlider() {
               fill
               sizes="(max-width: 719px) 100vw, 640px"
               priority={i === 0}
+              fetchPriority={i === 0 ? "high" : "auto"}
+              quality={85}
               draggable={false}
+              style={{ objectFit: "cover" }}
             />
           </div>
         ))}
