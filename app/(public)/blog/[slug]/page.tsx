@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { ensureDB } from "@/lib/db";
-import { siteUrl, siteName } from "@/lib/seo";
+import { siteUrl, siteName, siteFounder } from "@/lib/seo";
 export const dynamic = "force-dynamic";
 
 type Post = {
@@ -47,6 +47,52 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
   const seoTitle = post.seo_title || `${post.title} | ${siteName} Blog`;
   const seoDescription = post.seo_description || post.excerpt || "";
   const ogImage = post.image_url;
+  const keywords = post.seo_keywords
+    ? post.seo_keywords.split(",").map((k) => k.trim()).filter(Boolean)
+    : [];
+
+  // JSON-LD: BlogPosting (more specific than Article, recommended by Google
+  // for blog posts) + BreadcrumbList. Rendered by Next into
+  // <head> via the `other["script:ld+json"]` field — no dangerouslySetInnerHTML.
+  const isFounder = post.author === siteFounder.name;
+  const blogPostingJsonLd = {
+    "@context": "https://schema.org",
+    "@type": "BlogPosting",
+    headline: seoTitle,
+    description: seoDescription,
+    datePublished: post.created_at,
+    dateModified: post.updated_at || post.created_at,
+    author: post.author
+      ? {
+          "@type": "Person",
+          name: post.author,
+          ...(isFounder ? { url: siteFounder.linkedinUrl } : {}),
+        }
+      : { "@type": "Organization", name: siteName },
+    publisher: {
+      "@type": "Organization",
+      name: siteName,
+      logo: {
+        "@type": "ImageObject",
+        url: `${siteUrl}/logo.png`,
+      },
+    },
+    mainEntityOfPage: { "@type": "WebPage", "@id": url },
+    image: post.image_url ? [post.image_url] : undefined,
+    keywords: post.seo_keywords || undefined,
+    inLanguage: "en-US",
+    articleSection: post.category || undefined,
+  };
+
+  const breadcrumbJsonLd = {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    itemListElement: [
+      { "@type": "ListItem", position: 1, name: "Home", item: siteUrl },
+      { "@type": "ListItem", position: 2, name: "Blog", item: `${siteUrl}/blog` },
+      { "@type": "ListItem", position: 3, name: post.title, item: url },
+    ],
+  };
 
   return {
     title: seoTitle,
@@ -69,7 +115,7 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
       publishedTime: post.created_at,
       modifiedTime: post.updated_at || post.created_at,
       authors: [post.author],
-      tags: post.seo_keywords ? post.seo_keywords.split(",").map(k => k.trim()).filter(Boolean) : undefined,
+      tags: keywords.length ? keywords : undefined,
       images: ogImage ? [{ url: ogImage, alt: post.image_alt || post.title }] : undefined,
     },
     twitter: {
@@ -77,6 +123,12 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
       title: seoTitle,
       description: seoDescription,
       images: ogImage ? [ogImage] : undefined,
+    },
+    other: {
+      "script:ld+json": [
+        JSON.stringify(blogPostingJsonLd),
+        JSON.stringify(breadcrumbJsonLd),
+      ],
     },
   };
 }
@@ -86,45 +138,11 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
   const post = await getPost(slug);
   if (!post) notFound();
 
-  const url = `${siteUrl}/blog/${post.slug}`;
-  const seoTitle = post.seo_title || post.title;
-  const seoDescription = post.seo_description || post.excerpt || "";
   const readingTime = estimateReadingTime(post.content);
   const keywords = post.seo_keywords ? post.seo_keywords.split(",").map(k => k.trim()).filter(Boolean) : [];
 
-  const articleJsonLd = {
-    "@context": "https://schema.org",
-    "@type": "Article",
-    headline: seoTitle,
-    description: seoDescription,
-    keywords: keywords.join(", ") || undefined,
-    image: post.image_url ? [post.image_url] : undefined,
-    datePublished: post.created_at,
-    dateModified: post.updated_at || post.created_at,
-    author: { "@type": "Person", name: post.author },
-    publisher: {
-      "@type": "Organization",
-      name: siteName,
-      logo: { "@type": "ImageObject", url: `${siteUrl}/images/growmos.jpg` },
-    },
-    mainEntityOfPage: { "@type": "WebPage", "@id": url },
-  };
-
-  const breadcrumbJsonLd = {
-    "@context": "https://schema.org",
-    "@type": "BreadcrumbList",
-    itemListElement: [
-      { "@type": "ListItem", position: 1, name: "Home", item: siteUrl },
-      { "@type": "ListItem", position: 2, name: "Blog", item: `${siteUrl}/blog` },
-      { "@type": "ListItem", position: 3, name: post.title, item: url },
-    ],
-  };
-
   return (
     <main style={{ paddingTop:"2rem" }}>
-      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(articleJsonLd) }} />
-      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbJsonLd) }} />
-
       <article style={{ maxWidth:"800px", margin:"0 auto", padding:"0 1.5rem 4rem" }}>
         {/* Breadcrumbs */}
         <nav aria-label="Breadcrumb" style={{ marginBottom:"1.5rem", fontSize:"0.85rem", color:"var(--gray-500)" }}>
