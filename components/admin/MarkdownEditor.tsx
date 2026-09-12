@@ -162,10 +162,12 @@ export default function MarkdownEditor({ value, onChange, placeholder, onUploadI
         )}
         {(view === "preview" || view === "split") && (
           <div
-            className="min-h-[500px] px-6 py-5 overflow-auto bg-white"
+            className="post-body min-h-[500px] px-6 py-5 overflow-auto bg-white"
             // The preview is built from admin-controlled markdown via the same
             // sanitizer the server uses on write. Client-side rendering is
-            // safe in this loop.
+            // safe in this loop. .post-body (globals.css) gives headings,
+            // lists, code blocks, etc. their proper typography so the live
+            // preview matches what the public reader will render.
             dangerouslySetInnerHTML={{ __html: previewHtml || "<p class='text-gray-400 italic'>Preview will appear here.</p>" }}
           />
         )}

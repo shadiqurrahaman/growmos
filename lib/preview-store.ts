@@ -52,12 +52,14 @@ function randomToken(): string {
 export async function putPreview(post: PreviewPost): Promise<string> {
   const sql = await ensureDB();
   const token = randomToken();
-  // Pass JSON as a JSON string and let Postgres cast ::jsonb on insert —
-  // avoids relying on sql.json()'s stricter JSONValue type.
-  const postJson = JSON.stringify(post);
+  // Pass the post as a plain JS object — the postgres driver binds it as jsonb
+  // and round-trips it back as a parsed object on SELECT. If we pass a string
+  // and cast with ::jsonb, the driver has no type info on read and returns the
+  // raw JSON text, which then crashes downstream consumers (e.g. BlogPostArticle
+  // calls .replace on the result, expecting a real object).
   await sql`
     INSERT INTO post_previews (token, post, expires_at)
-    VALUES (${token}, ${postJson}::jsonb, NOW() + INTERVAL '10 minutes')
+    VALUES (${token}, ${post}, NOW() + INTERVAL '10 minutes')
   `;
   return token;
 }
@@ -71,6 +73,16 @@ export async function getPreview(token: string): Promise<PreviewPost | null> {
   `;
   const row = rows[0];
   if (!row) return null;
+  // Defensive: if the column ever comes back as a JSON string (older rows, or
+  // an environment where the driver doesn't auto-parse jsonb), parse it here
+  // instead of returning the raw text.
+  if (typeof row.post === "string") {
+    try {
+      return JSON.parse(row.post) as PreviewPost;
+    } catch {
+      return null;
+    }
+  }
   return row.post;
 }
 

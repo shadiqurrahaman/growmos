@@ -16,6 +16,9 @@ const securityHeaders = [
   // - 'unsafe-inline' on script/style is required because Next.js emits inline
   //   bootstrap + JSON-LD scripts/styles; a strict nonce policy would require
   //   deeper middleware refactoring and is tracked separately.
+  // - 'unsafe-eval' is included only in development — React's HMR / Fast Refresh
+  //   use eval() to reconstruct callstacks across module boundaries. Production
+  //   builds never use eval(), so we omit it there.
   // - frame-ancestors 'none' replaces X-Frame-Options for modern browsers
   //   (we keep X-Frame-Options for legacy UAs).
   // - GA4 endpoints, Vercel Blob, Google Fonts, Font Awesome CDN, Calendly
@@ -25,7 +28,7 @@ const securityHeaders = [
     key: "Content-Security-Policy",
     value: [
       "default-src 'self'",
-      "script-src 'self' 'unsafe-inline' https://www.googletagmanager.com https://*.googletagmanager.com",
+      `script-src 'self' 'unsafe-inline'${process.env.NODE_ENV !== "production" ? " 'unsafe-eval'" : ""} https://www.googletagmanager.com https://*.googletagmanager.com`,
       "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://cdnjs.cloudflare.com",
       "font-src 'self' data: https://fonts.gstatic.com https://cdnjs.cloudflare.com",
       "img-src 'self' data: blob: https:",

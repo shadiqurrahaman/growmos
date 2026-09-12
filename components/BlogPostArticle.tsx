@@ -166,9 +166,12 @@ export default function BlogPostArticle({ post, previewBadge = false }: { post: 
           </p>
         )}
 
-        {/* Content */}
+        {/* Content — .post-body styles (in globals.css) apply typography
+            (headings, paragraphs, lists, blockquote, code, tables) to the
+            sanitized HTML produced by `marked`. Without this class the
+            markdown elements render visually identical to body text. */}
         <div
-          style={{ lineHeight: 1.8, color: "var(--gray-700)", fontSize: "1.05rem" }}
+          className="post-body"
           dangerouslySetInnerHTML={{ __html: post.content }}
         />
 
