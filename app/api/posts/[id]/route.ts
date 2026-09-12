@@ -1,8 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { ensureDB } from "@/lib/db";
 import { getAdminFromCookie } from "@/lib/auth";
-import { compileMarkdownServer as compileMarkdown } from "@/lib/markdown.server";
-import { sanitizeHtml } from "@/lib/sanitize";
 import { validateSchemaJsonld } from "@/lib/schema-validator";
 
 export const dynamic = "force-dynamic";
@@ -48,14 +46,21 @@ export async function GET(req: NextRequest, { params }: { params: Promise<{ id: 
       : await sql`SELECT * FROM posts WHERE id = ${numericId} AND status = 'published'`;
     if (!post) return NextResponse.json({ error: "Not found" }, { status: 404 });
     return NextResponse.json({ post });
-  } catch {
-    return NextResponse.json({ error: "DB error" }, { status: 500 });
+  } catch (err) {
+    const msg = err instanceof Error ? err.message : "DB error";
+    console.error("[GET /api/posts/[id]] failed:", msg, err);
+    return NextResponse.json({ error: msg }, { status: 500 });
   }
 }
 
 export async function PUT(req: NextRequest, { params }: { params: Promise<{ id: string }> }) {
   const admin = await getAdminFromCookie();
   if (!admin) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+
+  // Lazy-import the markdown/sanitizer stack only on PUT to keep GETs cheap
+  // and avoid module-load failures on Vercel cold starts.
+  const { compileMarkdownServer: compileMarkdown } = await import("@/lib/markdown.server");
+  const { sanitizeHtml } = await import("@/lib/sanitize");
 
   const { id } = await params;
   const numericId = Number(id);

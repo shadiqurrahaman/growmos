@@ -1,24 +1,11 @@
 import { NextRequest, NextResponse } from "next/server";
 import { ensureDB } from "@/lib/db";
 import { getAdminFromCookie } from "@/lib/auth";
-import { compileMarkdownServer } from "@/lib/markdown.server";
-import { sanitizeHtml } from "@/lib/sanitize";
 import { validateSchemaJsonld } from "@/lib/schema-validator";
 
 export const dynamic = "force-dynamic";
 
 const ALLOWED_STATUS = new Set(["draft", "review", "published"]);
-
-function compileContentIfMarkdown(row: { body_markdown?: unknown; content?: unknown }) {
-  if (typeof row.body_markdown === "string" && row.body_markdown.length > 0) {
-    return compileMarkdownServer(row.body_markdown);
-  }
-  // Fallback: if content was passed but body_markdown was not, still sanitize it.
-  if (typeof row.content === "string") {
-    return sanitizeHtml(row.content);
-  }
-  return "";
-}
 
 function normalizeStatus(input: unknown): "draft" | "review" | "published" {
   if (typeof input === "string" && ALLOWED_STATUS.has(input)) {
@@ -74,14 +61,30 @@ export async function GET(req: NextRequest) {
     }
     return NextResponse.json({ posts });
   } catch (err) {
-    console.error(err);
-    return NextResponse.json({ error: "DB error" }, { status: 500 });
+    const msg = err instanceof Error ? err.message : "DB error";
+    console.error("[GET /api/posts] failed:", msg, err);
+    return NextResponse.json({ error: msg }, { status: 500 });
   }
 }
 
 export async function POST(req: NextRequest) {
   const admin = await getAdminFromCookie();
   if (!admin) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+
+  // Lazy-import the markdown/sanitizer stack only on POST to keep the GET
+  // hot-path lightweight and avoid module-load failures on Vercel cold starts.
+  const { compileMarkdownServer } = await import("@/lib/markdown.server");
+  const { sanitizeHtml } = await import("@/lib/sanitize");
+
+  function compileContentIfMarkdown(row: { body_markdown?: unknown; content?: unknown }) {
+    if (typeof row.body_markdown === "string" && row.body_markdown.length > 0) {
+      return compileMarkdownServer(row.body_markdown);
+    }
+    if (typeof row.content === "string") {
+      return sanitizeHtml(row.content);
+    }
+    return "";
+  }
 
   try {
     const sql = await ensureDB();
