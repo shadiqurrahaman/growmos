@@ -10,21 +10,22 @@ function parseSync(md: string): string {
 }
 
 /**
- * Compile markdown to safe HTML. The result is sanitized before being stored
- * in the `content` column. Belt-and-braces — the public reader also relies
- * on the sanitized-on-write invariant.
+ * SERVER-ONLY markdown compiler. Uses isomorphic-dompurify (which falls back
+ * to jsdom on the server). NEVER import this from a "use client" component
+ * — it pulls jsdom into the browser bundle.
+ *
+ * Use lib/markdown.client.ts from client components.
  */
-export function compileMarkdown(md: string): string {
+export function compileMarkdownServer(md: string): string {
   if (!md) return "";
   const raw = parseSync(md);
   return sanitizeHtml(raw);
 }
 
 /**
- * Plain-text view of a markdown document, used for reading-time / excerpt
- * estimation when only the markdown source is available.
+ * Server-side plain-text helper for reading-time / excerpt estimation.
  */
-export function plainTextFromMarkdown(md: string): string {
+export function plainTextFromMarkdownServer(md: string): string {
   if (!md) return "";
   return sanitizeHtml(parseSync(md))
     .replace(/<[^>]*>/g, " ")

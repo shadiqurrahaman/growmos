@@ -1,6 +1,6 @@
 "use client";
 import { useEffect, useMemo, useRef, useState } from "react";
-import { compileMarkdown } from "@/lib/markdown";
+import { compileMarkdownClient as compileMarkdown } from "@/lib/markdown.client";
 
 type Props = {
   value: string;

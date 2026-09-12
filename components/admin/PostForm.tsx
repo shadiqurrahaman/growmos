@@ -146,6 +146,7 @@ export default function PostForm({ mode, initialPost }: Props) {
   const [slugManuallyEdited, setSlugManuallyEdited] = useState(false);
   const [uploadingHero, setUploadingHero] = useState(false);
   const [uploadingBodyImage, setUploadingBodyImage] = useState(false);
+  const [previewing, setPreviewing] = useState(false);
 
   function generateSlug(title: string) {
     return title
@@ -222,6 +223,37 @@ export default function PostForm({ mode, initialPost }: Props) {
       setError(err instanceof Error ? err.message : "Something went wrong.");
     } finally {
       setSaving(false);
+    }
+  }
+
+  async function handlePreview() {
+    setPreviewing(true);
+    setError("");
+    try {
+      const payload: Record<string, unknown> = {
+        ...form,
+        // Carry through the post id when editing so preview can use the same
+        // canonical URL paths if needed.
+        id: initialPost?.id,
+      };
+      const res = await fetch("/api/posts/preview", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload),
+      });
+      if (!res.ok) {
+        const d = await res.json().catch(() => ({}));
+        setError(d.error || `Preview failed (${res.status}).`);
+        return;
+      }
+      const data = await res.json();
+      if (data.url) {
+        window.open(data.url, "_blank", "noopener,noreferrer");
+      }
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "Preview failed.");
+    } finally {
+      setPreviewing(false);
     }
   }
 
@@ -521,24 +553,39 @@ export default function PostForm({ mode, initialPost }: Props) {
         </div>
 
         {/* ── BOTTOM ACTIONS ───────────────────────────────────────── */}
-        <div className="flex items-center gap-3 justify-end pb-8">
-          <Link
-            href="/admin/dashboard"
-            className="px-5 py-2.5 text-sm font-semibold text-gray-600 hover:text-gray-900 bg-white border border-gray-200 rounded-xl transition-colors"
-          >
-            Cancel
-          </Link>
+        <div className="flex items-center gap-3 justify-between pb-8 flex-wrap">
           <button
-            type="submit"
-            disabled={saving || uploadingBodyImage}
-            className="px-6 py-2.5 text-sm font-semibold text-white bg-purple-600 hover:bg-purple-700 disabled:opacity-60 rounded-xl transition-colors flex items-center gap-2"
+            type="button"
+            onClick={handlePreview}
+            disabled={previewing || saving || !form.title || !form.slug}
+            title={!form.title || !form.slug ? "Add a title and slug first" : "Open public-page preview in a new tab"}
+            className="px-5 py-2.5 text-sm font-semibold text-purple-700 bg-purple-50 hover:bg-purple-100 disabled:opacity-50 disabled:cursor-not-allowed border border-purple-200 rounded-xl transition-colors flex items-center gap-2"
           >
-            {saving ? (
-              <><i className="fa-solid fa-spinner fa-spin"></i> Saving…</>
+            {previewing ? (
+              <><i className="fa-solid fa-spinner fa-spin"></i> Generating…</>
             ) : (
-              <><i className="fa-solid fa-check"></i> {mode === "new" ? "Save Post" : "Save Changes"}</>
+              <><i className="fa-solid fa-eye"></i> Preview public page</>
             )}
           </button>
+          <div className="flex items-center gap-3">
+            <Link
+              href="/admin/dashboard"
+              className="px-5 py-2.5 text-sm font-semibold text-gray-600 hover:text-gray-900 bg-white border border-gray-200 rounded-xl transition-colors"
+            >
+              Cancel
+            </Link>
+            <button
+              type="submit"
+              disabled={saving || uploadingBodyImage}
+              className="px-6 py-2.5 text-sm font-semibold text-white bg-purple-600 hover:bg-purple-700 disabled:opacity-60 rounded-xl transition-colors flex items-center gap-2"
+            >
+              {saving ? (
+                <><i className="fa-solid fa-spinner fa-spin"></i> Saving…</>
+              ) : (
+                <><i className="fa-solid fa-check"></i> {mode === "new" ? "Save Post" : "Save Changes"}</>
+              )}
+            </button>
+          </div>
         </div>
       </form>
     </div>

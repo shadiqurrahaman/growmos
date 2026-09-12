@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { ensureDB } from "@/lib/db";
 import { getAdminFromCookie } from "@/lib/auth";
-import { compileMarkdown } from "@/lib/markdown";
+import { compileMarkdownServer } from "@/lib/markdown.server";
 import { sanitizeHtml } from "@/lib/sanitize";
 import { validateSchemaJsonld } from "@/lib/schema-validator";
 
@@ -11,7 +11,7 @@ const ALLOWED_STATUS = new Set(["draft", "review", "published"]);
 
 function compileContentIfMarkdown(row: { body_markdown?: unknown; content?: unknown }) {
   if (typeof row.body_markdown === "string" && row.body_markdown.length > 0) {
-    return compileMarkdown(row.body_markdown);
+    return compileMarkdownServer(row.body_markdown);
   }
   // Fallback: if content was passed but body_markdown was not, still sanitize it.
   if (typeof row.content === "string") {

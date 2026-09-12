@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { ensureDB } from "@/lib/db";
 import { getAdminFromCookie } from "@/lib/auth";
-import { compileMarkdown } from "@/lib/markdown";
+import { compileMarkdownServer as compileMarkdown } from "@/lib/markdown.server";
 import { sanitizeHtml } from "@/lib/sanitize";
 import { validateSchemaJsonld } from "@/lib/schema-validator";
 
