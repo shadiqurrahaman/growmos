@@ -201,4 +201,21 @@ export async function initDB() {
       created_at TIMESTAMPTZ DEFAULT NOW()
     )
   `);
+
+  // ── Post previews (short-lived unsaved drafts for the public preview) ───
+  // Backing store for /api/posts/preview → /admin/preview/[token]. Postgres
+  // is used (not an in-memory Map) because Vercel/serverless invocations may
+  // each get a fresh runtime, so a Map-based cache silently loses previews
+  // between the POST that creates them and the GET that renders them.
+  await step("create post_previews table", () => sql`
+    CREATE TABLE IF NOT EXISTS post_previews (
+      token TEXT PRIMARY KEY,
+      post JSONB NOT NULL,
+      expires_at TIMESTAMPTZ NOT NULL
+    )
+  `);
+  await step("create post_previews_expires_at index", () => sql`
+    CREATE INDEX IF NOT EXISTS post_previews_expires_at_idx
+    ON post_previews (expires_at)
+  `);
 }

@@ -9,7 +9,7 @@ export const dynamic = "force-dynamic";
 
 export async function generateMetadata({ params }: { params: Promise<{ token: string }> }) {
   const { token } = await params;
-  const post = getPreview(token);
+  const post = await getPreview(token);
   if (!post) return { title: "Preview expired | GrowMos" };
 
   const canonical = resolveCanonical(post);
@@ -29,7 +29,7 @@ export default async function PreviewPage({ params }: { params: Promise<{ token:
   if (!admin) redirect("/admin/login");
 
   const { token } = await params;
-  const post = getPreview(token);
+  const post = await getPreview(token);
   if (!post) {
     return (
       <main style={{ paddingTop: "8rem", textAlign: "center", minHeight: "60vh" }}>

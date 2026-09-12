@@ -1,17 +1,16 @@
 import { NextRequest, NextResponse } from "next/server";
 import { getAdminFromCookie } from "@/lib/auth";
-import { putPreview } from "@/lib/preview-store";
+import { putPreview, type PreviewPost } from "@/lib/preview-store";
 import { compileMarkdownServer } from "@/lib/markdown.server";
-import { sanitizeHtml } from "@/lib/sanitize";
 
 export const dynamic = "force-dynamic";
 
 /**
- * Build an unsaved post into the full Post shape used by the public reader,
+ * Build an unsaved post into the full shape used by the public reader,
  * by compiling the markdown body, normalizing dates, and providing fallback
  * values for fields the form may have left blank.
  */
-function buildPreviewPost(form: Record<string, unknown>) {
+function buildPreviewPost(form: Record<string, unknown>): PreviewPost {
   const bodyMarkdown = typeof form.body_markdown === "string" ? form.body_markdown : "";
   const content = compileMarkdownServer(bodyMarkdown);
 
@@ -66,9 +65,9 @@ export async function POST(req: NextRequest) {
     const body = await req.json();
     const post = buildPreviewPost(body || {});
 
-    // Also re-sanitize any user-supplied schema_jsonld for safety (defense in
-    // depth — the API that stores it also validates, but previews can come
-    // from unsaved drafts).
+    // Re-validate user-supplied schema_jsonld before caching (defense in depth
+    // — preview cache holds unsaved drafts, so anything here must be safe to
+    // inject into the public reader's <head>).
     if (post.schema_jsonld) {
       try {
         const parsed: unknown = JSON.parse(post.schema_jsonld);
@@ -76,9 +75,9 @@ export async function POST(req: NextRequest) {
           const obj = parsed as Record<string, unknown>;
           const ctx = obj["@context"];
           const type = obj["@type"];
-          if (ctx && type) {
-            // Keep as-is if structurally OK; the public reader will JSON-stringify it.
-          }
+          if (!ctx || !type) post.schema_jsonld = null;
+        } else {
+          post.schema_jsonld = null;
         }
       } catch {
         // Bad JSON in preview — strip it rather than block the preview
@@ -86,10 +85,7 @@ export async function POST(req: NextRequest) {
       }
     }
 
-    // Avoid unused-var lint if sanitizeHtml ever shifts signatures
-    void sanitizeHtml;
-
-    const token = putPreview(post as never);
+    const token = await putPreview(post);
     return NextResponse.json({ token, url: `/admin/preview/${token}` });
   } catch (err) {
     const msg = err instanceof Error ? err.message : "Preview failed";

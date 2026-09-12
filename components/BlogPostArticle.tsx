@@ -11,6 +11,8 @@ export type BlogPostData = {
   image_alt: string | null;
   category: string;
   author: string;
+  published?: boolean;
+  sort_order?: number;
   created_at: string;
   updated_at?: string | null;
   seo_title: string | null;
@@ -26,7 +28,7 @@ export type BlogPostData = {
   hero_image_alt: string | null;
   body_markdown: string | null;
   schema_jsonld: string | null;
-  status: string | null;
+  status?: string | null;
 };
 
 export function resolveCanonical(post: BlogPostData): string {

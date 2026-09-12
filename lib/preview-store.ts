@@ -1,22 +1,46 @@
 /**
- * In-memory short-lived cache for unsaved post previews.
+ * Short-lived cache for unsaved post previews, backed by Postgres.
  *
- * Why in-memory: previews are unsaved drafts. We don't want them persisted to
- * the DB. The cache is per-process; for multi-instance deploys that's a
- * limitation but acceptable since previews are best-effort.
+ * Why Postgres, not in-memory: on Vercel/serverless, each request can be
+ * served by a fresh runtime, so a Map-based cache silently loses previews
+ * between the POST that creates them and the GET that renders them.
  *
- * TTL: 10 minutes. Old entries are pruned lazily on read.
+ * The shape `PreviewPost` mirrors the `posts` row shape used by the public
+ * reader, so the same `<BlogPostArticle>` component can render either.
  */
+import { ensureDB } from "@/lib/db";
 
-import type { Post } from "@/components/admin/PostForm";
-
-type Entry = {
-  post: Post;
-  expiresAt: number;
+export type PreviewPost = {
+  id: number;
+  title: string;
+  slug: string;
+  content: string;
+  excerpt: string | null;
+  image_url: string | null;
+  image_alt: string | null;
+  category: string;
+  author: string;
+  published: boolean;
+  sort_order: number;
+  seo_title: string | null;
+  seo_description: string | null;
+  seo_keywords: string | null;
+  target_url: string | null;
+  meta_description: string | null;
+  author_name: string | null;
+  author_url: string | null;
+  date_published: string | null;
+  date_modified: string | null;
+  hero_image_url: string | null;
+  hero_image_alt: string | null;
+  body_markdown: string | null;
+  schema_jsonld: string | null;
+  status: string;
+  created_at: string;
+  updated_at: string;
 };
 
 const TTL_MS = 10 * 60 * 1000;
-const store = new Map<string, Entry>();
 
 function randomToken(): string {
   // 24 chars, URL-safe
@@ -25,28 +49,30 @@ function randomToken(): string {
   return Buffer.from(bytes).toString("base64url");
 }
 
-function prune(now: number) {
-  for (const [key, entry] of store) {
-    if (entry.expiresAt <= now) store.delete(key);
-  }
-}
-
-export function putPreview(post: Post): string {
-  const now = Date.now();
-  prune(now);
+export async function putPreview(post: PreviewPost): Promise<string> {
+  const sql = await ensureDB();
   const token = randomToken();
-  store.set(token, { post, expiresAt: now + TTL_MS });
+  // Pass JSON as a JSON string and let Postgres cast ::jsonb on insert —
+  // avoids relying on sql.json()'s stricter JSONValue type.
+  const postJson = JSON.stringify(post);
+  await sql`
+    INSERT INTO post_previews (token, post, expires_at)
+    VALUES (${token}, ${postJson}::jsonb, NOW() + INTERVAL '10 minutes')
+  `;
   return token;
 }
 
-export function getPreview(token: string): Post | null {
-  const now = Date.now();
-  prune(now);
-  const entry = store.get(token);
-  if (!entry) return null;
-  if (entry.expiresAt <= now) {
-    store.delete(token);
-    return null;
-  }
-  return entry.post;
+export async function getPreview(token: string): Promise<PreviewPost | null> {
+  const sql = await ensureDB();
+  // Lazy-prune expired rows once per call (cheap).
+  await sql`DELETE FROM post_previews WHERE expires_at < NOW()`;
+  const rows = await sql<{ post: PreviewPost }[]>`
+    SELECT post FROM post_previews WHERE token = ${token} AND expires_at >= NOW() LIMIT 1
+  `;
+  const row = rows[0];
+  if (!row) return null;
+  return row.post;
 }
+
+// Keep TTL_MS referenced so future tuning is one constant to change.
+void TTL_MS;
