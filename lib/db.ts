@@ -3,6 +3,12 @@ import postgres from "postgres";
 let _sql: ReturnType<typeof postgres> | null = null;
 let _initPromise: Promise<void> | null = null;
 
+/**
+ * Initialize the SQL client once per process. Safe to call multiple times.
+ * On the very first call, also kicks off `initDB()` so schema migrations are
+ * applied lazily. Callers that need migrations to be done should use
+ * `ensureDB()` instead of `getDB()`.
+ */
 export function getDB() {
   if (!process.env.DATABASE_URL) {
     throw new Error("DATABASE_URL environment variable is not set");
@@ -17,14 +23,21 @@ export function getDB() {
       no_prepare: false,
     });
   }
-  // Kick off initDB on first use per process so schema migrations are always
-  // applied. We do NOT await here to keep getDB() synchronous; callers that
-  // need to wait should use ensureDB() instead (e.g. via /api/init).
+  // Kick off initDB on first use per process. CRITICAL: assign `_initPromise`
+  // to a placeholder *before* invoking initDB() so that initDB's internal
+  // getDB() call (or anything else re-entering through ensureDB/getDB) sees a
+  // non-null _initPromise and does NOT recursively start another initDB run.
+  // Without this guard initDB and getDB mutually recurse and blow the stack.
   if (!_initPromise) {
-    _initPromise = initDB().catch((err) => {
-      console.error("initDB failed:", err);
-      _initPromise = null; // allow retry on next call
-    });
+    _initPromise = (async () => {
+      try {
+        await initDB();
+      } catch (err) {
+        console.error("initDB failed:", err);
+        _initPromise = null; // allow retry on next call
+        throw err;
+      }
+    })();
   }
   return _sql;
 }
@@ -43,7 +56,14 @@ export async function ensureDB() {
 }
 
 export async function initDB() {
-  const sql = getDB();
+  // Use _sql directly (it was set by the caller — getDB or ensureDB). Calling
+  // getDB() from here used to recurse forever because _initPromise hadn't been
+  // assigned yet at the moment initDB ran. We now own the assignment in getDB
+  // via the placeholder promise above, so _sql is guaranteed to be set here.
+  if (!_sql) {
+    throw new Error("initDB called before SQL client was initialized");
+  }
+  const sql = _sql;
 
   // Helper: run a migration step independently — if one fails, others still apply.
   async function step(name: string, fn: () => Promise<unknown>) {
