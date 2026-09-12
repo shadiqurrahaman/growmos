@@ -26,8 +26,8 @@ async function getPosts() {
   try {
     const sql = await ensureDB();
     const posts = await sql`
-      SELECT id, title, slug, excerpt, image_url, image_alt, category, author, created_at, updated_at
-      FROM posts WHERE published = true
+      SELECT id, title, slug, excerpt, image_url, image_alt, hero_image_url, hero_image_alt, category, author, date_published, created_at, updated_at
+      FROM posts WHERE status = 'published'
       ORDER BY COALESCE(updated_at, created_at) DESC, created_at DESC
     `;
     return posts;
@@ -62,8 +62,8 @@ export default async function BlogPage() {
                 return (
                   <Link key={String(post.id)} href={`/blog/${post.slug}`} className="blog-card">
                     <div className="blog-card__image">
-                      {post.image_url ? (
-                        <img src={String(post.image_url)} alt={String(post.title)} className="blog-card__img" />
+                      {(post.hero_image_url || post.image_url) ? (
+                        <img src={String(post.hero_image_url || post.image_url)} alt={String(post.hero_image_alt || post.image_alt || post.title)} className="blog-card__img" />
                       ) : (
                         <div className={`blog-card__placeholder blog-card__placeholder--${color}`}>
                           <div className="blog-card__placeholder-badge">{String(post.category)}</div>
@@ -82,12 +82,8 @@ export default async function BlogPage() {
                             <span className="blog-card__author-name">{String(post.author)}</span>
                             <span className="blog-card__date">
                               {(() => {
-                                const created = new Date(String(post.created_at)).getTime();
-                                const updated = post.updated_at ? new Date(String(post.updated_at)).getTime() : 0;
-                                const wasEdited = updated > created + 1000;
-                                const label = wasEdited ? "Updated " : "";
-                                const dt = wasEdited ? post.updated_at : post.created_at;
-                                return label + new Date(String(dt)).toLocaleDateString("en-US",{year:"numeric",month:"long",day:"numeric"});
+                                const dateLabel = post.date_published || post.created_at;
+                                return new Date(String(dateLabel)).toLocaleDateString("en-US",{year:"numeric",month:"long",day:"numeric"});
                               })()}
                             </span>
                           </div>

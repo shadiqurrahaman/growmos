@@ -70,6 +70,17 @@ export async function initDB() {
       seo_title TEXT,
       seo_description TEXT,
       seo_keywords TEXT,
+      target_url TEXT,
+      meta_description TEXT,
+      author_name TEXT,
+      author_url TEXT,
+      date_published DATE,
+      date_modified DATE,
+      hero_image_url TEXT,
+      hero_image_alt TEXT,
+      body_markdown TEXT,
+      schema_jsonld TEXT,
+      status TEXT DEFAULT 'draft',
       created_at TIMESTAMPTZ DEFAULT NOW(),
       updated_at TIMESTAMPTZ DEFAULT NOW()
     )
@@ -80,6 +91,37 @@ export async function initDB() {
   await step("add seo_title column",       () => sql`ALTER TABLE posts ADD COLUMN IF NOT EXISTS seo_title TEXT`);
   await step("add seo_description column", () => sql`ALTER TABLE posts ADD COLUMN IF NOT EXISTS seo_description TEXT`);
   await step("add seo_keywords column",    () => sql`ALTER TABLE posts ADD COLUMN IF NOT EXISTS seo_keywords TEXT`);
+
+  // ── CMS v2 fields (additive — no destructive changes) ───────────────────
+  await step("add target_url column",      () => sql`ALTER TABLE posts ADD COLUMN IF NOT EXISTS target_url TEXT`);
+  await step("add meta_description column",() => sql`ALTER TABLE posts ADD COLUMN IF NOT EXISTS meta_description TEXT`);
+  await step("add author_name column",     () => sql`ALTER TABLE posts ADD COLUMN IF NOT EXISTS author_name TEXT`);
+  await step("add author_url column",      () => sql`ALTER TABLE posts ADD COLUMN IF NOT EXISTS author_url TEXT`);
+  await step("add date_published column",  () => sql`ALTER TABLE posts ADD COLUMN IF NOT EXISTS date_published DATE`);
+  await step("add date_modified column",   () => sql`ALTER TABLE posts ADD COLUMN IF NOT EXISTS date_modified DATE`);
+  await step("add hero_image_url column",  () => sql`ALTER TABLE posts ADD COLUMN IF NOT EXISTS hero_image_url TEXT`);
+  await step("add hero_image_alt column",  () => sql`ALTER TABLE posts ADD COLUMN IF NOT EXISTS hero_image_alt TEXT`);
+  await step("add body_markdown column",   () => sql`ALTER TABLE posts ADD COLUMN IF NOT EXISTS body_markdown TEXT`);
+  await step("add schema_jsonld column",   () => sql`ALTER TABLE posts ADD COLUMN IF NOT EXISTS schema_jsonld TEXT`);
+  await step("add status column",          () => sql`ALTER TABLE posts ADD COLUMN IF NOT EXISTS status TEXT DEFAULT 'draft'`);
+
+  // Indexes come AFTER column-add (idempotent CREATE INDEX IF NOT EXISTS).
+  await step("create posts_target_url unique index", () => sql`
+    CREATE UNIQUE INDEX IF NOT EXISTS posts_target_url_unique
+    ON posts (target_url) WHERE target_url IS NOT NULL
+  `);
+  await step("create posts_status index", () => sql`
+    CREATE INDEX IF NOT EXISTS posts_status_idx ON posts (status)
+  `);
+
+  // Backfill existing rows: set status + date_published from legacy columns.
+  await step("backfill status from published", async () => {
+    await sql`UPDATE posts SET status = 'published' WHERE published = true AND (status IS NULL OR status = 'draft')`;
+    await sql`UPDATE posts SET status = 'draft'     WHERE (published = false OR published IS NULL) AND status IS NULL`;
+  });
+  await step("backfill date_published from created_at", () =>
+    sql`UPDATE posts SET date_published = created_at::date WHERE date_published IS NULL`
+  );
 
   await step("create subscribers table", () => sql`
     CREATE TABLE IF NOT EXISTS subscribers (
