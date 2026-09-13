@@ -169,9 +169,12 @@ export default function BlogPostArticle({ post, previewBadge = false }: { post: 
         {/* Content — .post-body styles (in globals.css) apply typography
             (headings, paragraphs, lists, blockquote, code, tables) to the
             sanitized HTML produced by `marked`. Without this class the
-            markdown elements render visually identical to body text. */}
+            markdown elements render visually identical to body text. The
+            class is applied twice ("post-body post-body") so the doubled
+            selector in globals.css (specificity 0,2,1) reliably beats the
+            `* { margin: 0 }` universal reset in styles.css. */}
         <div
-          className="post-body"
+          className="post-body post-body"
           dangerouslySetInnerHTML={{ __html: post.content }}
         />
 
