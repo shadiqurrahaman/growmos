@@ -35,15 +35,21 @@ export function compileMarkdownServer(md: string): string {
   // Drop editor scaffolding the author may have left in body_markdown:
   // - "H1 "/"H2 "/"H3 " prefixes on heading lines
   // - "Q: " prefix on FAQ question lines
+  // - em dashes (—) replaced with " - " (per content style guide)
   // These should not appear in published output. We strip them BEFORE marked
   // parses the markdown so the resulting headings are clean.
   const cleaned = md
     .replace(/^(#{1,6}\s+)(H[1-6]\s+)/gm, "$1")
-    .replace(/^(#{3,6}\s+)Q:\s+/gm, "$1");
+    .replace(/^(#{3,6}\s+)Q:\s+/gm, "$1")
+    // Em dash → " - " (with surrounding spaces normalized)
+    .replace(/\s*—\s*/g, " - ");
   const raw = parseSync(cleaned);
   // Strip any remaining raw footnote-definition lines (in case the extension
-  // didn't register) so they don't appear as visible body text.
-  const stripped = raw.replace(/\[\^[^\]]+\]:\s*[^\n<]*(?:\n(?!\[\^)[^\n<]*)*/g, "");
+  // didn't register) so they don't appear as visible body text. Also catch any
+  // em dashes that survived (e.g. encoded as &#8212; by marked).
+  const stripped = raw
+    .replace(/\[\^[^\]]+\]:\s*[^\n<]*(?:\n(?!\[\^)[^\n<]*)*/g, "")
+    .replace(/\s*&#8212;|\s*&#x2014;|\s*—\s*/g, " - ");
   return sanitizeHtml(stripped);
 }
 
