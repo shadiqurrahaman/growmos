@@ -150,10 +150,18 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ post }, { status: 201 });
   } catch (err: unknown) {
     const msg = err instanceof Error ? err.message : "DB error";
+    const stack = err instanceof Error ? err.stack : undefined;
+    // Always log full error so Vercel function logs capture the cause
+    console.error("[POST /api/posts] failed:", msg, "\n", stack);
     // Postgres unique-violation surface
     if (/unique|duplicate/i.test(msg)) {
       return NextResponse.json({ error: msg }, { status: 409 });
     }
-    return NextResponse.json({ error: msg }, { status: 500 });
+    // Surface stack in non-prod for faster debugging
+    const debug = process.env.NODE_ENV !== "production";
+    return NextResponse.json(
+      { error: msg, ...(debug && stack ? { stack } : {}) },
+      { status: 500 }
+    );
   }
 }
