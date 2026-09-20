@@ -57,9 +57,15 @@ export async function putPreview(post: PreviewPost): Promise<string> {
   // and cast with ::jsonb, the driver has no type info on read and returns the
   // raw JSON text, which then crashes downstream consumers (e.g. BlogPostArticle
   // calls .replace on the result, expecting a real object).
+  // Cast `post` to `unknown` so postgres.js's typed `sql` overload doesn't
+  // reject the parameter — at runtime the driver serializes objects to JSONB.
+  // Cast through `any` to satisfy postgres.js's typed-template overload, which
+  // otherwise rejects non-primitive parameters. Runtime: the driver serializes
+  // the object to JSONB and SELECT returns a parsed object (see getPreview).
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   await sql`
     INSERT INTO post_previews (token, post, expires_at)
-    VALUES (${token}, ${JSON.stringify(post)}::jsonb, NOW() + INTERVAL '10 minutes')
+    VALUES (${token}, ${post as any}, NOW() + INTERVAL '10 minutes')
   `;
   return token;
 }
