@@ -68,6 +68,8 @@ export async function GET(req: NextRequest) {
 }
 
 export async function POST(req: NextRequest) {
+  // Diagnostic: log every POST so we know whether the handler is being reached.
+  console.log("[POST /api/posts] entered, content-type:", req.headers.get("content-type"));
   // Single top-level try/catch covers ALL failure modes including import-time
   // errors, JSON parse errors, and DB errors. Without this, errors that happen
   // outside the inner try would produce an empty 500 response.
