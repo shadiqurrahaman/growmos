@@ -1,13 +1,11 @@
 import { NextResponse } from "next/server";
-import { initDB } from "@/lib/db";
+import { ensureDB } from "@/lib/db";
 export const dynamic = "force-dynamic";
 
 export async function GET() {
   try {
-    await initDB();
+    const sql = await ensureDB();
     // Verify the new columns exist
-    const { getDB } = await import("@/lib/db");
-    const sql = getDB();
     const cols = await sql`
       SELECT column_name FROM information_schema.columns
       WHERE table_name = 'posts'
