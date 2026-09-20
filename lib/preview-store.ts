@@ -59,7 +59,7 @@ export async function putPreview(post: PreviewPost): Promise<string> {
   // calls .replace on the result, expecting a real object).
   await sql`
     INSERT INTO post_previews (token, post, expires_at)
-    VALUES (${token}, ${post}, NOW() + INTERVAL '10 minutes')
+    VALUES (${token}, ${JSON.stringify(post)}::jsonb, NOW() + INTERVAL '10 minutes')
   `;
   return token;
 }
