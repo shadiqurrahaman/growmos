@@ -89,6 +89,8 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ token, url: `/admin/preview/${token}` });
   } catch (err) {
     const msg = err instanceof Error ? err.message : "Preview failed";
-    return NextResponse.json({ error: msg }, { status: 500 });
+    const stack = err instanceof Error ? err.stack : undefined;
+    console.error("[POST /api/posts/preview] failed:", msg, "\n", stack);
+    return NextResponse.json({ error: msg, stack }, { status: 500 });
   }
 }

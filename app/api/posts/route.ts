@@ -68,25 +68,28 @@ export async function GET(req: NextRequest) {
 }
 
 export async function POST(req: NextRequest) {
-  const admin = await getAdminFromCookie();
-  if (!admin) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-
-  // Lazy-import the markdown/sanitizer stack only on POST to keep the GET
-  // hot-path lightweight and avoid module-load failures on Vercel cold starts.
-  const { compileMarkdownServer } = await import("@/lib/markdown.server");
-  const { sanitizeHtml } = await import("@/lib/sanitize");
-
-  function compileContentIfMarkdown(row: { body_markdown?: unknown; content?: unknown }) {
-    if (typeof row.body_markdown === "string" && row.body_markdown.length > 0) {
-      return compileMarkdownServer(row.body_markdown);
-    }
-    if (typeof row.content === "string") {
-      return sanitizeHtml(row.content);
-    }
-    return "";
-  }
-
+  // Single top-level try/catch covers ALL failure modes including import-time
+  // errors, JSON parse errors, and DB errors. Without this, errors that happen
+  // outside the inner try would produce an empty 500 response.
   try {
+    const admin = await getAdminFromCookie();
+    if (!admin) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+
+    // Lazy-import the markdown/sanitizer stack only on POST to keep the GET
+    // hot-path lightweight and avoid module-load failures on Vercel cold starts.
+    const { compileMarkdownServer } = await import("@/lib/markdown.server");
+    const { sanitizeHtml } = await import("@/lib/sanitize");
+
+    function compileContentIfMarkdown(row: { body_markdown?: unknown; content?: unknown }) {
+      if (typeof row.body_markdown === "string" && row.body_markdown.length > 0) {
+        return compileMarkdownServer(row.body_markdown);
+      }
+      if (typeof row.content === "string") {
+        return sanitizeHtml(row.content);
+      }
+      return "";
+    }
+
     const sql = await ensureDB();
     const body = await req.json();
 
@@ -157,10 +160,9 @@ export async function POST(req: NextRequest) {
     if (/unique|duplicate/i.test(msg)) {
       return NextResponse.json({ error: msg }, { status: 409 });
     }
-    // Surface stack in non-prod for faster debugging
-    const debug = process.env.NODE_ENV !== "production";
+    // Surface stack so we can debug empty-response issues
     return NextResponse.json(
-      { error: msg, ...(debug && stack ? { stack } : {}) },
+      { error: msg, stack },
       { status: 500 }
     );
   }
