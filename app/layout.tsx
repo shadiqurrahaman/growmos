@@ -246,16 +246,12 @@ export default function RootLayout({
           rel="stylesheet"
         />
         {/*
-          Non-blocking Font Awesome load: render-blocking CSS is one of the
-          top LCP/TBT contributors. The pattern:
-          1. <link rel="preload" as="style"> so the browser fetches it eagerly
-             but doesn't block render.
-          2. <link rel="stylesheet" media="print"> with a tiny inline-script
-             swap that promotes it to media="all" once the stylesheet loads
-             (or on DOMContentLoaded as a safety net). Using an inline script
-             instead of React's onLoad handler because <link> is a Server
-             Component element in this layout and can't receive event handlers.
-          3. <noscript> fallback for users without JS.
+          Font Awesome. Rendered as a plain blocking <link>. The previous
+          deferred-load pattern (media="print" + inline script flip) mutated
+          the SSR <link> during React hydration on warm caches, producing
+          hydration-mismatch warnings on the media attribute. Removing the
+          swap entirely eliminates the race; the small render-blocking cost
+          is acceptable for an auth-gated admin route.
         */}
         <link
           rel="preload"
@@ -265,45 +261,7 @@ export default function RootLayout({
         <link
           rel="stylesheet"
           href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
-          media="print"
-          // @ts-expect-error — using a custom data attribute as a sentinel so
-          // the inline script below can find this exact link element.
-          data-gm-deferred-css="font-awesome"
         />
-        <script
-          // Inline, runs as soon as parsed. The function looks up any link with
-          // the sentinel attribute and, once the stylesheet finishes loading
-          // (or immediately if it's already cached), promotes media from
-          // "print" to "all". This is the classic non-blocking CSS pattern.
-          dangerouslySetInnerHTML={{
-            __html: `
-              (function(){
-                function promote(){
-                  document.querySelectorAll('link[data-gm-deferred-css]').forEach(function(l){
-                    if (l.media === 'print') l.media = 'all';
-                  });
-                }
-                document.querySelectorAll('link[data-gm-deferred-css]').forEach(function(l){
-                  if (l.media === 'print') {
-                    l.addEventListener('load', promote, { once: true });
-                    l.addEventListener('error', promote, { once: true });
-                  }
-                });
-                if (document.readyState === 'loading') {
-                  document.addEventListener('DOMContentLoaded', promote);
-                } else {
-                  promote();
-                }
-              })();
-            `,
-          }}
-        />
-        <noscript>
-          <link
-            rel="stylesheet"
-            href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
-          />
-        </noscript>
 
         <JsonLd data={organizationJsonLd} />
 
@@ -314,8 +272,10 @@ export default function RootLayout({
           CTAs. Conservative defaults: prerender only on pointer-down of
           matching URLs to avoid wasting bandwidth.
         */}
-        <script
+        <Script
+          id="speculation-rules"
           type="speculationrules"
+          strategy="beforeInteractive"
           dangerouslySetInnerHTML={{
             __html: JSON.stringify({
               prefetch: [
